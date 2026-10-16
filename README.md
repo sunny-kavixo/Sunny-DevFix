@@ -6,9 +6,9 @@ small proposed fix before testing it safely.
 
 The project is being built for the **Frontier Buildathon 2026 — Developer
 Tools & Open Source** track with OmniRush. The reproducible foundation,
-deterministic traceback/source-analysis core, FastAPI analysis endpoint, and
-responsive browser workspace are now in place. The optional Docker sandbox and
-fix-comparison workflow will follow.
+deterministic traceback/source-analysis core, FastAPI analysis endpoint,
+conservative fix suggestions, before/after diffs, and responsive browser
+workspace are now in place. The optional Docker sandbox will follow.
 
 ## Safety boundary
 
@@ -59,6 +59,17 @@ make run
 
 Open <http://127.0.0.1:8000/> for the browser workspace. The health endpoint is
 available at <http://127.0.0.1:8000/api/health>.
+
+The analysis endpoint accepts bounded source and traceback text:
+
+```text
+POST /api/analyze
+```
+
+Its response includes the parsed traceback, source syntax validation,
+beginner-friendly root-cause guidance, a conservative suggested fix when one
+can be determined, the before/after source, and a copyable unified diff. Fixes
+are validated with `ast.parse`; submitted source is never imported or executed.
 
 ## Test
 

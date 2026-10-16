@@ -4,16 +4,24 @@ from fastapi import APIRouter, HTTPException
 
 from sunny_devfix.analysis.models import (
     AnalysisInputError,
+    AnalysisInsights,
+    CodeComparison,
+    FixSuggestion,
+    RootCauseExplanation,
     SourceAnalysis,
     SyntaxDiagnostic,
     TracebackFrame,
     TracebackParseError,
 )
+from sunny_devfix.analysis.insights import build_insights
 from sunny_devfix.analysis.source_analysis import analyze_source
 from sunny_devfix.analysis.traceback_parser import parse_traceback
 from sunny_devfix.api.schemas import (
     AnalyzeRequest,
     AnalyzeResponse,
+    CodeComparisonResponse,
+    FixSuggestionResponse,
+    RootCauseResponse,
     SafetyResponse,
     SourceAnalysisResponse,
     SourceLineResponse,
@@ -36,6 +44,7 @@ def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
             filename=payload.filename,
             context_radius=payload.context_radius,
         )
+        insights = build_insights(payload.source, traceback_info, source_analysis)
     except (AnalysisInputError, TracebackParseError, ValueError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
@@ -47,6 +56,8 @@ def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
         frames=frames,
         deepest_frame=deepest_frame,
         source_analysis=_source_response(source_analysis),
+        root_cause=_root_cause_response(insights),
+        suggestion=_suggestion_response(insights),
         safety=SafetyResponse(
             executed=False,
             message=(
@@ -94,4 +105,35 @@ def _syntax_response(diagnostic: SyntaxDiagnostic) -> SyntaxDiagnosticResponse:
         line_number=diagnostic.line_number,
         column=diagnostic.column,
         source_line=diagnostic.source_line,
+    )
+
+
+def _root_cause_response(insights: AnalysisInsights) -> RootCauseResponse:
+    root_cause: RootCauseExplanation = insights.root_cause
+    return RootCauseResponse(
+        code=root_cause.code,
+        title=root_cause.title,
+        explanation=root_cause.explanation,
+        next_step=root_cause.next_step,
+        confidence=root_cause.confidence,
+    )
+
+
+def _suggestion_response(insights: AnalysisInsights) -> FixSuggestionResponse:
+    suggestion: FixSuggestion = insights.suggestion
+    comparison: CodeComparison = suggestion.comparison
+    return FixSuggestionResponse(
+        available=suggestion.available,
+        title=suggestion.title,
+        description=suggestion.description,
+        confidence=suggestion.confidence,
+        comparison=CodeComparisonResponse(
+            before=comparison.before,
+            after=comparison.after,
+            unified_diff=comparison.unified_diff,
+            changed=comparison.changed,
+            before_valid_syntax=comparison.before_valid_syntax,
+            after_valid_syntax=comparison.after_valid_syntax,
+        ),
+        limitation=suggestion.limitation,
     )

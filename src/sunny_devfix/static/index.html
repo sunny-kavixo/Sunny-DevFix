@@ -142,6 +142,35 @@
             <div class="syntax-status" id="syntax-status"></div>
           </article>
 
+          <article class="result-card suggestion-card">
+            <div class="card-topline">
+              <span class="card-label">Suggested fix</span>
+              <span class="suggestion-confidence" id="suggestion-confidence">Not proposed</span>
+            </div>
+            <h3 id="suggestion-title">No automatic fix proposed</h3>
+            <p class="suggestion-description" id="suggestion-description">Run an analysis to review a conservative fix.</p>
+            <div class="comparison-grid">
+              <div class="comparison-panel">
+                <div class="comparison-label">Before</div>
+                <pre id="before-code" class="comparison-code"></pre>
+              </div>
+              <div class="comparison-panel comparison-after">
+                <div class="comparison-label">After</div>
+                <pre id="after-code" class="comparison-code"></pre>
+              </div>
+            </div>
+            <div class="diff-toolbar">
+              <span class="comparison-label">Unified diff</span>
+              <div class="copy-actions">
+                <button class="button button-quiet button-small" id="copy-fixed" type="button" disabled>Copy fixed code</button>
+                <button class="button button-quiet button-small" id="copy-diff" type="button" disabled>Copy diff</button>
+                <span class="copy-status" id="copy-status" aria-live="polite"></span>
+              </div>
+            </div>
+            <pre id="diff-output" class="diff-output">No diff available.</pre>
+            <p class="suggestion-limit" id="suggestion-limit"></p>
+          </article>
+
           <article class="result-card trace-card">
             <div class="card-topline"><span class="card-label">Traceback path</span><span class="card-number" id="frame-count">0 frames</span></div>
             <ol class="trace-list" id="trace-list"></ol>

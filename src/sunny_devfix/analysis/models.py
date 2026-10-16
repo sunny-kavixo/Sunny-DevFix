@@ -70,3 +70,46 @@ class SourceAnalysis:
     context: tuple[SourceLine, ...]
     syntax_error: SyntaxDiagnostic | None = None
     warnings: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class RootCauseExplanation:
+    """Beginner-friendly explanation for a recognized exception family."""
+
+    code: str
+    title: str
+    explanation: str
+    next_step: str
+    confidence: str
+
+
+@dataclass(frozen=True)
+class CodeComparison:
+    """Non-executing before/after source comparison."""
+
+    before: str
+    after: str
+    unified_diff: str
+    changed: bool
+    before_valid_syntax: bool
+    after_valid_syntax: bool
+
+
+@dataclass(frozen=True)
+class FixSuggestion:
+    """A conservative proposed fix or an explicit limitation."""
+
+    available: bool
+    title: str
+    description: str
+    confidence: str
+    comparison: CodeComparison
+    limitation: str | None = None
+
+
+@dataclass(frozen=True)
+class AnalysisInsights:
+    """Root-cause explanation and fix suggestion for one analysis."""
+
+    root_cause: RootCauseExplanation
+    suggestion: FixSuggestion

@@ -65,6 +65,38 @@ class SafetyResponse(BaseModel):
     message: str
 
 
+class RootCauseResponse(BaseModel):
+    """Beginner-friendly explanation of the recognized error family."""
+
+    code: str
+    title: str
+    explanation: str
+    next_step: str
+    confidence: str
+
+
+class CodeComparisonResponse(BaseModel):
+    """Before/after source and its copyable unified diff."""
+
+    before: str
+    after: str
+    unified_diff: str
+    changed: bool
+    before_valid_syntax: bool
+    after_valid_syntax: bool
+
+
+class FixSuggestionResponse(BaseModel):
+    """A proposed patch or an explicit explanation of why one was withheld."""
+
+    available: bool
+    title: str
+    description: str
+    confidence: str
+    comparison: CodeComparisonResponse
+    limitation: str | None = None
+
+
 class AnalyzeResponse(BaseModel):
     """Complete structured result for a traceback analysis request."""
 
@@ -73,4 +105,6 @@ class AnalyzeResponse(BaseModel):
     frames: list[TracebackFrameResponse]
     deepest_frame: TracebackFrameResponse | None
     source_analysis: SourceAnalysisResponse
+    root_cause: RootCauseResponse
+    suggestion: FixSuggestionResponse
     safety: SafetyResponse

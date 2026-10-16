@@ -1,4 +1,4 @@
-const DEMO_SOURCE = `def greet(name):
+const DEMO_SOURCE = `def greet(user_name):
     return "Hello, " + username
 
 print(greet("Sunny"))`;
@@ -56,49 +56,16 @@ function explainResult(result) {
     ? `${frame.filename}:${frame.line_number} · ${frame.function}`
     : "No traceback frame mapped";
 
-  const explanation = {
-    NameError: [
-      "Python reached a name it could not find in the current scope.",
-      "Check the spelling, then confirm the value is defined before this line runs.",
-    ],
-    TypeError: [
-      "An operation received a value of a type it does not support.",
-      "Inspect the values on the highlighted line and compare their actual types.",
-    ],
-    IndexError: [
-      "The code asked a sequence for a position outside its available range.",
-      "Check the sequence length and whether the index can reach its last value.",
-    ],
-    KeyError: [
-      "A dictionary lookup asked for a key that is not present.",
-      "Confirm the key exists, or use a deliberate fallback such as dict.get().",
-    ],
-    AttributeError: [
-      "The value on the left of the dot does not have that attribute.",
-      "Check whether the value is None or whether the attribute name is correct.",
-    ],
-    SyntaxError: [
-      "Python could not turn the source into a valid program structure.",
-      "Start at the highlighted line and check punctuation, indentation, and delimiters.",
-    ],
-    IndentationError: [
-      "Python found an indentation level that does not match the surrounding block.",
-      "Use consistent spaces and align the line with the block it belongs to.",
-    ],
-    ZeroDivisionError: [
-      "The code tried to divide by zero.",
-      "Trace where the denominator comes from and guard the zero case explicitly.",
-    ],
-  }[type] || [
-    "Python stopped at the exception shown above.",
-    "Use the highlighted frame as the starting point and inspect the values flowing into it.",
-  ];
-
-  document.querySelector("#explanation-title").textContent = explanation[0];
-  document.querySelector("#explanation-copy").textContent = `The traceback points to ${type} with the message: “${message}”`;
+  const rootCause = result.root_cause || {
+    title: "Python stopped at this exception",
+    explanation: "Start with the deepest traceback frame and inspect the values flowing into it.",
+    next_step: "Inspect the highlighted source line.",
+  };
+  document.querySelector("#explanation-title").textContent = rootCause.title;
+  document.querySelector("#explanation-copy").textContent = `${rootCause.explanation} The traceback message is: “${message}”`;
   document.querySelector("#next-step").textContent = targetLine
-    ? `${explanation[1]} Focus line ${targetLine}.`
-    : explanation[1];
+    ? `${rootCause.next_step} Focus line ${targetLine}.`
+    : rootCause.next_step;
 
   const context = result.source_analysis.context;
   document.querySelector("#code-context").innerHTML = context.length
@@ -126,6 +93,45 @@ function explainResult(result) {
     : '<li class="trace-item"><span class="trace-marker">—</span><span>No file frame was present.</span></li>';
 
   document.querySelector("#safety-message").textContent = result.safety.message;
+  renderSuggestion(result.suggestion);
+}
+
+function renderSuggestion(suggestion) {
+  const comparison = suggestion.comparison;
+  const confidence = document.querySelector("#suggestion-confidence");
+  confidence.textContent = suggestion.available
+    ? `${suggestion.confidence} confidence`
+    : "Not proposed";
+  confidence.classList.toggle("is-confident", suggestion.available);
+  document.querySelector("#suggestion-title").textContent = suggestion.title;
+  document.querySelector("#suggestion-description").textContent = suggestion.description;
+  document.querySelector("#before-code").textContent = comparison.before || "(empty source)";
+  document.querySelector("#after-code").textContent = comparison.after || "(empty source)";
+  document.querySelector("#diff-output").textContent = comparison.unified_diff || "No diff available.";
+  document.querySelector("#suggestion-limit").textContent = suggestion.limitation || (
+    comparison.after_valid_syntax
+      ? "✓ Proposed source passes non-executing syntax validation."
+      : "△ The proposed source needs syntax attention."
+  );
+
+  const fixedButton = document.querySelector("#copy-fixed");
+  const diffButton = document.querySelector("#copy-diff");
+  fixedButton.disabled = !suggestion.available;
+  diffButton.disabled = !suggestion.available || !comparison.unified_diff;
+  document.querySelector("#copy-status").textContent = "";
+  fixedButton.dataset.copyValue = comparison.after;
+  diffButton.dataset.copyValue = comparison.unified_diff;
+}
+
+async function copyValue(button) {
+  const value = button.dataset.copyValue || "";
+  if (!value || button.disabled) return;
+  try {
+    await navigator.clipboard.writeText(value);
+    document.querySelector("#copy-status").textContent = "Copied";
+  } catch (error) {
+    document.querySelector("#copy-status").textContent = "Copy unavailable";
+  }
 }
 
 async function analyze(event) {
@@ -192,4 +198,6 @@ document.querySelector("#clear-form").addEventListener("click", () => {
 sourceInput.addEventListener("input", updateCounts);
 tracebackInput.addEventListener("input", updateCounts);
 form.addEventListener("submit", analyze);
+document.querySelector("#copy-fixed").addEventListener("click", (event) => copyValue(event.currentTarget));
+document.querySelector("#copy-diff").addEventListener("click", (event) => copyValue(event.currentTarget));
 updateCounts();

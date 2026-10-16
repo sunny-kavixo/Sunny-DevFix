@@ -25,6 +25,9 @@ def test_root_and_static_assets_are_served() -> None:
 
     assert page.status_code == 200
     assert "Sunny DevFix" in page.text
+    assert "suggestion-card" in page.text
+    assert "copy-diff" in page.text
+    assert "before-code" in page.text
     assert stylesheet.status_code == 200
     assert "--mint" in stylesheet.text
 
@@ -34,7 +37,7 @@ def test_analyze_endpoint_returns_structured_result_without_execution() -> None:
         "POST",
         "/api/analyze",
         json={
-            "source": "def greet(name):\n    return 'hello ' + username\n",
+            "source": "def greet(user_name):\n    return 'hello ' + username\n",
             "traceback": (
                 "Traceback (most recent call last):\n"
                 '  File "app.py", line 2, in greet\n'
@@ -50,6 +53,12 @@ def test_analyze_endpoint_returns_structured_result_without_execution() -> None:
     assert body["deepest_frame"]["line_number"] == 2
     assert body["source_analysis"]["target_line"] == 2
     assert body["source_analysis"]["context"][1]["is_target"] is True
+    assert body["root_cause"]["code"] == "NameError"
+    assert body["suggestion"]["available"] is True
+    assert body["suggestion"]["comparison"]["after_valid_syntax"] is True
+    assert body["suggestion"]["comparison"]["unified_diff"].startswith(
+        "--- before.py"
+    )
     assert body["safety"] == {
         "executed": False,
         "message": (
@@ -82,3 +91,63 @@ def test_analyze_endpoint_rejects_unknown_request_fields() -> None:
     )
 
     assert response.status_code == 422
+
+
+def test_analyze_endpoint_reports_limitation_for_ambiguous_runtime_fix() -> None:
+    response = request(
+        "POST",
+        "/api/analyze",
+        json={
+            "source": "def run(user_name, user_name_):\n    return username\n",
+            "traceback": (
+                "Traceback (most recent call last):\n"
+                '  File "app.py", line 2, in run\n'
+                "    return username\n"
+                "NameError: name 'username' is not defined\n"
+            ),
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["suggestion"]["available"] is False
+    assert body["suggestion"]["comparison"]["unified_diff"] == ""
+    assert body["suggestion"]["limitation"]
+
+
+def test_analyze_endpoint_rejects_oversized_source_before_analysis() -> None:
+    response = request(
+        "POST",
+        "/api/analyze",
+        json={
+            "source": "x" * 20_001,
+            "traceback": "RuntimeError: stopped",
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_analyze_endpoint_never_executes_a_host_file_write_payload(tmp_path) -> None:
+    marker = tmp_path / "must-not-be-created.txt"
+    source = (
+        f"open({str(marker)!r}, 'w').write('host code executed')\n"
+        "missing_name\n"
+    )
+    response = request(
+        "POST",
+        "/api/analyze",
+        json={
+            "source": source,
+            "traceback": (
+                "Traceback (most recent call last):\n"
+                '  File "payload.py", line 2, in <module>\n'
+                "    missing_name\n"
+                "NameError: name 'missing_name' is not defined\n"
+            ),
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["safety"]["executed"] is False
+    assert marker.exists() is False
