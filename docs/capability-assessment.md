@@ -14,6 +14,7 @@ the Frontier Buildathon 2026 submission.
 | Evidence-driven repair | `/api/evidence` can run before/after versions in separate hardened Docker containers when explicitly enabled and confirmed. |
 | Safety boundary | Static analysis never imports or executes submitted source. Evidence execution is never direct host execution. |
 | VS Code integration | Dependency-free extension prototype publishes Problems diagnostics and user-approved Quick Fix actions to a local engine. |
+| Chrome integration | Clearly labeled, narrow Manifest V3 prototype for localhost textareas and Monaco input areas; local-only permissions and explicit apply action. |
 | Causal debugging | Traceback frames, deepest-frame mapping, root-cause explanation, confidence, and fix limitation are shown in the API/UI. |
 
 ## Explicit limitations
@@ -32,11 +33,10 @@ real VS Code UI run remains a manual demonstration step.
 
 ### Chrome extension
 
-No universal Chrome integration is advertised. Browser code editors differ in
-document access, sandboxing, and content-security policy. Implementing a
-generic content-script bridge without a named supported editor would be
-superficial and would weaken the privacy boundary. This capability remains
-unshipped rather than being represented as complete.
+The Chrome artifact is a prototype, not a universal integration. It supports
+only localhost pages with a discoverable textarea/Monaco input area. Hosted
+IDEs, cross-origin iframes, and editors with incompatible controlled-input
+implementations are outside the tested scope.
 
 ### Advanced capabilities
 

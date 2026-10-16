@@ -1,0 +1,29 @@
+#sunny-devfix-chrome-panel {
+  position: fixed;
+  z-index: 2147483647;
+  right: 18px;
+  bottom: 18px;
+  width: min(330px, calc(100vw - 36px));
+  padding: 14px;
+  border: 1px solid rgba(148, 230, 189, .35);
+  border-radius: 12px;
+  color: #edf4f2;
+  background: #131e1f;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, .28);
+  font: 12px/1.45 system-ui, sans-serif;
+}
+
+.sunny-devfix-chrome-title { font-weight: 700; }
+.sunny-devfix-chrome-title span { color: #94e6bd; }
+.sunny-devfix-chrome-title small { margin-left: 5px; color: #91a3a0; font-weight: 500; }
+.sunny-devfix-chrome-state { margin-top: 8px; color: #91a3a0; font-size: 11px; }
+.sunny-devfix-chrome-state[data-kind="ok"] { color: #94e6bd; }
+.sunny-devfix-chrome-state[data-kind="warn"] { color: #f2c477; }
+.sunny-devfix-chrome-state[data-kind="error"] { color: #f28782; }
+.sunny-devfix-chrome-list { display: grid; gap: 7px; margin-top: 10px; }
+.sunny-devfix-chrome-item { padding-top: 8px; border-top: 1px solid rgba(190, 218, 208, .13); }
+.sunny-devfix-chrome-item strong, .sunny-devfix-chrome-item span { display: block; }
+.sunny-devfix-chrome-item strong { color: #f2c477; font-size: 10px; text-transform: uppercase; }
+.sunny-devfix-chrome-item span { margin-top: 3px; color: #d8e5e1; }
+.sunny-devfix-chrome-item button { margin-top: 7px; padding: 5px 8px; border: 0; border-radius: 6px; color: #10201b; background: #94e6bd; font-size: 10px; font-weight: 700; cursor: pointer; }
+.sunny-devfix-chrome-clean { color: #91a3a0; font-size: 11px; }
