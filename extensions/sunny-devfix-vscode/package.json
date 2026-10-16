@@ -1,0 +1,45 @@
+{
+  "name": "sunny-devfix-vscode",
+  "displayName": "Sunny DevFix",
+  "description": "Local Python diagnostics and conservative quick fixes from Sunny DevFix.",
+  "version": "0.1.0",
+  "publisher": "sunny-devfix",
+  "license": "MIT",
+  "engines": {
+    "vscode": ">=1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onCommand:sunnyDevFix.analyzeDocument"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sunnyDevFix.analyzeDocument",
+        "title": "Sunny DevFix: Analyze Current Python File"
+      }
+    ],
+    "configuration": {
+      "title": "Sunny DevFix",
+      "properties": {
+        "sunnyDevFix.engineUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8000",
+          "description": "Local Sunny DevFix engine URL. Source stays local to this engine."
+        },
+        "sunnyDevFix.debounceMilliseconds": {
+          "type": "number",
+          "default": 450,
+          "minimum": 100,
+          "maximum": 2000,
+          "description": "Delay before a changed Python document is checked."
+        }
+      }
+    }
+  }
+}

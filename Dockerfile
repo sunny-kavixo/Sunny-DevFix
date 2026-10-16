@@ -17,6 +17,8 @@ RUN python -m pip install --no-cache-dir --requirement requirements-dev.lock
 COPY pyproject.toml Makefile README.md LICENSE .env.example ./
 COPY src ./src
 COPY tests ./tests
+COPY docs ./docs
+COPY extensions ./extensions
 
 EXPOSE 8000
 
