@@ -6,18 +6,19 @@ small proposed fix before testing it safely.
 
 The project is being built for the **Frontier Buildathon 2026 — Developer
 Tools & Open Source** track with OmniRush. The reproducible foundation,
-deterministic traceback/source-analysis core, FastAPI analysis endpoint,
-conservative fix suggestions, before/after diffs, and responsive browser
-workspace are now in place. The optional Docker sandbox will follow.
+deterministic traceback/source-analysis core, FastAPI analysis endpoint, live
+guardian diagnostics, conservative fix suggestions, before/after diffs, and
+responsive browser workspace are now in place. Explicit Docker evidence is
+available as an opt-in local capability.
 
 ## Safety boundary
 
 Sunny DevFix does not execute submitted Python directly on the host. The
-analysis path only parses bounded text and source code. Any future execution
-path must use an explicitly configured disposable Docker sandbox with no
-network access, no host mounts, a read-only filesystem, dropped capabilities,
-and resource limits. If those conditions are unavailable, the application must
-report that sandbox execution was not performed.
+analysis path only parses bounded text and source code. The evidence path uses
+an explicitly configured disposable Docker sandbox with no network access, no
+host mounts, a read-only filesystem, dropped capabilities, and resource limits.
+If those conditions are unavailable, the application reports that sandbox
+execution was not performed.
 
 There are no external AI or network services required at runtime.
 
@@ -70,6 +71,40 @@ Its response includes the parsed traceback, source syntax validation,
 beginner-friendly root-cause guidance, a conservative suggested fix when one
 can be determined, the before/after source, and a copyable unified diff. Fixes
 are validated with `ast.parse`; submitted source is never imported or executed.
+
+## Live Guardian
+
+The browser workspace sends source changes to `POST /api/guardian` after a
+short debounce. The guardian reports line-level syntax errors, likely
+undefined names, and guaranteed literal division-by-zero cases with severity
+and confidence labels. A quick fix is only applied after the user clicks
+**Review & apply** or **Apply fix**; diagnostics alone never modify the editor.
+
+## Evidence Lab
+
+The **Verify in Docker** action is explicit and opt-in. When
+`DEVFIX_SANDBOX_ENABLED=true` and the configured local image exists, Sunny
+DevFix runs the before and after versions in separate disposable containers
+with no network, no host mounts, a read-only filesystem, dropped capabilities,
+resource limits, and a timeout. It reports observed exit status, output, timing,
+regression status, and an evidence scorecard. A passing isolated reproduction
+is evidence for that reproduction only; it does not prove general functional
+correctness.
+
+The application container intentionally does not receive the Docker socket.
+Therefore Docker evidence is available when the local service can reach the
+host Docker CLI, not from the default app container. If the sandbox is not
+configured or the image is missing, the UI reports that evidence was not run.
+
+## VS Code integration
+
+`extensions/sunny-devfix-vscode` contains a dependency-free Python integration
+prototype that is wired to the live guardian endpoint. It debounces document
+changes, publishes Problems-panel diagnostics, and exposes fixes as normal
+user-approved Quick Fix code actions. It requires the local engine at
+`http://127.0.0.1:8000` by default; source is not sent to a cloud service.
+The repository checks the extension manifest and JavaScript syntax, but a VS
+Code Extension Development Host is not available in the offline test image.
 
 ## Test
 

@@ -12,6 +12,7 @@ from sunny_devfix.analysis.models import (
     TracebackInfo,
 )
 from sunny_devfix.analysis.insights import build_insights
+from sunny_devfix.analysis.guardian import diagnose_source
 from sunny_devfix.analysis.source_analysis import analyze_source
 from sunny_devfix.analysis.traceback_parser import parse_traceback
 
@@ -27,5 +28,6 @@ __all__ = [
     "TracebackInfo",
     "analyze_source",
     "build_insights",
+    "diagnose_source",
     "parse_traceback",
 ]

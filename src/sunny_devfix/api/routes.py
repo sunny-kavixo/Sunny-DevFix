@@ -13,6 +13,7 @@ from sunny_devfix.analysis.models import (
     TracebackFrame,
     TracebackParseError,
 )
+from sunny_devfix.analysis.guardian import diagnose_source
 from sunny_devfix.analysis.insights import build_insights
 from sunny_devfix.analysis.source_analysis import analyze_source
 from sunny_devfix.analysis.traceback_parser import parse_traceback
@@ -21,12 +22,25 @@ from sunny_devfix.api.schemas import (
     AnalyzeResponse,
     CodeComparisonResponse,
     FixSuggestionResponse,
+    EvidenceRequest,
+    EvidenceResponse,
+    EvidenceScorecardResponse,
+    GuardianDiagnosticResponse,
+    GuardianRequest,
+    GuardianResponse,
+    SandboxRunResponse,
     RootCauseResponse,
     SafetyResponse,
     SourceAnalysisResponse,
     SourceLineResponse,
     SyntaxDiagnosticResponse,
     TracebackFrameResponse,
+)
+from sunny_devfix.sandbox import (
+    EvidenceResult,
+    SandboxRun,
+    confirmation_required_result,
+    run_evidence,
 )
 
 router = APIRouter(prefix="/api")
@@ -65,6 +79,53 @@ def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
                 "or executed."
             ),
         ),
+    )
+
+
+@router.post("/guardian", response_model=GuardianResponse)
+def guardian(payload: GuardianRequest) -> GuardianResponse:
+    """Run bounded diagnostics while a user is editing source."""
+
+    try:
+        result = diagnose_source(payload.source)
+    except (AnalysisInputError, SyntaxError, ValueError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return GuardianResponse(
+        valid_syntax=result.valid_syntax,
+        line_count=result.line_count,
+        diagnostics=[
+            GuardianDiagnosticResponse(
+                code=item.code,
+                message=item.message,
+                explanation=item.explanation,
+                line_number=item.line_number,
+                column=item.column,
+                severity=item.severity,
+                confidence=item.confidence,
+                fix=(
+                    _suggestion_response_from_fix(item.fix)
+                    if item.fix is not None
+                    else None
+                ),
+            )
+            for item in result.diagnostics
+        ],
+    )
+
+
+@router.post("/evidence", response_model=EvidenceResponse)
+def evidence(payload: EvidenceRequest) -> EvidenceResponse:
+    """Run an explicitly confirmed before/after Docker reproduction."""
+
+    if not payload.confirm:
+        return _evidence_response(confirmation_required_result())
+    return _evidence_response(
+        run_evidence(
+            payload.source_before,
+            payload.source_after,
+            stdin=payload.stdin,
+            timeout_seconds=payload.timeout_seconds,
+        )
     )
 
 
@@ -120,7 +181,10 @@ def _root_cause_response(insights: AnalysisInsights) -> RootCauseResponse:
 
 
 def _suggestion_response(insights: AnalysisInsights) -> FixSuggestionResponse:
-    suggestion: FixSuggestion = insights.suggestion
+    return _suggestion_response_from_fix(insights.suggestion)
+
+
+def _suggestion_response_from_fix(suggestion: FixSuggestion) -> FixSuggestionResponse:
     comparison: CodeComparison = suggestion.comparison
     return FixSuggestionResponse(
         available=suggestion.available,
@@ -136,4 +200,34 @@ def _suggestion_response(insights: AnalysisInsights) -> FixSuggestionResponse:
             after_valid_syntax=comparison.after_valid_syntax,
         ),
         limitation=suggestion.limitation,
+    )
+
+
+def _evidence_response(result: EvidenceResult) -> EvidenceResponse:
+    return EvidenceResponse(
+        available=result.available,
+        message=result.message,
+        before=_sandbox_run_response(result.before),
+        after=_sandbox_run_response(result.after),
+        regression_detected=result.regression_detected,
+        scorecard=EvidenceScorecardResponse(
+            overall=result.scorecard.overall,
+            syntax_valid=result.scorecard.syntax_valid,
+            reproduction_passed=result.scorecard.reproduction_passed,
+            no_regression=result.scorecard.no_regression,
+            claim=result.scorecard.claim,
+        ),
+    )
+
+
+def _sandbox_run_response(run: SandboxRun | None) -> SandboxRunResponse | None:
+    if run is None:
+        return None
+    return SandboxRunResponse(
+        status=run.status,
+        exit_code=run.exit_code,
+        stdout=run.stdout,
+        stderr=run.stderr,
+        duration_ms=run.duration_ms,
+        timed_out=run.timed_out,
     )

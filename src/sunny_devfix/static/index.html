@@ -101,6 +101,25 @@
         </form>
       </section>
 
+      <section class="guardian-panel" aria-labelledby="guardian-title" aria-live="polite">
+        <div class="guardian-heading">
+          <div>
+            <span class="section-kicker">Live guardian</span>
+            <h2 id="guardian-title">Problems, while you type</h2>
+          </div>
+          <span class="guardian-state" id="guardian-state">Waiting for source</span>
+        </div>
+        <p class="guardian-intro">Local diagnostics are debounced, line-aware, and never execute your code.</p>
+        <div class="guardian-empty" id="guardian-empty">Type or paste Python to see conservative warnings and approved quick fixes.</div>
+        <div class="guardian-content hidden" id="guardian-content">
+          <div class="guardian-summary" id="guardian-summary"></div>
+          <div class="guardian-grid">
+            <div class="guardian-source" id="guardian-source" aria-label="Live diagnostic source preview"></div>
+            <div class="guardian-diagnostics" id="guardian-diagnostics"></div>
+          </div>
+        </div>
+      </section>
+
       <section class="results-section" aria-labelledby="results-title">
         <div class="results-heading">
           <div>
@@ -162,13 +181,30 @@
             <div class="diff-toolbar">
               <span class="comparison-label">Unified diff</span>
               <div class="copy-actions">
+                <button class="button button-primary button-small" id="apply-fixed" type="button" disabled>Apply fix</button>
                 <button class="button button-quiet button-small" id="copy-fixed" type="button" disabled>Copy fixed code</button>
                 <button class="button button-quiet button-small" id="copy-diff" type="button" disabled>Copy diff</button>
+                <button class="button button-quiet button-small" id="verify-evidence" type="button" disabled>Verify in Docker</button>
                 <span class="copy-status" id="copy-status" aria-live="polite"></span>
               </div>
             </div>
             <pre id="diff-output" class="diff-output">No diff available.</pre>
             <p class="suggestion-limit" id="suggestion-limit"></p>
+          </article>
+
+          <article class="result-card evidence-card hidden" id="evidence-card">
+            <div class="card-topline">
+              <span class="card-label">Evidence lab</span>
+              <span class="suggestion-confidence" id="evidence-score">Not run</span>
+            </div>
+            <h3 id="evidence-title">Reproduction evidence is opt-in</h3>
+            <p class="suggestion-description" id="evidence-message">No code runs unless you explicitly choose Verify in Docker.</p>
+            <div class="evidence-grid">
+              <div class="evidence-run"><span class="comparison-label">Before</span><strong id="evidence-before-status">—</strong><span id="evidence-before-detail">Not run</span></div>
+              <div class="evidence-run evidence-after"><span class="comparison-label">After</span><strong id="evidence-after-status">—</strong><span id="evidence-after-detail">Not run</span></div>
+            </div>
+            <pre class="evidence-output" id="evidence-output">No captured output.</pre>
+            <p class="evidence-claim" id="evidence-claim"></p>
           </article>
 
           <article class="result-card trace-card">

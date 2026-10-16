@@ -28,6 +28,8 @@ def test_root_and_static_assets_are_served() -> None:
     assert "suggestion-card" in page.text
     assert "copy-diff" in page.text
     assert "before-code" in page.text
+    assert "guardian-panel" in page.text
+    assert "verify-evidence" in page.text
     assert stylesheet.status_code == 200
     assert "--mint" in stylesheet.text
 
@@ -151,3 +153,50 @@ def test_analyze_endpoint_never_executes_a_host_file_write_payload(tmp_path) -> 
     assert response.status_code == 200
     assert response.json()["safety"]["executed"] is False
     assert marker.exists() is False
+
+
+def test_guardian_endpoint_returns_line_level_diagnostics_and_fix() -> None:
+    response = request(
+        "POST",
+        "/api/guardian",
+        json={
+            "source": "def greet(user_name):\n    return 'hello ' + username\n",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["valid_syntax"] is True
+    assert body["diagnostics"][0]["line_number"] == 2
+    assert body["diagnostics"][0]["severity"] == "error"
+    assert body["diagnostics"][0]["fix"]["available"] is True
+
+
+def test_guardian_endpoint_handles_empty_source_without_false_alarm() -> None:
+    response = request("POST", "/api/guardian", json={"source": ""})
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "valid_syntax": True,
+        "line_count": 0,
+        "diagnostics": [],
+    }
+
+
+def test_evidence_endpoint_never_runs_by_default() -> None:
+    response = request(
+        "POST",
+        "/api/evidence",
+        json={
+            "source_before": "open('/tmp/host-marker', 'w').write('x')\n",
+            "source_after": "print('safe')\n",
+            "confirm": True,
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["available"] is False
+    assert body["before"] is None
+    assert body["after"] is None
+    assert body["scorecard"]["overall"] == "unavailable"

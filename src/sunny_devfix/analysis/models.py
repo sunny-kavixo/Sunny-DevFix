@@ -113,3 +113,26 @@ class AnalysisInsights:
 
     root_cause: RootCauseExplanation
     suggestion: FixSuggestion
+
+
+@dataclass(frozen=True)
+class GuardianDiagnostic:
+    """A line-level non-executing diagnostic for code being edited."""
+
+    code: str
+    message: str
+    explanation: str
+    line_number: int
+    column: int | None
+    severity: str
+    confidence: str
+    fix: FixSuggestion | None = None
+
+
+@dataclass(frozen=True)
+class GuardianAnalysis:
+    """The complete result of one live guardian pass."""
+
+    valid_syntax: bool
+    line_count: int
+    diagnostics: tuple[GuardianDiagnostic, ...]
