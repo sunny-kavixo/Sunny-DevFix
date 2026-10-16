@@ -5,9 +5,10 @@ understanding tracebacks, learning why an error happened, and reviewing a
 small proposed fix before testing it safely.
 
 The project is being built for the **Frontier Buildathon 2026 — Developer
-Tools & Open Source** track with OmniRush. The foundation and deterministic
-traceback/source-analysis core are now in place. The browser interface and
-optional Docker sandbox will follow.
+Tools & Open Source** track with OmniRush. The reproducible foundation,
+deterministic traceback/source-analysis core, FastAPI analysis endpoint, and
+responsive browser workspace are now in place. The optional Docker sandbox and
+fix-comparison workflow will follow.
 
 ## Safety boundary
 
@@ -56,7 +57,8 @@ Start the local service with:
 make run
 ```
 
-The health endpoint is available at <http://127.0.0.1:8000/api/health>.
+Open <http://127.0.0.1:8000/> for the browser workspace. The health endpoint is
+available at <http://127.0.0.1:8000/api/health>.
 
 ## Test
 

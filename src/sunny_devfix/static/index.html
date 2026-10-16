@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Sunny DevFix explains Python tracebacks locally and safely."
+    />
+    <title>Sunny DevFix · Python debugging, explained</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="topbar shell">
+      <a class="brand" href="/" aria-label="Sunny DevFix home">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>
+          <strong>Sunny DevFix</strong>
+          <small>Python, made clearer.</small>
+        </span>
+      </a>
+      <div class="topbar-meta">
+        <span class="status-pill"><span class="status-dot"></span>Local-first</span>
+        <span class="build-pill">v0.1 MVP</span>
+      </div>
+    </header>
+
+    <main class="shell page-content">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow"><span class="eyebrow-line"></span>Traceback workspace</div>
+        <h1 id="page-title">Turn the red wall of text into a <em>next step.</em></h1>
+        <p class="hero-copy">
+          Paste your Python source and traceback. Sunny DevFix finds the failing
+          frame, checks the syntax, and explains what happened in plain language.
+        </p>
+        <div class="hero-notes" aria-label="Safety notes">
+          <span><span class="note-icon">⌁</span> No uploads</span>
+          <span><span class="note-icon">◌</span> No code execution</span>
+          <span><span class="note-icon">✓</span> Reproducible analysis</span>
+        </div>
+      </section>
+
+      <section class="workspace-card" aria-labelledby="workspace-title">
+        <div class="workspace-header">
+          <div>
+            <span class="section-kicker">01 · Input</span>
+            <h2 id="workspace-title">Show me what broke</h2>
+          </div>
+          <div class="workspace-actions">
+            <button class="button button-quiet" id="load-demo" type="button">
+              Load example
+            </button>
+            <button class="button button-quiet" id="clear-form" type="button">
+              Clear
+            </button>
+            <button class="button button-primary" id="analyze-button" type="submit" form="analysis-form">
+              Analyze traceback <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="analysis-form" novalidate>
+          <div class="editor-grid">
+            <label class="editor-card" for="source-input">
+              <span class="editor-label-row">
+                <span><span class="editor-icon">{ }</span> Python source</span>
+                <span class="editor-count" id="source-count">0 / 20,000</span>
+              </span>
+              <textarea
+                id="source-input"
+                name="source"
+                spellcheck="false"
+                autocomplete="off"
+                placeholder="Paste the Python file that raised the error..."
+                aria-describedby="source-help"
+              ></textarea>
+              <span class="editor-help" id="source-help">The code is parsed locally and never executed.</span>
+            </label>
+
+            <label class="editor-card" for="traceback-input">
+              <span class="editor-label-row">
+                <span><span class="editor-icon">!</span> Python traceback</span>
+                <span class="editor-count" id="traceback-count">0 / 20,000</span>
+              </span>
+              <textarea
+                id="traceback-input"
+                name="traceback"
+                spellcheck="false"
+                autocomplete="off"
+                placeholder="Traceback (most recent call last):&#10;  ..."
+                aria-describedby="traceback-help"
+                required
+              ></textarea>
+              <span class="editor-help" id="traceback-help">Include the final exception line for the clearest result.</span>
+            </label>
+          </div>
+        </form>
+      </section>
+
+      <section class="results-section" aria-labelledby="results-title">
+        <div class="results-heading">
+          <div>
+            <span class="section-kicker">02 · Readout</span>
+            <h2 id="results-title">What the traceback is saying</h2>
+          </div>
+          <span class="analysis-state" id="analysis-state">Waiting for a traceback</span>
+        </div>
+
+        <div class="alert-box hidden" id="error-message" role="alert"></div>
+
+        <div class="empty-state" id="empty-state">
+          <div class="empty-orbit" aria-hidden="true"><span>?</span></div>
+          <h3>Your explanation will land here</h3>
+          <p>Start with the example or paste a traceback from your terminal.</p>
+        </div>
+
+        <div class="results-grid hidden" id="results-grid">
+          <article class="result-card error-card">
+            <div class="card-topline">
+              <span class="card-label">Exception</span>
+              <span class="severity-badge">Needs attention</span>
+            </div>
+            <div class="exception-name" id="exception-type">—</div>
+            <p class="exception-message" id="exception-message">—</p>
+            <div class="location-chip" id="exception-location">No frame mapped</div>
+          </article>
+
+          <article class="result-card explanation-card">
+            <div class="card-topline"><span class="card-label">Plain-language read</span><span class="card-number">01</span></div>
+            <h3 id="explanation-title">Let’s locate the cause.</h3>
+            <p id="explanation-copy">Run an analysis to see a focused explanation.</p>
+            <div class="tip-row"><span class="tip-icon">↳</span><span id="next-step">The next step will appear here.</span></div>
+          </article>
+
+          <article class="result-card source-card">
+            <div class="card-topline"><span class="card-label">Focused source</span><span class="card-number">02</span></div>
+            <div class="code-context" id="code-context" aria-label="Focused source context"></div>
+            <div class="syntax-status" id="syntax-status"></div>
+          </article>
+
+          <article class="result-card trace-card">
+            <div class="card-topline"><span class="card-label">Traceback path</span><span class="card-number" id="frame-count">0 frames</span></div>
+            <ol class="trace-list" id="trace-list"></ol>
+          </article>
+
+          <article class="result-card safety-card">
+            <div class="safety-icon" aria-hidden="true">✓</div>
+            <div>
+              <div class="card-label">Safe by default</div>
+              <p id="safety-message">No submitted code was executed.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="shell footer">
+      <span>Sunny DevFix</span>
+      <span>Deterministic analysis · built for learning</span>
+    </footer>
+  </body>
+</html>
