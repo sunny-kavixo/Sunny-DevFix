@@ -5,10 +5,9 @@ understanding tracebacks, learning why an error happened, and reviewing a
 small proposed fix before testing it safely.
 
 The project is being built for the **Frontier Buildathon 2026 — Developer
-Tools & Open Source** track with OmniRush. The first milestone establishes a
-rebuildable Python service and an offline test command. The deterministic
-traceback and source-analysis core is being added next; the browser interface
-and optional Docker sandbox will follow.
+Tools & Open Source** track with OmniRush. The foundation and deterministic
+traceback/source-analysis core are now in place. The browser interface and
+optional Docker sandbox will follow.
 
 ## Safety boundary
 
