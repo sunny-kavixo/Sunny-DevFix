@@ -20,6 +20,8 @@ Run these from the repository before submitting:
 
 ```bash
 make test
+docker build --no-cache --tag sunny-devfix:local .
+docker run --rm --network none --read-only \
   --tmpfs /tmp:rw,nosuid,nodev,size=64m \
   sunny-devfix:local make test
 ```
