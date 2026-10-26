@@ -8,10 +8,12 @@
       content="Sunny DevFix explains Python tracebacks locally and safely."
     />
     <title>Sunny DevFix · Python debugging, explained</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/static/style.css" />
     <script src="/static/app.js" defer></script>
   </head>
   <body>
+    <a class="skip-link" href="#workspace-title">Skip to workspace</a>
     <div class="ambient ambient-one" aria-hidden="true"></div>
     <div class="ambient ambient-two" aria-hidden="true"></div>
 
@@ -39,9 +41,13 @@
         </p>
         <div class="hero-notes" aria-label="Safety notes">
           <span><span class="note-icon">⌁</span> No uploads</span>
-          <span><span class="note-icon">◌</span> No code execution</span>
+          <span><span class="note-icon">◌</span> No code execution during analysis</span>
           <span><span class="note-icon">✓</span> Reproducible analysis</span>
         </div>
+        <figure class="workflow-figure">
+          <img src="/static/workflow.svg" width="1120" height="470" decoding="async" alt="Three-step debugging process: inspect the traceback, review a suggested fix, and optionally verify it in an isolated Docker container." />
+          <figcaption>Understand → review → optionally verify. No automated fix is applied without approval.</figcaption>
+        </figure>
       </section>
 
       <section class="workspace-card" aria-labelledby="workspace-title">
