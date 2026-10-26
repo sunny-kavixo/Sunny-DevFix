@@ -223,3 +223,14 @@ textarea::placeholder { color: #4f6460; }
   .hero-notes { display: grid; gap: 8px; }
   .workspace-actions .button-primary { width: 100%; }
 }
+
+/* Lightweight, local product illustration and keyboard accessibility. */
+.workflow-figure { margin: 32px 0 0; }
+.workflow-figure img { display: block; width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); }
+.workflow-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.skip-link { position: absolute; z-index: 20; top: -100px; left: 16px; padding: 12px 16px; color: #10201b; background: var(--mint); border-radius: 8px; font-weight: 700; }
+.skip-link:focus { top: 12px; }
+:where(a, button, textarea):focus-visible { outline: 3px solid var(--mint-bright); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
