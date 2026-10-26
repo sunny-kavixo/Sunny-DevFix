@@ -1,5 +1,15 @@
 # Sunny DevFix
 
+<div align="center">
+
+![Sunny DevFix workflow](docs/assets/workflow.svg)
+
+**Local-first Python traceback analysis · Conservative fixes · Optional sandbox evidence**
+
+[Quick start](#local-setup) · [Safety boundary](#safety-boundary) · [Tests](#test) · [Architecture](#architecture)
+
+</div>
+
 Sunny DevFix is a local-first browser-based Python debugging assistant for
 understanding tracebacks, learning why an error happened, and reviewing a
 small proposed fix before testing it safely.
@@ -10,6 +20,18 @@ deterministic traceback/source-analysis core, FastAPI analysis endpoint, live
 guardian diagnostics, conservative fix suggestions, before/after diffs, and
 responsive browser workspace are now in place. Explicit Docker evidence is
 available as an opt-in local capability.
+
+## Architecture
+
+![Sunny DevFix architecture](docs/assets/architecture.svg)
+
+The browser and editor integrations communicate with the local FastAPI engine. The static-analysis path never executes submitted Python. The separate Docker evidence path runs only after explicit opt-in and when its sandbox prerequisites are met.
+
+## What this project does — and does not claim
+
+- **Implemented:** local traceback analysis, line-aware live guardian, reviewed code suggestions, before/after diffs, opt-in Docker evidence, VS Code and Chrome integration prototypes.
+- **Not implemented:** general-purpose autonomous coding agent, broad multi-file repository repair, cloud AI model integration, persisted debugging histories, and production-scale performance benchmarks.
+- **Performance:** no latency or throughput claim is made without a reproducible benchmark; evaluate cold start, guardian response times, peak RAM, and Docker isolation overhead before publishing figures.
 
 ## Safety boundary
 
