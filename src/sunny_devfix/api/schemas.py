@@ -8,6 +8,7 @@ from sunny_devfix.sandbox import (
     DEFAULT_TIMEOUT_SECONDS,
     MAX_EVIDENCE_STDIN_BYTES,
 )
+from sunny_devfix.patches import MAX_PATCH_BYTES
 
 
 class AnalyzeRequest(BaseModel):
@@ -190,3 +191,39 @@ class EvidenceResponse(BaseModel):
     after: SandboxRunResponse | None
     regression_detected: bool
     scorecard: EvidenceScorecardResponse
+
+
+class PatchPreviewRequest(BaseModel):
+    """Exact before/after content for a project-scoped patch preview."""
+
+    model_config = ConfigDict(extra="forbid")
+    project_root: str = Field(min_length=1, max_length=1024)
+    relative_path: str = Field(min_length=1, max_length=1024)
+    before: str = Field(max_length=MAX_PATCH_BYTES)
+    after: str = Field(max_length=MAX_PATCH_BYTES)
+
+
+class PatchPreviewResponse(BaseModel):
+    """Short-lived approval bound to exact file content."""
+
+    approval_id: str
+    relative_path: str
+    before_sha256: str
+    after_sha256: str
+    expires_in_seconds: int
+
+
+class PatchActionRequest(BaseModel):
+    """Explicit confirmation for a prepared patch or rollback."""
+
+    model_config = ConfigDict(extra="forbid")
+    token: str = Field(min_length=16, max_length=256)
+    confirm: bool = False
+
+
+class PatchActionResponse(BaseModel):
+    """Observed file mutation result."""
+
+    status: str
+    relative_path: str
+    rollback_id: str | None = None

@@ -29,6 +29,10 @@ from sunny_devfix.api.schemas import (
     GuardianRequest,
     GuardianResponse,
     SandboxRunResponse,
+    PatchActionRequest,
+    PatchActionResponse,
+    PatchPreviewRequest,
+    PatchPreviewResponse,
     RootCauseResponse,
     SafetyResponse,
     SourceAnalysisResponse,
@@ -36,6 +40,7 @@ from sunny_devfix.api.schemas import (
     SyntaxDiagnosticResponse,
     TracebackFrameResponse,
 )
+from sunny_devfix.patches import PatchError, apply_patch, prepare_patch, rollback_patch
 from sunny_devfix.sandbox import (
     EvidenceResult,
     SandboxRun,
@@ -127,6 +132,41 @@ def evidence(payload: EvidenceRequest) -> EvidenceResponse:
             timeout_seconds=payload.timeout_seconds,
         )
     )
+
+
+@router.post("/patches/preview", response_model=PatchPreviewResponse)
+def patch_preview(payload: PatchPreviewRequest) -> PatchPreviewResponse:
+    """Validate a patch without writing and bind approval to its exact content."""
+
+    try:
+        preview = prepare_patch(
+            payload.project_root, payload.relative_path, payload.before, payload.after
+        )
+    except PatchError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return PatchPreviewResponse(**preview.__dict__)
+
+
+@router.post("/patches/apply", response_model=PatchActionResponse)
+def patch_apply(payload: PatchActionRequest) -> PatchActionResponse:
+    """Apply one prepared patch after explicit confirmation."""
+
+    try:
+        result = apply_patch(payload.token, confirm=payload.confirm)
+    except PatchError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return PatchActionResponse(**result.__dict__)
+
+
+@router.post("/patches/rollback", response_model=PatchActionResponse)
+def patch_rollback(payload: PatchActionRequest) -> PatchActionResponse:
+    """Rollback one applied patch after explicit confirmation."""
+
+    try:
+        result = rollback_patch(payload.token, confirm=payload.confirm)
+    except PatchError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return PatchActionResponse(**result.__dict__)
 
 
 def _frame_response(frame: TracebackFrame) -> TracebackFrameResponse:

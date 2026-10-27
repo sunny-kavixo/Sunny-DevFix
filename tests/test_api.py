@@ -200,3 +200,66 @@ def test_evidence_endpoint_never_runs_by_default() -> None:
     assert body["before"] is None
     assert body["after"] is None
     assert body["scorecard"]["overall"] == "unavailable"
+
+
+def test_patch_api_requires_preview_confirmation_and_supports_rollback(
+    monkeypatch, tmp_path
+) -> None:
+    target = tmp_path / "app.py"
+    target.write_text("before\n")
+    monkeypatch.setenv("DEVFIX_PROJECT_ROOTS", str(tmp_path))
+
+    preview = request(
+        "POST",
+        "/api/patches/preview",
+        json={
+            "project_root": str(tmp_path),
+            "relative_path": "app.py",
+            "before": "before\n",
+            "after": "after\n",
+        },
+    )
+    assert preview.status_code == 200
+    approval_id = preview.json()["approval_id"]
+    assert len(preview.json()["before_sha256"]) == 64
+    assert target.read_text() == "before\n"
+
+    refused = request(
+        "POST", "/api/patches/apply", json={"token": approval_id, "confirm": False}
+    )
+    assert refused.status_code == 422
+    assert target.read_text() == "before\n"
+
+    applied = request(
+        "POST", "/api/patches/apply", json={"token": approval_id, "confirm": True}
+    )
+    assert applied.status_code == 200
+    assert applied.json()["status"] == "applied"
+    assert target.read_text() == "after\n"
+
+    rolled_back = request(
+        "POST",
+        "/api/patches/rollback",
+        json={"token": applied.json()["rollback_id"], "confirm": True},
+    )
+    assert rolled_back.status_code == 200
+    assert target.read_text() == "before\n"
+
+
+def test_patch_api_rejects_unauthorized_root(monkeypatch, tmp_path) -> None:
+    target = tmp_path / "app.py"
+    target.write_text("before\n")
+    monkeypatch.delenv("DEVFIX_PROJECT_ROOTS", raising=False)
+
+    response = request(
+        "POST",
+        "/api/patches/preview",
+        json={
+            "project_root": str(tmp_path),
+            "relative_path": "app.py",
+            "before": "before\n",
+            "after": "after\n",
+        },
+    )
+    assert response.status_code == 422
+    assert "disabled" in response.json()["detail"]
