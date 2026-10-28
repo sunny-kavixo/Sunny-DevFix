@@ -227,3 +227,95 @@ class PatchActionResponse(BaseModel):
     status: str
     relative_path: str
     rollback_id: str | None = None
+
+
+class ModelInfoResponse(BaseModel):
+    """Diagnostics and metadata for Nebius Token Factory and NVIDIA models."""
+
+    provider: str
+    model: str
+    base_url: str
+    enabled: bool
+    configured: bool
+    key_present: bool
+    key_masked: str
+    timeout_seconds: float
+    max_retries: int
+
+
+class AgentTimelineItem(BaseModel):
+    """One event in the agent repair lifecycle."""
+
+    state: str
+    description: str
+    metadata: dict[str, str | int | float | bool] = Field(default_factory=dict)
+
+
+class AgentRepairRequest(BaseModel):
+    """Request to run full agentic analysis and patch proposal."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    source: str = Field(default="", max_length=MAX_SOURCE_BYTES)
+    traceback: str = Field(
+        min_length=1,
+        max_length=MAX_TRACEBACK_BYTES,
+        description="The Python traceback or error to debug.",
+    )
+    filename: str = Field(default="<submitted>", min_length=1, max_length=512)
+    project_root: str | None = Field(default=None, max_length=1024)
+    relative_path: str | None = Field(default=None, max_length=1024)
+    use_nebius: bool = Field(default=True)
+
+
+class AgentRepairResultResponse(BaseModel):
+    """Detailed repair diagnosis and unified patch."""
+
+    available: bool
+    provider: str
+    model: str
+    is_ai_generated: bool
+    root_cause_title: str
+    root_cause_explanation: str
+    next_step: str
+    confidence: str
+    fix_description: str
+    before_source: str
+    after_source: str
+    unified_diff: str
+    syntax_valid: bool
+    error_message: str | None = None
+
+
+class AgentRepairResponse(BaseModel):
+    """Complete response from the agentic repair orchestrator."""
+
+    state: str
+    repair: AgentRepairResultResponse | None
+    patch_preview: PatchPreviewResponse | None
+    timeline: list[AgentTimelineItem]
+    error: str | None = None
+
+
+class AgentApplyRequest(BaseModel):
+    """Request to confirm and apply an agent-generated patch."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    token: str = Field(min_length=16, max_length=256)
+    confirm: bool = False
+    run_sandbox_evidence: bool = False
+    stdin: str = Field(default="", max_length=MAX_EVIDENCE_STDIN_BYTES)
+    source_before: str = Field(default="", max_length=MAX_SOURCE_BYTES)
+    source_after: str = Field(default="", max_length=MAX_SOURCE_BYTES)
+
+
+class AgentApplyResponse(BaseModel):
+    """Result of human-approved patch execution."""
+
+    state: str
+    patch_result: PatchActionResponse | None
+    evidence: EvidenceResponse | None
+    timeline: list[AgentTimelineItem]
+    error: str | None = None
+
