@@ -1,7 +1,7 @@
 const DEMO_SOURCE = `def greet(user_name):
     return "Hello, " + username
 
-print(greet("Sunny"))`;
+print(greet("Sunny"))` + "\n";
 
 const DEMO_TRACEBACK = `Traceback (most recent call last):
   File "demo.py", line 4, in <module>
@@ -30,6 +30,8 @@ let guardianTimer = null;
 let guardianRequestId = 0;
 let currentGuardianDiagnostics = [];
 let currentSuggestion = null;
+let patchApprovalId = null;
+let patchRollbackId = null;
 
 function updateCount(input, output) {
   output.textContent = `${input.value.length.toLocaleString()} / 20,000`;
@@ -133,9 +135,68 @@ function renderSuggestion(suggestion) {
   fixedButton.disabled = !suggestion.available;
   diffButton.disabled = !suggestion.available || !comparison.unified_diff;
   evidenceButton.disabled = !suggestion.available || !comparison.changed;
+  document.querySelector("#preview-patch").disabled = !suggestion.available || !comparison.changed;
+  resetPatchWorkflow();
   document.querySelector("#copy-status").textContent = "";
   fixedButton.dataset.copyValue = comparison.after;
   diffButton.dataset.copyValue = comparison.unified_diff;
+}
+
+function setPatchStage(stage, message, kind = "") {
+  const state = document.querySelector("#patch-state");
+  const notice = document.querySelector("#patch-notice");
+  state.textContent = stage === "approved" ? "Approved · not applied" : stage.replace("-", " ");
+  notice.textContent = message;
+  notice.className = `patch-notice${kind ? ` is-${kind}` : ""}`;
+  document.querySelectorAll(".patch-timeline li").forEach((item) => item.classList.toggle("is-current", item.dataset.stage === stage));
+}
+
+function resetPatchWorkflow() {
+  patchApprovalId = null; patchRollbackId = null;
+  document.querySelector("#patch-confirm").checked = false;
+  document.querySelector("#apply-patch").disabled = true;
+  document.querySelector("#rollback-patch").disabled = true;
+  setPatchStage("analyzed", "No file operation has run.");
+}
+
+async function patchRequest(path, body) {
+  const response = await fetch(path, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+  const payload = await response.json();
+  if (!response.ok) throw new Error(typeof payload.detail === "string" ? payload.detail : "The patch request was rejected.");
+  return payload;
+}
+
+async function previewPatch() {
+  if (!currentSuggestion?.available) return;
+  const root = document.querySelector("#project-root").value.trim();
+  const relativePath = document.querySelector("#relative-path").value.trim();
+  if (!root || !relativePath) { setPatchStage("analyzed", "Enter an authorized root and a relative file path.", "error"); return; }
+  try {
+    const comparison = currentSuggestion.comparison;
+    const payload = await patchRequest("/api/patches/preview", {project_root: root, relative_path: relativePath, before: comparison.before, after: comparison.after});
+    patchApprovalId = payload.approval_id;
+    document.querySelector("#apply-patch").disabled = !document.querySelector("#patch-confirm").checked;
+    setPatchStage("approved", `Preview bound to ${payload.relative_path}. It expires in ${payload.expires_in_seconds} seconds.`, "success");
+  } catch (error) { patchApprovalId = null; document.querySelector("#apply-patch").disabled = true; setPatchStage("analyzed", error instanceof Error ? error.message : "Preview failed.", "error"); }
+}
+
+async function applyFilePatch() {
+  if (!patchApprovalId || !document.querySelector("#patch-confirm").checked) return;
+  try {
+    const payload = await patchRequest("/api/patches/apply", {token: patchApprovalId, confirm: true});
+    patchApprovalId = null; patchRollbackId = payload.rollback_id;
+    document.querySelector("#apply-patch").disabled = true; document.querySelector("#rollback-patch").disabled = !patchRollbackId;
+    setPatchStage("applied", "Patch written atomically. This is applied, not functionally verified.", "success");
+  } catch (error) { setPatchStage("approved", error instanceof Error ? error.message : "Apply failed.", "error"); }
+}
+
+async function rollbackFilePatch() {
+  if (!patchRollbackId) return;
+  try {
+    await patchRequest("/api/patches/rollback", {token: patchRollbackId, confirm: true}); patchRollbackId = null;
+    document.querySelector("#rollback-patch").disabled = true;
+    setPatchStage("rolled-back", "Original content restored. Newer edits would have blocked rollback.", "success");
+  } catch (error) { setPatchStage("applied", error instanceof Error ? error.message : "Rollback failed.", "error"); }
 }
 
 function renderGuardian(result) {
@@ -404,4 +465,8 @@ document.querySelector("#apply-fixed").addEventListener("click", applyCurrentFix
 document.querySelector("#verify-evidence").addEventListener("click", verifyEvidence);
 document.querySelector("#copy-fixed").addEventListener("click", (event) => copyValue(event.currentTarget));
 document.querySelector("#copy-diff").addEventListener("click", (event) => copyValue(event.currentTarget));
+document.querySelector("#preview-patch").addEventListener("click", previewPatch);
+document.querySelector("#apply-patch").addEventListener("click", applyFilePatch);
+document.querySelector("#rollback-patch").addEventListener("click", rollbackFilePatch);
+document.querySelector("#patch-confirm").addEventListener("change", (event) => { document.querySelector("#apply-patch").disabled = !patchApprovalId || !event.currentTarget.checked; });
 updateCounts();

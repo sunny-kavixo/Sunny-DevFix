@@ -20,7 +20,7 @@
 
 * { box-sizing: border-box; }
 
-html { min-width: 320px; background: var(--page); }
+html { min-width: 320px; overflow-x: hidden; background: var(--page); }
 
 body {
   min-height: 100vh;
@@ -50,7 +50,7 @@ button { cursor: pointer; }
 }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
-.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; color: #10201c; background: var(--mint); border-radius: 11px; box-shadow: 0 0 26px rgba(148, 230, 189, .22); font-size: 18px; }
+.brand-mark { display: block; width: 34px; height: 34px; border-radius: 9px; box-shadow: 0 0 26px rgba(148, 230, 189, .18); }
 .brand strong { display: block; font-size: 14px; letter-spacing: -.01em; }
 .brand small { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; letter-spacing: .01em; }
 .topbar-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; }
@@ -167,6 +167,22 @@ textarea::placeholder { color: #4f6460; }
 .diff-output { min-height: 80px; max-height: 180px; margin-top: 8px; color: #b4d7ce; }
 .suggestion-limit { margin: 10px 0 0; color: var(--amber); font-size: 10px; line-height: 1.5; }
 .evidence-card { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(40, 80, 66, .27), rgba(19, 29, 30, .90) 62%); }
+.patch-card { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(42, 65, 74, .34), rgba(19, 29, 30, .92) 62%); }
+.patch-card h3 { margin-bottom: 7px; font-size: 18px; }
+.patch-state { padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--amber); font-size: 9px; font-weight: 700; text-transform: uppercase; }
+.patch-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.patch-fields label { display: grid; gap: 7px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.patch-fields input[type="text"] { width: 100%; min-height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; outline: none; color: var(--ink); background: rgba(3, 8, 9, .48); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+.patch-fields input:focus-visible { border-color: var(--mint); outline: 3px solid rgba(148, 230, 189, .12); }
+.approval-check { display: flex; align-items: flex-start; gap: 9px; margin: 14px 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.approval-check input { margin-top: 2px; accent-color: var(--mint); }
+.patch-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.patch-notice { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: rgba(3, 8, 9, .35); font-size: 11px; }
+.patch-notice.is-success { color: var(--mint); border-color: rgba(148, 230, 189, .28); }
+.patch-notice.is-error { color: #ffc1bd; border-color: rgba(242, 135, 130, .32); }
+.patch-timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin: 14px 0 0; padding: 0; list-style: none; }
+.patch-timeline li { padding-top: 8px; border-top: 2px solid var(--line); color: var(--subtle); font-size: 9px; }
+.patch-timeline li.is-current { border-color: var(--mint); color: var(--mint); }
 .evidence-card h3 { margin-bottom: 7px; font-size: 18px; letter-spacing: -.03em; }
 .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 13px; }
 .evidence-run { display: grid; gap: 5px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: rgba(3, 8, 9, .38); }
@@ -207,13 +223,15 @@ textarea::placeholder { color: #4f6460; }
   .editor-grid, .results-grid { grid-template-columns: 1fr; }
   .editor-card textarea { min-height: 190px; }
   .guardian-heading { align-items: flex-start; flex-direction: column; }
-  .guardian-grid, .evidence-grid { grid-template-columns: 1fr; }
+  .guardian-grid, .evidence-grid, .patch-fields { grid-template-columns: 1fr; }
   .suggestion-card { grid-column: auto; }
   .comparison-grid { grid-template-columns: 1fr; }
   .diff-toolbar { align-items: flex-start; flex-direction: column; }
   .copy-actions { justify-content: flex-start; }
   .safety-card { grid-column: auto; }
   .evidence-card { grid-column: auto; }
+  .patch-card { grid-column: auto; }
+  .patch-timeline { grid-template-columns: 1fr; }
   .footer { flex-direction: column; gap: 6px; }
 }
 

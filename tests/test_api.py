@@ -30,6 +30,9 @@ def test_root_and_static_assets_are_served() -> None:
     assert "before-code" in page.text
     assert "guardian-panel" in page.text
     assert "verify-evidence" in page.text
+    assert "preview-patch" in page.text
+    assert "apply-patch" in page.text
+    assert "rollback-patch" in page.text
     assert stylesheet.status_code == 200
     assert "--mint" in stylesheet.text
 

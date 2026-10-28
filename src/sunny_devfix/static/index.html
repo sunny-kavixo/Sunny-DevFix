@@ -19,7 +19,7 @@
 
     <header class="topbar shell">
       <a class="brand" href="/" aria-label="Sunny DevFix home">
-        <span class="brand-mark" aria-hidden="true">✦</span>
+        <img class="brand-mark" src="/static/favicon.svg" width="34" height="34" alt="" />
         <span>
           <strong>Sunny DevFix</strong>
           <small>Python, made clearer.</small>
@@ -187,7 +187,7 @@
             <div class="diff-toolbar">
               <span class="comparison-label">Unified diff</span>
               <div class="copy-actions">
-                <button class="button button-primary button-small" id="apply-fixed" type="button" disabled>Apply fix</button>
+                <button class="button button-primary button-small" id="apply-fixed" type="button" disabled>Use in editor</button>
                 <button class="button button-quiet button-small" id="copy-fixed" type="button" disabled>Copy fixed code</button>
                 <button class="button button-quiet button-small" id="copy-diff" type="button" disabled>Copy diff</button>
                 <button class="button button-quiet button-small" id="verify-evidence" type="button" disabled>Verify in Docker</button>
@@ -196,6 +196,17 @@
             </div>
             <pre id="diff-output" class="diff-output">No diff available.</pre>
             <p class="suggestion-limit" id="suggestion-limit"></p>
+          </article>
+
+          <article class="result-card patch-card" id="patch-card">
+            <div class="card-topline"><span class="card-label">Safe file patch</span><span class="patch-state" id="patch-state">Analyzed · not approved</span></div>
+            <h3>Review before touching a project file</h3>
+            <p class="suggestion-description">The server accepts only existing files inside roots explicitly configured by its operator. Preview never writes; apply and rollback require separate confirmation.</p>
+            <div class="patch-fields"><label>Authorized project root<input id="project-root" type="text" autocomplete="off" placeholder="/absolute/path/to/project" /></label><label>Relative file path<input id="relative-path" type="text" autocomplete="off" placeholder="src/app.py" /></label></div>
+            <label class="approval-check"><input id="patch-confirm" type="checkbox" /> I reviewed the exact before/after diff and approve this file write.</label>
+            <div class="patch-actions"><button class="button button-quiet" id="preview-patch" type="button" disabled>Prepare secure preview</button><button class="button button-primary" id="apply-patch" type="button" disabled>Apply approved patch</button><button class="button button-quiet" id="rollback-patch" type="button" disabled>Rollback</button></div>
+            <div class="patch-notice" id="patch-notice" role="status" aria-live="polite">No file operation has run.</div>
+            <ol class="patch-timeline" aria-label="Patch lifecycle"><li class="is-current" data-stage="analyzed">Analyzed</li><li data-stage="approved">Approved</li><li data-stage="applied">Applied</li><li data-stage="verified">Verified separately</li><li data-stage="rolled-back">Rolled back</li></ol>
           </article>
 
           <article class="result-card evidence-card hidden" id="evidence-card">
