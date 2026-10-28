@@ -9,7 +9,7 @@ def test_health_endpoint_reports_running_version() -> None:
     response = asyncio.run(_get_health())
 
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "version": "0.2.0"}
+    assert response.json() == {"status": "ok", "version": "0.2.1"}
 
 
 async def _get_health() -> httpx.Response:

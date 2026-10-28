@@ -3,7 +3,8 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST_DIR="${ROOT_DIR}/dist"
-ARCHIVE_NAME="sunny-devfix-v0.2.0.tar.gz"
+VERSION="$(grep -m1 '^version = ' "${ROOT_DIR}/pyproject.toml" | cut -d'"' -f2)"
+ARCHIVE_NAME="sunny-devfix-v${VERSION}.tar.gz"
 CHECKSUM_FILE="${DIST_DIR}/SHA256SUMS"
 
 mkdir -p "${DIST_DIR}"

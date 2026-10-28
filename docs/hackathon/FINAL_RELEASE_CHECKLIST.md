@@ -19,7 +19,7 @@
 | **G6** | **CI & Reproducible Test Suite** | **PASS** | Mandatory | 86/86 tests passing in 0.81s (`pytest`). Fast local benchmark (`0.18ms` median). |
 | **G7** | **Professional Application UI/UX** | **PASS** | Mandatory | Modern dark theme, interactive lifecycle stepper, live model badge, side-by-side diffs, colored unified diffs. |
 | **G8** | **Public Repo & Open-Source License** | **PASS** | Mandatory | Permissive MIT License in root `LICENSE`. Pinned lockfiles for clean reproducibility. |
-| **G9** | **Judge-Accessible Demo / Test Build** | **PASS** | Mandatory | Public GitHub Release asset, zero-cost offline local mode, Docker container, and BYOK cloud instructions. Release: `https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0`. |
+| **G9** | **Judge-Accessible Demo / Test Build** | **PASS** | Mandatory | Public GitHub Release asset, zero-cost offline local mode, Docker container, and BYOK cloud instructions. Release: `https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.1`. |
 | **G10**| **Under-3-Minute YouTube Demo Video** | **OWNER ACTION PENDING** | Mandatory | The owner will upload the final under-three-minute product demonstration to YouTube and add its public URL to Devpost. No video or audio files are created or modified by this release workflow. |
 | **G11**| **Complete Factual Devpost Text** | **PASS** | Mandatory | Complete write-up ready in `DEVPOST_SUBMISSION.md`. Clear explanation of problem, solution, and architecture. |
 | **G12**| **Evidence of Significant New Work** | **PASS** | Mandatory | `NEW_WORK_CHANGELOG.md` documents post-August 26 commits, separating baseline foundation from hackathon additions. |

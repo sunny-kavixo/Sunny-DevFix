@@ -107,8 +107,8 @@ The complete desktop, tablet, mobile, apply, and rollback evidence set is availa
 ```bash
 git clone https://github.com/sunny-kavixo/Sunny-DevFix.git
 cd Sunny-DevFix
-git checkout feat/nebius-nvidia-verified-repair
 
+# Both main and feat/nebius-nvidia-verified-repair are synchronized
 # Install pinned dependencies
 python3 -m pip install -r requirements.lock -r requirements-dev.lock
 ```
@@ -124,6 +124,12 @@ export DEVFIX_NEBIUS_ENABLED="true"
 make run
 ```
 Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser.
+
+### 4. Standalone Judge Build (v0.2.1)
+- **Latest Release:** [Sunny DevFix v0.2.1](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.1)
+- **Direct Archive Download:** [sunny-devfix-v0.2.1.tar.gz](https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.1/sunny-devfix-v0.2.1.tar.gz) (3.0 MB)
+- **SHA-256 Checksum:** `0e17ec61ee707453eb99f26e44d83c72f6fd757c5095894e83be097ee74b15e5`
+- **Prior Verified Build:** [v0.2.0](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0)
 
 ---
 
@@ -159,7 +165,7 @@ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 
 Detailed compliance, architecture, and verification materials are maintained in `docs/hackathon/`:
 
-- [FILE_BY_FILE_AUDIT.md](docs/hackathon/FILE_BY_FILE_AUDIT.md): Comprehensive inventory of all 120 tracked files.
+- [FILE_BY_FILE_AUDIT.md](docs/hackathon/FILE_BY_FILE_AUDIT.md): Comprehensive inventory of all 127 tracked files.
 - [FINAL_ENGINEERING_VERIFICATION.md](docs/hackathon/FINAL_ENGINEERING_VERIFICATION.md): Complete verification results for backend, security, and UI.
 - [RELEASE_CONSISTENCY_REPORT.md](docs/hackathon/RELEASE_CONSISTENCY_REPORT.md): Audit proving branch synchronization and checksum consistency.
 - [FINAL_DEVPOST_HANDOFF.md](docs/hackathon/FINAL_DEVPOST_HANDOFF.md): Ready-to-paste Devpost submission text and owner instructions.

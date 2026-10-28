@@ -170,7 +170,7 @@ class NebiusClient:
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "User-Agent": "Sunny-DevFix-Agent/0.2.0 (Nebius-NVIDIA-Hackathon)",
+            "User-Agent": "Sunny-DevFix-Agent/0.2.1 (Nebius-NVIDIA-Hackathon)",
         }
 
         request_body: dict[str, Any] = {

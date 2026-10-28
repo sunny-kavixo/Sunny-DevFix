@@ -13,7 +13,7 @@
 
 - **FastAPI Endpoints Audited:**
   - `GET /` — Serves clean 2-column developer shell.
-  - `GET /api/health`, `GET /healthz`, `GET /health` — Multi-probe health checks returning `{"status": "ok", "version": "0.2.0"}`.
+  - `GET /api/health`, `GET /healthz`, `GET /health` — Multi-probe health checks returning `{"status": "ok", "version": "0.2.1"}`.
   - `GET /api/model-info` — Truthfully returns active provider, runtime model (`nvidia/Nemotron-3_5-Lightning`), and safe key redaction (`[REDACTED]` or `[NOT_SET]`).
   - `POST /api/analyze` — Pure AST & frame extraction engine; execution-free; sub-millisecond parsing (`0.18ms`).
   - `POST /api/guardian` — Debounced in-editor linter returning line-level syntax diagnostics.
@@ -68,6 +68,30 @@
 
 ## 5. Judge-Accessible Test Build & Packaging
 
-- **Release Package:** `dist/sunny-devfix-v0.2.0.tar.gz` (3.0 MB).
-- **SHA-256 Checksum:** `3b0bda3a8ec3efbb6e1136c839cd1e1245727095e3aa0329d1dec21058ddb444`.
-- **Clean Environment Verification:** Extracted to isolated temporary directory and executed test suite: **86 passed in 0.82s**.
+- **Release Package:** `dist/sunny-devfix-v0.2.1.tar.gz` (3.0 MB).
+- **SHA-256 Checksum:** `0e17ec61ee707453eb99f26e44d83c72f6fd757c5095894e83be097ee74b15e5`.
+- **Clean Environment Verification:** Extracted to isolated temporary directory and executed test suite: **86 passed in 0.86s**, application runtime endpoints verified.
+- **Historical v0.2.0 Build:** `sunny-devfix-v0.2.0.tar.gz` (`f3e4010eb53364812793337222042dddd3042bb8bf362a58bf2348dd043568d1`) preserved intact on GitHub Releases.
+
+---
+
+## 6. Exact Test Module Inventory (17 Test Suites, 86 Tests)
+
+1. `tests/test_adversarial_security.py` — 9 tests (path traversal, symlink escapes, replay attacks, prompt injection)
+2. `tests/test_agent.py` — 2 tests (in-memory agent state lifecycle and approval/rollback flow)
+3. `tests/test_agent_api.py` — 4 tests (model-info, agent repair fallback, confirmation gates)
+4. `tests/test_api.py` — 11 tests (root, static assets, passive frame extraction, guardian, patch routes)
+5. `tests/test_app.py` — 1 test (multi-probe health check `/api/health`, `/healthz`, `/health`)
+6. `tests/test_chrome_extension.py` — 2 tests (prototype manifest and mock guardian interaction)
+7. `tests/test_cloud_repair_lifecycle.py` — 1 test (end-to-end cloud repair lifecycle replay)
+8. `tests/test_diff.py` — 3 tests (unified diff formatting, empty diffs, newline edge cases)
+9. `tests/test_guardian.py` — 4 tests (AST undefined names, zero-division, builtins, syntax diagnostics)
+10. `tests/test_insights.py` — 5 tests (NameError spelling heuristics, syntax fixes, limitation reporting)
+11. `tests/test_nebius_client.py` — 13 tests (API client defaults, key masking, payload bounds, mock 401/403/429/500/timeout, secret token sanitization)
+12. `tests/test_nvidia_repair.py` — 6 tests (JSON extraction, markdown fence stripping, fallback, syntax validation)
+13. `tests/test_patches.py` — 8 tests (workspace root containment, atomic replacement, permission preservation, TTL expiry)
+14. `tests/test_sandbox.py` — 3 tests (Docker disabled-by-default, explicit confirmation, hardened execution)
+15. `tests/test_source_analysis.py` — 5 tests (frame mapping, syntax error location, input size bounds)
+16. `tests/test_traceback_parser.py` — 5 tests (deepest frame extraction, CRLF normalization, custom exception names)
+17. `tests/test_vscode_extension.py` — 2 tests (manifest wiring and quick fix mock tests)
+- **Total:** **86 passed in 0.81s** (0 failures, 0 errors, 0 skipped).

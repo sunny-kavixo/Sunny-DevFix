@@ -22,5 +22,5 @@
 | **Adversarial Security** | Path traversal, symlinks, replay, prompt injection, root escape | 9/9 dedicated adversarial tests passing | **PASS** |
 | **Safety & Human-in-the-Loop** | Preview token required before write; cryptographic rollback | Verified in browser & backend integration tests | **PASS** |
 | **Performance Benchmarks** | Sub-millisecond local analysis; low memory footprint | Median: 0.1776 ms (P95: 0.1915 ms); RAM: 48.86 MB | **PASS** |
-| **Standalone Clean Build** | Self-contained judge archive runnable in fresh environment | `dist/sunny-devfix-v0.2.0.tar.gz` (3.0 MB) extracts & passes 86/86 | **PASS** |
+| **Standalone Clean Build** | Self-contained judge archive runnable in fresh environment | `dist/sunny-devfix-v0.2.1.tar.gz` (3.0 MB) extracts & passes 86/86 | **PASS** |
 | **Live Nebius/NVIDIA Inference** | Authenticated call to NVIDIA Nemotron via Nebius Token Factory | `nvidia/Nemotron-3_5-Lightning` verified in 7.506s (`LIVE_INFERENCE_RECORD.json`) | **PASS** |

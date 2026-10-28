@@ -22,7 +22,11 @@
 `https://github.com/sunny-kavixo/Sunny-DevFix`
 
 ### Release / Test Build URL
-`https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0`
+`https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.1`
+
+### Direct Standalone Archive Download
+`https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.1/sunny-devfix-v0.2.1.tar.gz`
+(SHA-256: `0e17ec61ee707453eb99f26e44d83c72f6fd757c5095894e83be097ee74b15e5`, Size: 3.0 MB)
 
 ### License
 `MIT License`

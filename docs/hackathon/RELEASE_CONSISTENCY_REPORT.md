@@ -25,11 +25,22 @@ Prior audits noted confusion where the default `main` branch contained an older 
 
 ## 2. Release Asset & Checksum Consistency
 
-- **Release Tag:** `v0.2.0`
-- **Release Archive:** `dist/sunny-devfix-v0.2.0.tar.gz`
+### A. Current Hackathon Release (v0.2.1)
+- **Release Tag:** `v0.2.1`
+- **Release Name:** `Sunny-DevFix v0.2.1 — Final Verified Hackathon Build`
+- **Release Archive:** `dist/sunny-devfix-v0.2.1.tar.gz`
 - **Archive Size:** 3.0 MB
-- **SHA-256 Checksum:** `3b0bda3a8ec3efbb6e1136c839cd1e1245727095e3aa0329d1dec21058ddb444`
-- **Published Release URL:** [https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0)
+- **SHA-256 Checksum:** `0e17ec61ee707453eb99f26e44d83c72f6fd757c5095894e83be097ee74b15e5`
+- **Published Release URL:** [https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.1](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.1)
+- **Direct Download URL:** [https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.1/sunny-devfix-v0.2.1.tar.gz](https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.1/sunny-devfix-v0.2.1.tar.gz)
+- **Clean Extraction Test:** Verified in temporary directory — 86/86 passed in 0.86s, FastAPI `/api/health` returned `{"status": "ok", "version": "0.2.1"}`.
+
+### B. Historical Build (v0.2.0)
+- **Release Tag:** `v0.2.0`
+- **Release Archive:** `sunny-devfix-v0.2.0.tar.gz` (1.36 MiB)
+- **Published SHA-256:** `f3e4010eb53364812793337222042dddd3042bb8bf362a58bf2348dd043568d1`
+- **Source Commit:** `7ec6cf087d6ba109ac720afe3bdc7e41454152fc`
+- **Status:** Preserved as immutable historical record on GitHub. Not overwritten.
 
 ---
 
