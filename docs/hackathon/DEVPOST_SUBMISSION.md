@@ -30,7 +30,7 @@ Sunny-DevFix transforms Python runtime debugging into an accountable, verified a
 
 Sunny-DevFix implements an explicit state machine:
 1. **`ANALYZED`**: When a traceback and source file are submitted, the local AST engine parses the stack trace, extracts chained frames, and maps the deepest failing frame to the exact line and scope in the source code without importing or running untrusted code.
-2. **`PATCH_PROPOSED`**: Bounded context is transmitted to `nvidia/Llama-3.1-Nemotron-70B-Instruct` via Nebius Token Factory. The model diagnoses the root cause and synthesizes a structured repair conforming to a strict Pydantic JSON schema.
+2. **`PATCH_PROPOSED`**: Bounded context is transmitted to `nvidia/Nemotron-3_5-Lightning` via Nebius Token Factory. The model diagnoses the root cause and synthesizes a structured repair conforming to a strict Pydantic JSON schema.
 3. **`AWAITING_APPROVAL`**: The engine validates that the proposed code compiles syntactically and generates a side-by-side colored unified diff. If an authorized project root is configured, a 5-minute cryptographic approval token is issued.
 4. **`APPLIED`**: The human operator must explicitly click **Approve & Apply**. The patch is written atomically to disk and immediately backed by a single-use rollback token.
 5. **`TESTING`**: The engine optionally launches twin disposable Docker containers (`--network none`, `--read-only`, 128MB RAM limit) to execute the before and after reproductions side-by-side.
@@ -41,7 +41,7 @@ Sunny-DevFix implements an explicit state machine:
 ## 4. Technical Architecture & Technology Stack
 
 - **Core Backend**: FastAPI, Pydantic v2, Python 3.14 AST standard library.
-- **Model Inference**: Nebius Token Factory (Serverless OpenAI-Compatible API) hosting `nvidia/Llama-3.1-Nemotron-70B-Instruct`.
+- **Model Inference**: Nebius Token Factory (Serverless OpenAI-Compatible API) hosting `nvidia/Nemotron-3_5-Lightning`.
 - **Offline Fallback Engine**: Local AST & SequenceMatcher analyzer (100% functional even when offline or unconfigured).
 - **Execution Sandbox**: Docker CLI integration enforcing non-root UID `65532:65532`, dropped Linux capabilities, and read-only filesystems.
 - **Frontend Workspace**: Zero-framework Vanilla HTML5/CSS3/JavaScript devtool UI featuring an interactive agent lifecycle visualizer, live model indicator, and debounced Live Code Guardian linter.
@@ -52,12 +52,12 @@ Sunny-DevFix implements an explicit state machine:
 
 ### Nebius Token Factory
 - Connects directly to `https://api.tokenfactory.nebius.com/v1/chat/completions`.
-- Zero client-side API key leakage: credentials remain strictly in the server environment (`NEBIUS_API_KEY`) and are masked in all diagnostic outputs (`supe...8877`).
+- Zero client-side API key leakage: credentials remain strictly in the server environment (`NEBIUS_API_KEY`) and are masked in all diagnostic outputs (`v1.C...s0AL`).
 - Includes payload character caps (30,000 chars), request timeouts (20s), and exponential backoff retry logic.
 
 ### NVIDIA Model Usage
-- Primary Model: `nvidia/Llama-3.1-Nemotron-70B-Instruct`.
-- Secondary / Alternative Model: `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`.
+- Primary Model: `nvidia/Nemotron-3_5-Lightning`.
+- Alternative Models: `nvidia/Llama-3.1-Nemotron-70B-Instruct`, `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`.
 - Why NVIDIA Nemotron: NVIDIA Nemotron excels at complex reasoning, code comprehension, and instruction-following. It reliably adheres to structured JSON schemas and understands subtle Python scoping quirks (e.g. variable typos vs. global/local scope shadowing).
 
 ---
@@ -116,7 +116,7 @@ $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 - **GitHub Repository**: [https://github.com/sunny-kavixo/Sunny-DevFix](https://github.com/sunny-kavixo/Sunny-DevFix)
 - **Branch**: `feat/nebius-nvidia-verified-repair`
 - **License**: MIT Permissive Open Source
-- **Local Verification Status**: **100% PASS** (80/80 unit, functional, and adversarial security tests passing cleanly).
-- **Live Nebius & NVIDIA Inference**: Implementation complete with `nvidia/Nemotron-3_5-Lightning` and `nvidia/Llama-3.1-Nemotron-70B-Instruct`; live paid test execution held pending owner authorization.
+- **Local Verification Status**: **100% PASS** (81/81 unit, functional, and adversarial security tests passing cleanly in 0.79s).
+- **Live Nebius & NVIDIA Inference**: **100% PASS** (Live authenticated inference verified on Nebius Token Factory with `nvidia/Nemotron-3_5-Lightning`, returning valid Python syntax in 7.506s with live evidence saved in `docs/hackathon/LIVE_INFERENCE_RECORD.json`).
 - **Judge Access**: Standalone test build archive `dist/sunny-devfix-v0.2.0.tar.gz` and Docker container ready; GitHub Release asset / Cloud Run URL pending owner authorization.
-- **Demo Video**: Script and storyboard finalized; recording and YouTube link pending owner action.
+- **Demo Video**: Script and Full HD video finalized; public YouTube link pending owner upload.

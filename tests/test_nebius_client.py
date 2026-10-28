@@ -29,7 +29,7 @@ def test_client_configuration_defaults():
 
     diag = client.get_diagnostics()
     assert diag["provider"] == "Nebius Token Factory"
-    assert diag["model"] == "nvidia/Llama-3.1-Nemotron-70B-Instruct"
+    assert diag["model"] == "nvidia/Nemotron-3_5-Lightning"
     assert not diag["configured"]
     assert diag["key_masked"] == "[NOT_SET]"
 

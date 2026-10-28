@@ -12,17 +12,17 @@ import httpx
 logger = logging.getLogger("sunny_devfix.providers.nebius")
 
 DEFAULT_BASE_URL = "https://api.tokenfactory.nebius.com/v1"
-DEFAULT_MODEL = "nvidia/Llama-3.1-Nemotron-70B-Instruct"
+DEFAULT_MODEL = "nvidia/Nemotron-3_5-Lightning"
 DEFAULT_TIMEOUT_SECONDS = 20.0
 DEFAULT_MAX_RETRIES = 2
 MAX_PAYLOAD_CHARS = 30_000
 
 SUPPORTED_NVIDIA_MODELS: tuple[str, ...] = (
+    "nvidia/Nemotron-3_5-Lightning",
     "nvidia/Llama-3.1-Nemotron-70B-Instruct",
     "nebius/nvidia/nemotron-3-super-120b-a12b",
     "nebius/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
     "nebius/nvidia/Nemotron-3-Ultra-550b-a55b",
-    "nebius/nvidia/Nemotron-3_5-Lightning",
 )
 
 

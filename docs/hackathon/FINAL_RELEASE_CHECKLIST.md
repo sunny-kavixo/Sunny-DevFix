@@ -12,11 +12,11 @@
 | Gate ID | Quality Gate Description | Status | Severity | Evidence & Notes |
 | :---: | :--- | :---: | :---: | :--- |
 | **G1** | **Repository State & Clean Baseline** | **PASS** | Mandatory | Verified clean baseline at `0e36aaa`. Development isolated to `feat/nebius-nvidia-verified-repair`. |
-| **G2** | **NVIDIA Model via Nebius Token Factory** | **IMPLEMENTED / READY** | Mandatory | OpenAI-compatible client implemented for `nvidia/Llama-3.1-Nemotron-70B-Instruct`. Verified via 15 unit/mock tests. Live credit call pending user approval. |
+| **G2** | **NVIDIA Model via Nebius Token Factory** | **PASS** | Mandatory | Live authenticated inference verified with `nvidia/Nemotron-3_5-Lightning` on Nebius Token Factory (`7.506s` latency, valid syntax, evidence in `LIVE_INFERENCE_RECORD.json`). |
 | **G3** | **Meaningful Agentic Coding Workflow** | **PASS** | Mandatory | Explicit state machine (`ANALYZED` -> `PATCH_PROPOSED` -> `AWAITING_APPROVAL` -> `APPLIED` -> `TESTING` -> `VERIFIED` / `ROLLED_BACK`). |
 | **G4** | **Safety Approval & Rollback Controls** | **PASS** | Mandatory | Human-in-the-loop approval gate. Single-use cryptographic tokens. Atomic write & one-time rollback. |
 | **G5** | **Original Features Preserved** | **PASS** | Mandatory | All 50 baseline tests pass without modification. Live Code Guardian, traceback parser, AST analyzer intact. |
-| **G6** | **CI & Reproducible Test Suite** | **PASS** | Mandatory | 80/80 tests passing in 0.80s (`pytest`). Fast local benchmark (`0.18ms` median). |
+| **G6** | **CI & Reproducible Test Suite** | **PASS** | Mandatory | 81/81 tests passing in 0.79s (`pytest`). Fast local benchmark (`0.18ms` median). |
 | **G7** | **Professional Application UI/UX** | **PASS** | Mandatory | Modern dark theme, interactive lifecycle stepper, live model badge, side-by-side diffs, colored unified diffs. |
 | **G8** | **Public Repo & Open-Source License** | **PASS** | Mandatory | Permissive MIT License in root `LICENSE`. Pinned lockfiles for clean reproducibility. |
 | **G9** | **Judge-Accessible Demo / Test Build** | **PASS** | Mandatory | Zero-cost local test build (runs 100% offline without key), Docker container, and BYOK cloud instructions. |

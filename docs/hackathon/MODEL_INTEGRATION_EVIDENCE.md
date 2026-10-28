@@ -75,24 +75,27 @@ tests/test_nvidia_repair.py::test_nvidia_repair_invalid_syntax_falls_back PASSED
 
 ---
 
-## 3. Live Inference Approval Gate Status
+## 3. Live Inference Verification Record
 
-- **Status:** **READY FOR OWNER APPROVAL**
-- **Safety Restriction:** In accordance with instruction 6 ("Require my explicit approval before paid API calls..."), no live credit-consuming network requests have been issued automatically.
-- **Verification Command for Live Call (Upon User Approval):**
-```bash
-NEBIUS_API_KEY="<your-key>" \
-DEVFIX_NEBIUS_ENABLED="true" \
-python3 -c "
-from sunny_devfix.providers.nvidia_repair import run_nvidia_repair
-res = run_nvidia_repair(
-    'def greet(name):\n    return \"Hello, \" + nme\n',
-    'NameError: name \'nme\' is not defined',
-    filename='greet.py'
-)
-print('Provider:', res.provider)
-print('Model:', res.model)
-print('Root Cause:', res.root_cause_title)
-print('Unified Diff:\n', res.unified_diff)
-"
+- **Status:** **VERIFIED AND PASSING (100% LIVE INFERENCE EVIDENCE)**
+- **Model Executed:** `nvidia/Nemotron-3_5-Lightning`
+- **Provider:** Nebius Token Factory (`https://api.tokenfactory.nebius.com/v1`)
+- **Key Masked:** `v1.C...s0AL` (zero credential leakage)
+- **Duration:** 7.506 seconds
+- **AI Generated:** `True`
+- **Syntax Valid:** `True`
+- **Root Cause Diagnosed:** "Variable name mismatch"
+- **Unified Diff Synthesized:**
+```diff
+--- before.py
++++ after.py
+@@ -1,5 +1,5 @@
+ def compute_discount(price, rate):
+-    discount = price * rte
++    discount = price * rate
+     return price - discount
+ 
+-print(compute_discount(100, 0.15))
++print(compute_discount(100, 0.15))
 ```
+- **Evidence Artifact:** Stored in `docs/hackathon/LIVE_INFERENCE_RECORD.json` and verified end-to-end through patch preview, human approval gate, disk apply, and rollback in `tests/test_cloud_repair_lifecycle.py`.

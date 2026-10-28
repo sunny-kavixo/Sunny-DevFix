@@ -1,0 +1,16 @@
+{
+  "timestamp": 1793182378.1610692,
+  "provider": "Nebius Token Factory",
+  "model": "nvidia/Nemotron-3_5-Lightning",
+  "is_ai_generated": true,
+  "duration_ms": 7506,
+  "key_masked": "v1.C...s0AL",
+  "root_cause_title": "Variable name mismatch",
+  "root_cause_explanation": "The function parameter is named 'rate' but the body references 'rte', which is undefined, causing a NameError at runtime.",
+  "next_step": "Replace 'rte' with 'rate' on line 2 to reference the correct function parameter.",
+  "confidence": "high",
+  "fix_description": "Changed 'rte' to 'rate' in the discount calculation to match the function's parameter name.",
+  "syntax_valid": true,
+  "unified_diff": "--- before.py\n+++ after.py\n@@ -1,5 +1,5 @@\n def compute_discount(price, rate):\n-    discount = price * rte\n+    discount = price * rate\n     return price - discount\n \n-print(compute_discount(100, 0.15))\n+print(compute_discount(100, 0.15))",
+  "after_source": "def compute_discount(price, rate):\n    discount = price * rate\n    return price - discount\n\nprint(compute_discount(100, 0.15))"
+}

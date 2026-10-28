@@ -23,7 +23,7 @@ Unlike naive LLM wrappers that emit speculative code snippets without validation
 ## Key Features
 
 1. **NVIDIA Nemotron Causal Reasoning on Nebius Token Factory**:
-   - Routes bounded traceback stacks and source code to `nvidia/Llama-3.1-Nemotron-70B-Instruct` (or `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`).
+   - Routes bounded traceback stacks and source code to `nvidia/Nemotron-3_5-Lightning` (with `nvidia/Llama-3.1-Nemotron-70B-Instruct` supported).
    - Enforces strict Pydantic JSON schemas (`root_cause_title`, `explanation`, `recommended_next_step`, and `repaired_source`).
 2. **6-Stage Agentic Workflow Lifecycle**:
    - `ANALYZED` → `PATCH_PROPOSED` → `AWAITING_APPROVAL` → `APPLIED` → `TESTING` → `VERIFIED` (or `ROLLED_BACK`).
@@ -113,13 +113,13 @@ Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser.
 
 ## Testing & Verification
 
-Sunny-DevFix features an exhaustive 80-test test suite across 16 test files:
+Sunny-DevFix features an exhaustive 81-test test suite across 17 test files:
 
 ```bash
 # Run the complete test suite
 python3 -m pytest
 
-# Result: 80 passed in ~0.8s
+# Result: 81 passed in ~0.8s
 ```
 
 Run the deterministic benchmark:
