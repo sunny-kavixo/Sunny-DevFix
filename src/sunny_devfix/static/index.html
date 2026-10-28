@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Sunny DevFix explains Python tracebacks locally and safely."
+      content="Sunny-DevFix: NVIDIA-powered verified code repair and autonomous debugging agent on Nebius Token Factory."
     />
-    <title>Sunny DevFix · Python debugging, explained</title>
+    <title>Sunny-DevFix · NVIDIA-Powered Verified Code Repair</title>
     <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/static/style.css" />
     <script src="/static/app.js" defer></script>
@@ -22,49 +22,108 @@
         <span class="brand-mark" aria-hidden="true">✦</span>
         <span>
           <strong>Sunny DevFix</strong>
-          <small>Python, made clearer.</small>
+          <small>NVIDIA-Powered Verified Code Repair</small>
         </span>
       </a>
       <div class="topbar-meta">
-        <span class="status-pill"><span class="status-dot"></span>Local-first</span>
-        <span class="build-pill">v0.1 MVP</span>
+        <span class="hackathon-pill" id="hackathon-badge">Nebius × NVIDIA Hackathon 2026</span>
+        <span class="status-pill" id="model-status-pill">
+          <span class="status-dot" id="model-status-dot"></span>
+          <span id="model-status-text">Detecting provider…</span>
+        </span>
+        <span class="build-pill">v0.2 Verified Agent</span>
       </div>
     </header>
 
     <main class="shell page-content">
       <section class="hero" aria-labelledby="page-title">
-        <div class="eyebrow"><span class="eyebrow-line"></span>Traceback workspace</div>
-        <h1 id="page-title">Turn the red wall of text into a <em>next step.</em></h1>
+        <div class="eyebrow"><span class="eyebrow-line"></span>Agentic Code Repair Engine</div>
+        <h1 id="page-title">Causal Python debugging with <em>verified repairs.</em></h1>
         <p class="hero-copy">
-          Paste your Python source and traceback. Sunny DevFix finds the failing
-          frame, checks the syntax, and explains what happened in plain language.
+          Pairing <strong>NVIDIA Nemotron</strong> on <strong>Nebius Token Factory</strong> with deterministic AST guardrails,
+          cryptographically bound human approval, and isolated Docker container verification.
         </p>
         <div class="hero-notes" aria-label="Safety notes">
-          <span><span class="note-icon">⌁</span> No uploads</span>
-          <span><span class="note-icon">◌</span> No code execution during analysis</span>
-          <span><span class="note-icon">✓</span> Reproducible analysis</span>
+          <span><span class="note-icon">⚡</span> NVIDIA Nemotron Reasoning</span>
+          <span><span class="note-icon">🔒</span> Token-Bound Approval Gate</span>
+          <span><span class="note-icon">🐳</span> Isolated Container Evidence</span>
+          <span><span class="note-icon">↺</span> One-Click Rollback</span>
         </div>
         <figure class="workflow-figure">
-          <img src="/static/workflow.svg" width="1120" height="470" decoding="async" alt="Three-step debugging process: inspect the traceback, review a suggested fix, and optionally verify it in an isolated Docker container." />
-          <figcaption>Understand → review → optionally verify. No automated fix is applied without approval.</figcaption>
+          <img src="/static/workflow.svg" width="1120" height="470" decoding="async" alt="Six-step agentic repair lifecycle: Analyze traceback, Propose patch with NVIDIA Nemotron, Require human approval token, Apply to workspace, Run isolated Docker test, and Verify or rollback." />
+          <figcaption>Autonomous diagnosis → Human approval barrier → Container verification. Zero code execution without explicit consent.</figcaption>
         </figure>
+      </section>
+
+      <!-- Agent State Machine Visualizer -->
+      <section class="agent-lifecycle-card" id="agent-lifecycle-section" aria-label="Agent Lifecycle State">
+        <div class="lifecycle-header">
+          <span class="section-kicker">Agent Workflow Lifecycle</span>
+          <div class="agent-current-state" id="agent-current-state-badge">
+            <span class="pulse-indicator" id="agent-pulse"></span>
+            <span id="agent-state-label">STATE: IDLE</span>
+          </div>
+        </div>
+        <div class="stepper-grid" id="lifecycle-stepper">
+          <div class="stepper-step active" id="step-analyzed">
+            <span class="step-num">01</span>
+            <strong class="step-title">Analyzed</strong>
+            <small class="step-desc">AST & Traceback</small>
+          </div>
+          <div class="stepper-step" id="step-proposed">
+            <span class="step-num">02</span>
+            <strong class="step-title">Patch Proposed</strong>
+            <small class="step-desc">NVIDIA Nemotron</small>
+          </div>
+          <div class="stepper-step" id="step-approval">
+            <span class="step-num">03</span>
+            <strong class="step-title">Awaiting Approval</strong>
+            <small class="step-desc">Token Issued</small>
+          </div>
+          <div class="stepper-step" id="step-applied">
+            <span class="step-num">04</span>
+            <strong class="step-title">Applied</strong>
+            <small class="step-desc">Atomic Write</small>
+          </div>
+          <div class="stepper-step" id="step-testing">
+            <span class="step-num">05</span>
+            <strong class="step-title">Testing</strong>
+            <small class="step-desc">Docker Sandbox</small>
+          </div>
+          <div class="stepper-step" id="step-verified">
+            <span class="step-num">06</span>
+            <strong class="step-title">Verified</strong>
+            <small class="step-desc">Confirmed Repair</small>
+          </div>
+        </div>
+        <div class="agent-timeline-log hidden" id="agent-timeline-log">
+          <ul class="timeline-entries" id="timeline-entries-list"></ul>
+        </div>
       </section>
 
       <section class="workspace-card" aria-labelledby="workspace-title">
         <div class="workspace-header">
           <div>
-            <span class="section-kicker">01 · Input</span>
-            <h2 id="workspace-title">Show me what broke</h2>
+            <span class="section-kicker">01 · Input Workspace</span>
+            <h2 id="workspace-title">Traceback & Defective Source</h2>
           </div>
           <div class="workspace-actions">
-            <button class="button button-quiet" id="load-demo" type="button">
-              Load example
+            <div class="example-selector-group">
+              <label for="example-select" class="sr-only">Choose Example Bug</label>
+              <select id="example-select" class="select-quiet">
+                <option value="name_error">Example 1: NameError (Variable Typo)</option>
+                <option value="syntax_error">Example 2: SyntaxError (Missing Block Colon)</option>
+                <option value="zero_div">Example 3: ZeroDivisionError (Missing Guard)</option>
+                <option value="index_error">Example 4: IndexError (Off-by-One)</option>
+              </select>
+              <button class="button button-quiet" id="load-demo" type="button">Load</button>
+            </div>
+            <button class="button button-quiet" id="clear-form" type="button">Clear</button>
+            <button class="button button-secondary" id="analyze-button" type="submit" form="analysis-form">
+              Local Analyze
             </button>
-            <button class="button button-quiet" id="clear-form" type="button">
-              Clear
-            </button>
-            <button class="button button-primary" id="analyze-button" type="submit" form="analysis-form">
-              Analyze traceback <span aria-hidden="true">→</span>
+            <button class="button button-primary" id="agent-repair-button" type="button">
+              AI Repair (NVIDIA) <span aria-hidden="true">✦</span>
             </button>
           </div>
         </div>
@@ -81,10 +140,10 @@
                 name="source"
                 spellcheck="false"
                 autocomplete="off"
-                placeholder="Paste the Python file that raised the error..."
+                placeholder="Paste the Python source file that produced the traceback..."
                 aria-describedby="source-help"
               ></textarea>
-              <span class="editor-help" id="source-help">The code is parsed locally and never executed.</span>
+              <span class="editor-help" id="source-help">Code is analyzed securely; execution occurs only in Docker with explicit approval.</span>
             </label>
 
             <label class="editor-card" for="traceback-input">
@@ -101,7 +160,7 @@
                 aria-describedby="traceback-help"
                 required
               ></textarea>
-              <span class="editor-help" id="traceback-help">Include the final exception line for the clearest result.</span>
+              <span class="editor-help" id="traceback-help">Include the full exception frame stack for deepest frame mapping.</span>
             </label>
           </div>
         </form>
@@ -110,13 +169,13 @@
       <section class="guardian-panel" aria-labelledby="guardian-title" aria-live="polite">
         <div class="guardian-heading">
           <div>
-            <span class="section-kicker">Live guardian</span>
-            <h2 id="guardian-title">Problems, while you type</h2>
+            <span class="section-kicker">Live Code Guardian</span>
+            <h2 id="guardian-title">Real-Time AST Diagnostics</h2>
           </div>
           <span class="guardian-state" id="guardian-state">Waiting for source</span>
         </div>
-        <p class="guardian-intro">Local diagnostics are debounced, line-aware, and never execute your code.</p>
-        <div class="guardian-empty" id="guardian-empty">Type or paste Python to see conservative warnings and approved quick fixes.</div>
+        <p class="guardian-intro">Continuous, line-aware local AST linting as you type. Never imports or executes code.</p>
+        <div class="guardian-empty" id="guardian-empty">Type or paste Python to see instant syntax warnings and validated quick fixes.</div>
         <div class="guardian-content hidden" id="guardian-content">
           <div class="guardian-summary" id="guardian-summary"></div>
           <div class="guardian-grid">
@@ -129,25 +188,26 @@
       <section class="results-section" aria-labelledby="results-title">
         <div class="results-heading">
           <div>
-            <span class="section-kicker">02 · Readout</span>
-            <h2 id="results-title">What the traceback is saying</h2>
+            <span class="section-kicker">02 · Diagnosis & Patch Review</span>
+            <h2 id="results-title">Inspection Readout & Evidence</h2>
           </div>
-          <span class="analysis-state" id="analysis-state">Waiting for a traceback</span>
+          <span class="analysis-state" id="analysis-state">Waiting for analysis or repair request</span>
         </div>
 
         <div class="alert-box hidden" id="error-message" role="alert"></div>
+        <div class="alert-box alert-success hidden" id="agent-success-message" role="status"></div>
 
         <div class="empty-state" id="empty-state">
-          <div class="empty-orbit" aria-hidden="true"><span>?</span></div>
-          <h3>Your explanation will land here</h3>
-          <p>Start with the example or paste a traceback from your terminal.</p>
+          <div class="empty-orbit" aria-hidden="true"><span>✦</span></div>
+          <h3>Your diagnosis & verified patch will appear here</h3>
+          <p>Click "AI Repair (NVIDIA)" for end-to-end agentic synthesis or "Local Analyze" for deterministic parsing.</p>
         </div>
 
         <div class="results-grid hidden" id="results-grid">
           <article class="result-card error-card">
             <div class="card-topline">
-              <span class="card-label">Exception</span>
-              <span class="severity-badge">Needs attention</span>
+              <span class="card-label">Exception & Frame</span>
+              <span class="severity-badge" id="model-provider-badge">AST Analyzer</span>
             </div>
             <div class="exception-name" id="exception-type">—</div>
             <p class="exception-message" id="exception-message">—</p>
@@ -155,41 +215,47 @@
           </article>
 
           <article class="result-card explanation-card">
-            <div class="card-topline"><span class="card-label">Plain-language read</span><span class="card-number">01</span></div>
-            <h3 id="explanation-title">Let’s locate the cause.</h3>
-            <p id="explanation-copy">Run an analysis to see a focused explanation.</p>
-            <div class="tip-row"><span class="tip-icon">↳</span><span id="next-step">The next step will appear here.</span></div>
+            <div class="card-topline"><span class="card-label">Root Cause Analysis</span><span class="card-number">01</span></div>
+            <h3 id="explanation-title">Locating root cause…</h3>
+            <p id="explanation-copy">Run an analysis to review the causal explanation.</p>
+            <div class="tip-row"><span class="tip-icon">↳</span><span id="next-step">Recommended action will appear here.</span></div>
           </article>
 
           <article class="result-card source-card">
-            <div class="card-topline"><span class="card-label">Focused source</span><span class="card-number">02</span></div>
+            <div class="card-topline"><span class="card-label">Focused Source Context</span><span class="card-number">02</span></div>
             <div class="code-context" id="code-context" aria-label="Focused source context"></div>
             <div class="syntax-status" id="syntax-status"></div>
           </article>
 
-          <article class="result-card suggestion-card">
+          <article class="result-card suggestion-card" id="suggestion-card">
             <div class="card-topline">
-              <span class="card-label">Suggested fix</span>
+              <span class="card-label">Synthesized Patch</span>
               <span class="suggestion-confidence" id="suggestion-confidence">Not proposed</span>
             </div>
-            <h3 id="suggestion-title">No automatic fix proposed</h3>
-            <p class="suggestion-description" id="suggestion-description">Run an analysis to review a conservative fix.</p>
+            <h3 id="suggestion-title">No patch proposed</h3>
+            <p class="suggestion-description" id="suggestion-description">Synthesizing patch proposal…</p>
+
+            <!-- Side-by-side Before / After comparison -->
             <div class="comparison-grid">
               <div class="comparison-panel">
-                <div class="comparison-label">Before</div>
+                <div class="comparison-label">Before (Defective Source)</div>
                 <pre id="before-code" class="comparison-code"></pre>
               </div>
               <div class="comparison-panel comparison-after">
-                <div class="comparison-label">After</div>
+                <div class="comparison-label">After (NVIDIA Repaired Source)</div>
                 <pre id="after-code" class="comparison-code"></pre>
               </div>
             </div>
+
+            <!-- Unified Diff with Syntax Coloration -->
             <div class="diff-toolbar">
-              <span class="comparison-label">Unified diff</span>
+              <span class="comparison-label">Unified Diff</span>
               <div class="copy-actions">
-                <button class="button button-primary button-small" id="apply-fixed" type="button" disabled>Apply fix</button>
-                <button class="button button-quiet button-small" id="copy-fixed" type="button" disabled>Copy fixed code</button>
-                <button class="button button-quiet button-small" id="copy-diff" type="button" disabled>Copy diff</button>
+                <button class="button button-primary button-small" id="apply-fixed" type="button" disabled>Replace Editor</button>
+                <button class="button button-success button-small hidden" id="agent-apply-btn" type="button">Approve & Apply (Disk)</button>
+                <button class="button button-warning button-small hidden" id="agent-rollback-btn" type="button">Instant Rollback</button>
+                <button class="button button-quiet button-small" id="copy-fixed" type="button" disabled>Copy Fixed</button>
+                <button class="button button-quiet button-small" id="copy-diff" type="button" disabled>Copy Diff</button>
                 <button class="button button-quiet button-small" id="verify-evidence" type="button" disabled>Verify in Docker</button>
                 <span class="copy-status" id="copy-status" aria-live="polite"></span>
               </div>
@@ -200,29 +266,29 @@
 
           <article class="result-card evidence-card hidden" id="evidence-card">
             <div class="card-topline">
-              <span class="card-label">Evidence lab</span>
+              <span class="card-label">Docker Evidence Lab</span>
               <span class="suggestion-confidence" id="evidence-score">Not run</span>
             </div>
-            <h3 id="evidence-title">Reproduction evidence is opt-in</h3>
-            <p class="suggestion-description" id="evidence-message">No code runs unless you explicitly choose Verify in Docker.</p>
+            <h3 id="evidence-title">Isolated Container Verification</h3>
+            <p class="suggestion-description" id="evidence-message">Runs strictly inside an isolated container with --network none, --read-only, and memory limits.</p>
             <div class="evidence-grid">
-              <div class="evidence-run"><span class="comparison-label">Before</span><strong id="evidence-before-status">—</strong><span id="evidence-before-detail">Not run</span></div>
-              <div class="evidence-run evidence-after"><span class="comparison-label">After</span><strong id="evidence-after-status">—</strong><span id="evidence-after-detail">Not run</span></div>
+              <div class="evidence-run"><span class="comparison-label">Before Run</span><strong id="evidence-before-status">—</strong><span id="evidence-before-detail">Not run</span></div>
+              <div class="evidence-run evidence-after"><span class="comparison-label">After Run</span><strong id="evidence-after-status">—</strong><span id="evidence-after-detail">Not run</span></div>
             </div>
             <pre class="evidence-output" id="evidence-output">No captured output.</pre>
             <p class="evidence-claim" id="evidence-claim"></p>
           </article>
 
           <article class="result-card trace-card">
-            <div class="card-topline"><span class="card-label">Traceback path</span><span class="card-number" id="frame-count">0 frames</span></div>
+            <div class="card-topline"><span class="card-label">Traceback Frame Stack</span><span class="card-number" id="frame-count">0 frames</span></div>
             <ol class="trace-list" id="trace-list"></ol>
           </article>
 
           <article class="result-card safety-card">
             <div class="safety-icon" aria-hidden="true">✓</div>
             <div>
-              <div class="card-label">Safe by default</div>
-              <p id="safety-message">No submitted code was executed.</p>
+              <div class="card-label">Safety & Provenance Guarantee</div>
+              <p id="safety-message">Zero submitted code was executed during analysis. Model proposed patches require explicit human approval.</p>
             </div>
           </article>
         </div>
@@ -230,8 +296,8 @@
     </main>
 
     <footer class="shell footer">
-      <span>Sunny DevFix</span>
-      <span>Deterministic analysis · built for learning</span>
+      <span>Sunny-DevFix — NVIDIA-Powered Verified Code Repair</span>
+      <span>Nebius Token Factory & NVIDIA Nemotron · Open Source MIT</span>
     </footer>
   </body>
 </html>
