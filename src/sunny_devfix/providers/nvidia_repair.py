@@ -25,6 +25,7 @@ from sunny_devfix.providers.nebius import (
     NebiusClient,
     NebiusConfigError,
     NebiusError,
+    sanitize_error_detail,
 )
 
 logger = logging.getLogger("sunny_devfix.providers.nvidia_repair")
@@ -192,13 +193,14 @@ def run_nvidia_repair(
         )
 
     except Exception as exc:
-        logger.warning(f"Nebius/NVIDIA repair error: {exc}")
+        clean_err = sanitize_error_detail(str(exc))
+        logger.warning(f"Nebius/NVIDIA repair error: {clean_err}")
         if fallback_on_error:
             return _fallback_to_deterministic(
                 source,
                 traceback_text,
                 filename=filename,
-                reason=f"Nebius request failed ({exc.__class__.__name__}: {exc}); fell back to deterministic analyzer.",
+                reason=f"Nebius request failed ({exc.__class__.__name__}: {clean_err}); fell back to deterministic analyzer.",
             )
         return NvidiaRepairResult(
             available=False,
@@ -206,7 +208,7 @@ def run_nvidia_repair(
             model=client.model,
             is_ai_generated=False,
             root_cause_title="Repair Error",
-            root_cause_explanation=str(exc),
+            root_cause_explanation=clean_err,
             next_step="Inspect model provider configuration and logs.",
             confidence="none",
             fix_description="No fix generated due to model provider error.",
@@ -214,7 +216,7 @@ def run_nvidia_repair(
             after_source=source,
             unified_diff="",
             syntax_valid=False,
-            error_message=str(exc),
+            error_message=clean_err,
         )
 
 

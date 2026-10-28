@@ -12,6 +12,7 @@ from sunny_devfix.providers.nebius import (
     NebiusResponseError,
     NebiusTimeoutError,
     redact_key,
+    sanitize_error_detail,
 )
 
 
@@ -109,3 +110,56 @@ def test_chat_completion_timeout_mocked():
     client = NebiusClient(api_key="neb-key", enabled=True, transport=transport, max_retries=0, timeout_seconds=1.0)
     with pytest.raises(NebiusTimeoutError, match="timed out"):
         client.chat_completion([{"role": "user", "content": "analyze"}])
+
+
+def test_sanitize_error_detail_redacts_tokens():
+    raw_leak = "Error from gateway: Bearer secret_token_value_abc1234567890 with key neb-abcdef1234567890 and v1.supersecret123456789"
+    sanitized = sanitize_error_detail(raw_leak)
+    assert "secret_token" not in sanitized
+    assert "abcdef1234567890" not in sanitized
+    assert "supersecret" not in sanitized
+    assert "[REDACTED_SECRET]" in sanitized
+
+
+def test_chat_completion_auth_error_sanitizes_secret():
+    def mock_handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(401, text="Auth failed for token Bearer leaked_token_value_9999999999")
+
+    transport = httpx.MockTransport(mock_handler)
+    client = NebiusClient(api_key="neb-key", enabled=True, transport=transport, max_retries=0)
+    with pytest.raises(NebiusAuthError) as exc_info:
+        client.chat_completion([{"role": "user", "content": "analyze"}])
+    err_str = str(exc_info.value)
+    assert "leaked_token" not in err_str
+    assert "[REDACTED_SECRET]" in err_str
+
+
+def test_chat_completion_server_error_500_mocked():
+    def mock_handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(500, text="Internal gateway error in cluster")
+
+    transport = httpx.MockTransport(mock_handler)
+    client = NebiusClient(api_key="neb-key", enabled=True, transport=transport, max_retries=0)
+    with pytest.raises(NebiusResponseError, match="Nebius server error"):
+        client.chat_completion([{"role": "user", "content": "analyze"}])
+
+
+def test_chat_completion_connect_error_mocked():
+    def mock_handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("Failed to resolve host")
+
+    transport = httpx.MockTransport(mock_handler)
+    client = NebiusClient(api_key="neb-key", enabled=True, transport=transport, max_retries=0)
+    with pytest.raises(NebiusResponseError, match="Network error contacting Nebius"):
+        client.chat_completion([{"role": "user", "content": "analyze"}])
+
+
+def test_chat_completion_malformed_json_mocked():
+    def mock_handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, text="<HTML>Not JSON</HTML>")
+
+    transport = httpx.MockTransport(mock_handler)
+    client = NebiusClient(api_key="neb-key", enabled=True, transport=transport, max_retries=0)
+    with pytest.raises(NebiusResponseError, match="Failed to decode response JSON"):
+        client.chat_completion([{"role": "user", "content": "analyze"}])
+

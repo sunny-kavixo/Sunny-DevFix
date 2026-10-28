@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import time
 from typing import Any
 
@@ -52,6 +53,27 @@ def redact_key(key: str | None) -> str:
     if not key:
         return "[NOT_SET]"
     return "[REDACTED]"
+
+
+_SECRET_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"Bearer\s+[A-Za-z0-9._\-]+", re.IGNORECASE),
+    re.compile(r"v1\.[A-Za-z0-9._\-]{8,}", re.IGNORECASE),
+    re.compile(r"neb-[A-Za-z0-9._\-]{8,}", re.IGNORECASE),
+    re.compile(r"[A-Za-z0-9_\-]{32,}"),
+)
+
+
+def sanitize_error_detail(detail: str | None, max_length: int = 160) -> str:
+    """Sanitize error messages from upstream providers to prevent secret leakage and noisy logs."""
+    if not detail:
+        return ""
+    clean = str(detail).strip()
+    for pattern in _SECRET_PATTERNS:
+        clean = pattern.sub("[REDACTED_SECRET]", clean)
+    clean = re.sub(r"\s+", " ", clean)
+    if len(clean) > max_length:
+        clean = clean[:max_length].rstrip() + "..."
+    return clean
 
 
 class NebiusClient:
@@ -178,9 +200,10 @@ class NebiusClient:
                     except Exception as parse_exc:
                         raise NebiusResponseError(f"Failed to decode response JSON: {parse_exc}") from parse_exc
 
+                clean_detail = sanitize_error_detail(response.text)
                 if response.status_code in {401, 403}:
                     raise NebiusAuthError(
-                        f"Nebius Token Factory authentication failed (HTTP {response.status_code}): {response.text}"
+                        f"Nebius Token Factory authentication failed (HTTP {response.status_code}): {clean_detail}"
                     )
 
                 if response.status_code == 429:
@@ -189,7 +212,7 @@ class NebiusClient:
                         time.sleep(sleep_time)
                         continue
                     raise NebiusRateLimitError(
-                        f"Nebius Token Factory rate limit exceeded (HTTP 429): {response.text}"
+                        f"Nebius Token Factory rate limit exceeded (HTTP 429): {clean_detail}"
                     )
 
                 if 500 <= response.status_code < 600:
@@ -198,11 +221,11 @@ class NebiusClient:
                         time.sleep(sleep_time)
                         continue
                     raise NebiusResponseError(
-                        f"Nebius server error (HTTP {response.status_code}): {response.text}"
+                        f"Nebius server error (HTTP {response.status_code}): {clean_detail}"
                     )
 
                 raise NebiusResponseError(
-                    f"Unexpected Nebius HTTP status {response.status_code}: {response.text}"
+                    f"Unexpected Nebius HTTP status {response.status_code}: {clean_detail}"
                 )
 
             except httpx.TimeoutException as exc:
@@ -210,15 +233,17 @@ class NebiusClient:
                 if attempts <= self.max_retries:
                     time.sleep(0.5 * (2 ** (attempts - 1)))
                     continue
+                clean_exc = sanitize_error_detail(str(exc))
                 raise NebiusTimeoutError(
-                    f"Nebius Token Factory request timed out after {self.timeout_seconds}s: {exc}"
+                    f"Nebius Token Factory request timed out after {self.timeout_seconds}s: {clean_exc}"
                 ) from exc
             except (httpx.ConnectError, httpx.NetworkError) as exc:
                 last_error = exc
                 if attempts <= self.max_retries:
                     time.sleep(0.5 * (2 ** (attempts - 1)))
                     continue
-                raise NebiusResponseError(f"Network error contacting Nebius: {exc}") from exc
+                clean_exc = sanitize_error_detail(str(exc))
+                raise NebiusResponseError(f"Network error contacting Nebius: {clean_exc}") from exc
 
         if last_error:
             raise NebiusResponseError(f"Nebius request failed after {attempts} attempts: {last_error}") from last_error

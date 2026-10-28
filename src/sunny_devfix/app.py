@@ -28,6 +28,8 @@ def index() -> FileResponse:
 
 
 @app.get("/api/health")
+@app.get("/healthz", include_in_schema=False)
+@app.get("/health", include_in_schema=False)
 def health() -> dict[str, str]:
     """Return a small health response for local and container checks."""
 
