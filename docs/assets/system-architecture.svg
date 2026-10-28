@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-label="Sunny-DevFix system architecture diagram">
+<style>text{font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;fill:#e8ebf0} .sub{fill:#9ca6b4;font-size:17px} .head{font-size:25px;font-weight:700} .label{font-size:19px;font-weight:600} .line{fill:none;stroke:#81909f;stroke-width:2.4;marker-end:url(#arrow)} .card{fill:#151b24;stroke:#354150;stroke-width:1.5;rx:15} .small{font-size:15px;fill:#b4becb} .note{font-size:16px;fill:#d3e8d8}</style>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#81909f" stroke-width="1.5"/></marker></defs>
+<rect width="1200" height="700" fill="#0d1117"/>
+<text x="55" y="58" class="head">Sunny-DevFix · System architecture</text>
+<text x="55" y="89" class="sub">Verified repair workflow · cloud reasoning with a deterministic local fallback</text>
+<rect class="card" x="55" y="136" width="270" height="108"/><text class="label" x="80" y="179">Developer workspace</text><text class="small" x="80" y="209">Code · traceback · review UI</text>
+<rect class="card" x="450" y="136" width="290" height="108"/><text class="label" x="475" y="179">FastAPI + agent</text><text class="small" x="475" y="209">Parse · validate · route · state</text>
+<rect class="card" x="870" y="136" width="275" height="108"/><text class="label" x="895" y="179">Nebius Token Factory</text><text class="small" x="895" y="209">NVIDIA Nemotron inference</text>
+<path class="line" d="M325 190 H448"/><path class="line" d="M740 190 H868"/>
+<rect class="card" x="450" y="308" width="290" height="95"/><text class="label" x="475" y="345">Local AST fallback</text><text class="small" x="475" y="375">Deterministic offline repair</text>
+<path class="line" d="M595 244 V305"/>
+<rect class="card" x="55" y="469" width="270" height="112"/><text class="label" x="80" y="509">Patch preview</text><text class="small" x="80" y="536">Before/after diff</text><text class="small" x="80" y="557">No file write yet</text>
+<rect class="card" x="450" y="469" width="290" height="112"/><text class="label" x="475" y="508">Human approval</text><text class="small" x="475" y="535">Token · path restriction</text><text class="small" x="475" y="557">Atomic apply / rollback</text>
+<rect class="card" x="870" y="469" width="275" height="112"/><text class="label" x="895" y="508">Optional verification</text><text class="small" x="895" y="535">Isolated Docker tests</text><text class="small" x="895" y="557">Results / evidence</text>
+<path class="line" d="M595 403 V440 H190 V467"/><path class="line" d="M190 581 V627 H595 V583"/><path class="line" d="M740 525 H868"/>
+<path class="line" d="M1008 244 V275 H770 V355 H742"/>
+<text x="55" y="668" class="note">Safety boundary: untrusted code is analyzed as data; disk writes require explicit approval.</text>
+</svg>
