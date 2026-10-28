@@ -20,7 +20,7 @@
 | **G7** | **Professional Application UI/UX** | **PASS** | Mandatory | Modern dark theme, interactive lifecycle stepper, live model badge, side-by-side diffs, colored unified diffs. |
 | **G8** | **Public Repo & Open-Source License** | **PASS** | Mandatory | Permissive MIT License in root `LICENSE`. Pinned lockfiles for clean reproducibility. |
 | **G9** | **Judge-Accessible Demo / Test Build** | **PASS** | Mandatory | Zero-cost local test build (runs 100% offline without key), Docker container, and BYOK cloud instructions. |
-| **G10**| **Under-3-Minute YouTube Demo Video** | **PENDING OWNER** | Mandatory | Scene-by-scene script & storyboard completed (`DEMO_VIDEO_SCRIPT.md`). Video recording/upload requires owner action. |
+| **G10**| **Under-3-Minute YouTube Demo Video** | **PRODUCED (PASS)** | Mandatory | Finished 1080p MP4 with voice narration & subtitles rendered at `release/video/Sunny-DevFix-NVIDIA-Hackathon-Demo.mp4` (169.7s). Public upload awaiting owner authorization. |
 | **G11**| **Complete Factual Devpost Text** | **PASS** | Mandatory | Complete write-up ready in `DEVPOST_SUBMISSION.md`. Clear explanation of problem, solution, and architecture. |
 | **G12**| **Evidence of Significant New Work** | **PASS** | Mandatory | `NEW_WORK_CHANGELOG.md` documents post-August 26 commits, separating baseline foundation from hackathon additions. |
 | **G13**| **Genuine Technology Feedback** | **PASS** | Mandatory | Actionable feedback on Nebius Token Factory and NVIDIA Nemotron included in Devpost text. |
