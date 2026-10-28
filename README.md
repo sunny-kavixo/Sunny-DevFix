@@ -26,6 +26,23 @@ Unlike naive LLM wrappers that emit speculative code snippets without validation
 
 The complete desktop, tablet, mobile, apply, and rollback evidence set is available in [`release/screenshots/final_ui/`](release/screenshots/final_ui/).
 
+### Demo gallery
+
+| Workspace | Diagnosis and repair |
+| :---: | :---: |
+| ![Current desktop application](release/screenshots/final_ui/01_fresh_launch_desktop.png) | ![Repair preview](release/screenshots/final_ui/03_repair_proposed_diff.png) |
+| **Patch applied** | **Rollback completed** |
+| ![Approved patch applied](release/screenshots/final_ui/04_patch_applied_rollback_active.png) | ![Rollback completed](release/screenshots/final_ui/05_rollback_completed.png) |
+| **Laptop layout** | **Mobile layout** |
+| ![Laptop view](release/screenshots/final_ui/07_laptop_1440x900.png) | ![Mobile view](release/screenshots/final_ui/09_mobile_responsive_390px.png) |
+
+### System design
+
+![Sunny-DevFix system architecture: browser, agent, Nebius inference, local fallback, approval, and optional Docker verification](docs/assets/system-architecture.svg)
+
+[Open system diagram](docs/assets/system-architecture.svg) · [Full architecture notes](docs/hackathon/ARCHITECTURE.md)
+
+
 ---
 
 ## Key Features
