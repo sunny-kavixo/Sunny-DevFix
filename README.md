@@ -1,195 +1,49 @@
-# Sunny DevFix
+# Sunny-DevFix — NVIDIA-Powered Verified Code Repair
 
-<div align="center">
+**Nebius × NVIDIA Global AI Hackathon 2026 · Coding and Agentic Engineering**
 
-![Sunny DevFix workflow](docs/assets/workflow.svg)
+A Python debugging and repair application with traceback analysis, NVIDIA Nemotron reasoning via Nebius Token Factory, reviewed patch previews, explicit human approval, rollback, and optional isolated verification.
 
-**Local-first Python traceback analysis · Conservative fixes · Optional sandbox evidence**
+> **Judge build:** The hackathon implementation is on [`feat/nebius-nvidia-verified-repair`](https://github.com/sunny-kavixo/Sunny-DevFix/tree/feat/nebius-nvidia-verified-repair), not this historical `main` branch. Use the [v0.2.0 public release](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0) and its [downloadable test archive](https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.0/sunny-devfix-v0.2.0.tar.gz) for evaluation.
 
-[Quick start](#local-setup) · [Safety boundary](#safety-boundary) · [Tests](#test) · [Architecture](#architecture)
+## Product demo — real application screenshots
 
-</div>
+These images are captured from the published hackathon feature branch (not mockups). Click a screenshot to view it at full resolution.
 
-Sunny DevFix is a local-first browser-based Python debugging assistant for
-understanding tracebacks, learning why an error happened, and reviewing a
-small proposed fix before testing it safely.
+### Workspace and root-cause analysis
 
-The project is being built for the **Frontier Buildathon 2026 — Developer
-Tools & Open Source** track with OmniRush. The reproducible foundation,
-deterministic traceback/source-analysis core, FastAPI analysis endpoint, live
-guardian diagnostics, conservative fix suggestions, before/after diffs, and
-responsive browser workspace are now in place. Explicit Docker evidence is
-available as an opt-in local capability.
+[![Sunny-DevFix developer workspace](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/01_fresh_launch_desktop.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/01_fresh_launch_desktop.png)
 
-## Architecture
+### Repair proposal and before/after diff
 
-![Sunny DevFix architecture](docs/assets/architecture.svg)
+[![Real repair preview and diff](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/03_repair_proposed_diff.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/03_repair_proposed_diff.png)
 
-The browser and editor integrations communicate with the local FastAPI engine. The static-analysis path never executes submitted Python. The separate Docker evidence path runs only after explicit opt-in and when its sandbox prerequisites are met.
+### Explicit patch approval and rollback
 
-## What this project does — and does not claim
+| Approved patch | Restored original file |
+| :---: | :---: |
+| ![Approved patch](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/04_patch_applied_rollback_active.png) | ![Completed rollback](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/05_rollback_completed.png) |
 
-- **Implemented:** local traceback analysis, line-aware live guardian, reviewed code suggestions, before/after diffs, opt-in Docker evidence, VS Code and Chrome integration prototypes.
-- **Not implemented:** general-purpose autonomous coding agent, broad multi-file repository repair, cloud AI model integration, persisted debugging histories, and production-scale performance benchmarks.
-- **Performance:** no latency or throughput claim is made without a reproducible benchmark; evaluate cold start, guardian response times, peak RAM, and Docker isolation overhead before publishing figures.
+### Responsive mobile view
 
-## Safety boundary
+![Mobile interface](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/09_mobile_responsive_390px.png)
 
-Sunny DevFix does not execute submitted Python directly on the host. The
-analysis path only parses bounded text and source code. The evidence path uses
-an explicitly configured disposable Docker sandbox with no network access, no
-host mounts, a read-only filesystem, dropped capabilities, and resource limits.
-If those conditions are unavailable, the application reports that sandbox
-execution was not performed.
+[See all nine original browser captures](https://github.com/sunny-kavixo/Sunny-DevFix/tree/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui)
 
-There are no external AI or network services required at runtime.
+## System design
 
-## Requirements
+![System architecture: browser, FastAPI agent, Nebius NVIDIA model, offline AST fallback, patch approvals and optional Docker verification](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/docs/assets/system-architecture.svg)
 
-- Python 3.14.5
-- GNU Make
-- Docker Desktop or Docker Engine for container checks and optional sandboxing
+[Open diagram at full size](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/assets/system-architecture.svg) · [Detailed technical architecture](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/hackathon/ARCHITECTURE.md)
 
-Node.js is not required for the current architecture because the frontend will
-use static HTML, CSS, and JavaScript served by the Python application.
+## Release and verification
 
-## Local setup
+- **NVIDIA model:** `nvidia/Nemotron-3_5-Lightning` via Nebius Token Factory; live synthetic repair previously verified.
+- **Safety:** approval required before file writes, patch containment, replay protections, and exact rollback.
+- **Testing:** 81 automated tests reported passing; [published GitHub CI succeeded](https://github.com/sunny-kavixo/Sunny-DevFix/actions/runs/40675252918).
+- **Release:** [Sunny-DevFix v0.2.0](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0) · [SHA-256 checksums](https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.0/SHA256SUMS).
+- **Quick start and judge instructions:** [Feature-branch README](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/README.md) · [Judge testing guide](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/hackathon/JUDGE_TESTING_GUIDE.md).
 
-Create a project-local virtual environment and install the pinned development
-dependencies:
+The repository's default `main` branch retains an earlier local-first implementation. The screenshots, diagram, and v0.2.0 judge build above refer to the published hackathon feature branch. A demonstration video and final Devpost submission are managed separately by the project owner.
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --requirement requirements-dev.lock
-```
-
-Copy the environment template if you want to customize local settings:
-
-```bash
-cp .env.example .env
-```
-
-No secret values are required for the current milestone.
-
-## Run
-
-Start the local service with:
-
-```bash
-make run
-```
-
-Open <http://127.0.0.1:8000/> for the browser workspace. The health endpoint is
-available at <http://127.0.0.1:8000/api/health>.
-
-The analysis endpoint accepts bounded source and traceback text:
-
-```text
-POST /api/analyze
-```
-
-Its response includes the parsed traceback, source syntax validation,
-beginner-friendly root-cause guidance, a conservative suggested fix when one
-can be determined, the before/after source, and a copyable unified diff. Fixes
-are validated with `ast.parse`; submitted source is never imported or executed.
-
-## Live Guardian
-
-The browser workspace sends source changes to `POST /api/guardian` after a
-short debounce. The guardian reports line-level syntax errors, likely
-undefined names, and guaranteed literal division-by-zero cases with severity
-and confidence labels. A quick fix is only applied after the user clicks
-**Review & apply** or **Apply fix**; diagnostics alone never modify the editor.
-
-## Evidence Lab
-
-The **Verify in Docker** action is explicit and opt-in. When
-`DEVFIX_SANDBOX_ENABLED=true` and the configured local image exists, Sunny
-DevFix runs the before and after versions in separate disposable containers
-with no network, no host mounts, a read-only filesystem, dropped capabilities,
-resource limits, and a timeout. It reports observed exit status, output, timing,
-regression status, and an evidence scorecard. A passing isolated reproduction
-is evidence for that reproduction only; it does not prove general functional
-correctness.
-
-The application container intentionally does not receive the Docker socket.
-Therefore Docker evidence is available when the local service can reach the
-host Docker CLI, not from the default app container. If the sandbox is not
-configured or the image is missing, the UI reports that evidence was not run.
-
-## VS Code integration
-
-`extensions/sunny-devfix-vscode` contains a dependency-free Python integration
-prototype that is wired to the live guardian endpoint. It debounces document
-changes, publishes Problems-panel diagnostics, and exposes fixes as normal
-user-approved Quick Fix code actions. It requires the local engine at
-`http://127.0.0.1:8000` by default; source is not sent to a cloud service.
-The repository checks the extension manifest and JavaScript syntax, but a VS
-Code Extension Development Host is not available in the offline test image.
-
-## Test
-
-The single project test command is:
-
-```bash
-make test
-```
-
-The test suite is designed to run without internet access after dependencies
-have been installed into the project virtual environment.
-
-## Docker
-
-Build the project image:
-
-```bash
-docker build --tag sunny-devfix:local .
-```
-
-Run the service:
-
-```bash
-docker run --rm --publish 8000:8000 sunny-devfix:local
-```
-
-Run the tests in the image with networking disabled and a temporary writable
-directory for test tooling:
-
-```bash
-docker run --rm --network none --read-only \
-  --tmpfs /tmp:rw,nosuid,nodev,size=64m \
-  sunny-devfix:local make test
-```
-
-The Docker daemon must be running for these commands. A Docker client being
-installed is not enough.
-
-## Rebuild checklist
-
-- `.python-version` pins the Python runtime.
-- `requirements.lock` and `requirements-dev.lock` pin dependencies.
-- `Dockerfile` installs system and Python dependencies inside the image.
-- `Makefile` provides the single offline test command.
-- `.env.example` documents configuration without storing secrets.
-- The project contains no machine-specific absolute paths.
-- Git history should contain focused commits after each working milestone.
-
-## Project layout
-
-```text
-src/sunny_devfix/  application and analysis code
-tests/             offline behavior tests and fixtures
-Dockerfile         clean Linux build and run instructions
-Makefile           run and test commands
-requirements*.lock pinned Python dependencies
-```
-
-## Buildathon submission notes
-
-The final submission should use a public GitHub repository from the connected
-account, identify the Developer Tools & Open Source track, and include the
-OmniRush sessions used to build the project. A short demo video and live link
-are optional but recommended by the event guide. Keep secrets, credentials, and
-private files out of the project folder because the project history and
-sessions are part of the review process.
+**License:** MIT.
