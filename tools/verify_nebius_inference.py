@@ -35,13 +35,19 @@ NameError: name 'rte' is not defined
 def main() -> int:
     parser = argparse.ArgumentParser(description="Test live Nebius Token Factory inference.")
     parser.add_argument(
+        "--model",
+        type=str,
+        default=None,
+        help="NVIDIA model ID to evaluate (e.g. nvidia/Nemotron-3_5-Lightning or nvidia/Llama-3.1-Nemotron-70B-Instruct).",
+    )
+    parser.add_argument(
         "--execute",
         action="store_true",
         help="Execute real live inference call against Nebius Token Factory (requires NEBIUS_API_KEY).",
     )
     args = parser.parse_args()
 
-    client = NebiusClient()
+    client = NebiusClient(model=args.model)
     diagnostics = client.get_diagnostics()
 
     print("=" * 65)

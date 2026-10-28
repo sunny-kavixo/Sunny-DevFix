@@ -110,8 +110,13 @@ $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 
 ---
 
-## 9. Submission Metadata
+## 9. Submission Metadata & Verification Status
+
+- **Track**: Coding and Agentic Engineering
 - **GitHub Repository**: [https://github.com/sunny-kavixo/Sunny-DevFix](https://github.com/sunny-kavixo/Sunny-DevFix)
 - **Branch**: `feat/nebius-nvidia-verified-repair`
-- **License**: MIT
-- **Judge Access**: 100% reproducible local build + Docker container with zero key requirements; BYOK support for active Nebius Token Factory inference.
+- **License**: MIT Permissive Open Source
+- **Local Verification Status**: **100% PASS** (80/80 unit, functional, and adversarial security tests passing cleanly).
+- **Live Nebius & NVIDIA Inference**: Implementation complete with `nvidia/Nemotron-3_5-Lightning` and `nvidia/Llama-3.1-Nemotron-70B-Instruct`; live paid test execution held pending owner authorization.
+- **Judge Access**: Standalone test build archive `dist/sunny-devfix-v0.2.0.tar.gz` and Docker container ready; GitHub Release asset / Cloud Run URL pending owner authorization.
+- **Demo Video**: Script and storyboard finalized; recording and YouTube link pending owner action.

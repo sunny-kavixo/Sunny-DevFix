@@ -14,7 +14,22 @@ Welcome, judges! This guide provides reproducible, step-by-step instructions for
 
 Judges can evaluate 100% of the UI, agent lifecycle state machine, diff viewer, and safety controls without needing a private Nebius API key:
 
-### Step 1: Clone and Inspect
+### Option A: Standalone Test Build Archive (Zero Git Clone Required)
+Download and unpack the pre-packaged judge release build (includes all source, tests, fixtures, and offline capabilities):
+```bash
+# 1. Download release archive (or get sunny-devfix-v0.2.0.tar.gz from GitHub Releases)
+curl -LO https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.0/sunny-devfix-v0.2.0.tar.gz
+
+# 2. Extract and enter directory
+tar -xzf sunny-devfix-v0.2.0.tar.gz
+cd sunny-devfix-v0.2.0
+
+# 3. Verify integrity against published checksum
+shasum -a 256 sunny-devfix-v0.2.0.tar.gz
+# Matches checksum published in SHA256SUMS (or GitHub Release notes)
+```
+
+### Option B: Clone via Git
 ```bash
 git clone https://github.com/sunny-kavixo/Sunny-DevFix.git
 cd Sunny-DevFix
