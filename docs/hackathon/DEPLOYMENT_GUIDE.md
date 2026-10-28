@@ -50,7 +50,7 @@ Visit `http://localhost:8000`.
 ### Cost & Resource Estimation
 - **Hosting Tier**: Google Cloud Run (Free Tier: 2 million requests/month, 360,000 vCPU-seconds) or Fly.io free tier.
 - **Estimated Hosting Cost**: **$0.00 / month** (well within free tier).
-- **Nebius Token Factory Inference Cost**: Estimated ~$0.0008 per 1k tokens with NVIDIA Llama-3.1-Nemotron-70B-Instruct. A 50-reproduction evaluation consumes ~$0.05.
+- **Nebius Token Factory Inference Cost**: Usage is billed according to the current Token Factory pricing for `nvidia/Nemotron-3_5-Lightning`; check the provider console before enabling judge traffic. No fixed cost claim is embedded in this release.
 - **Approval Gate**: Cloud deployment requires owner approval before creating external cloud resources.
 
 ### Cloud Run Deployment Steps (Upon Approval):

@@ -19,34 +19,18 @@
 | **G6** | **CI & Reproducible Test Suite** | **PASS** | Mandatory | 81/81 tests passing in 0.79s (`pytest`). Fast local benchmark (`0.18ms` median). |
 | **G7** | **Professional Application UI/UX** | **PASS** | Mandatory | Modern dark theme, interactive lifecycle stepper, live model badge, side-by-side diffs, colored unified diffs. |
 | **G8** | **Public Repo & Open-Source License** | **PASS** | Mandatory | Permissive MIT License in root `LICENSE`. Pinned lockfiles for clean reproducibility. |
-| **G9** | **Judge-Accessible Demo / Test Build** | **PASS** | Mandatory | Zero-cost local test build (runs 100% offline without key), Docker container, and BYOK cloud instructions. |
-| **G10**| **Under-3-Minute YouTube Demo Video** | **PRODUCED (PASS)** | Mandatory | Finished 1080p MP4 with voice narration & subtitles rendered at `release/video/Sunny-DevFix-NVIDIA-Hackathon-Demo.mp4` (169.7s). Public upload awaiting owner authorization. |
+| **G9** | **Judge-Accessible Demo / Test Build** | **PASS** | Mandatory | Public GitHub Release asset, zero-cost offline local mode, Docker container, and BYOK cloud instructions. Release: `https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0`. |
+| **G10**| **Under-3-Minute YouTube Demo Video** | **OWNER ACTION PENDING** | Mandatory | The owner will upload the final under-three-minute product demonstration to YouTube and add its public URL to Devpost. No video or audio files are created or modified by this release workflow. |
 | **G11**| **Complete Factual Devpost Text** | **PASS** | Mandatory | Complete write-up ready in `DEVPOST_SUBMISSION.md`. Clear explanation of problem, solution, and architecture. |
 | **G12**| **Evidence of Significant New Work** | **PASS** | Mandatory | `NEW_WORK_CHANGELOG.md` documents post-August 26 commits, separating baseline foundation from hackathon additions. |
 | **G13**| **Genuine Technology Feedback** | **PASS** | Mandatory | Actionable feedback on Nebius Token Factory and NVIDIA Nemotron included in Devpost text. |
 | **G14**| **Judging Access Commitment (Dec 15)**| **PASS** | Mandatory | Maintained through December 15, 2026. Zero host storage consumption (5.0 GiB free). |
-| **G15**| **Explicit User Approval for Release** | **HOLD** | Mandatory | **STOPPING BEFORE EXTERNAL ACTIONS.** Awaiting user approval to push branch, run live paid API call, or submit Devpost. |
+| **G15**| **Explicit User Approval for Release** | **PASS** | Mandatory | Owner explicitly authorized pushing `feat/nebius-nvidia-verified-repair` and publishing the public GitHub Release. Devpost submission remains owner-controlled. |
 
 ---
 
-## 2. Release Action Items for Project Owner
+## 2. Remaining Owner Actions
 
-1. **Review & Run the 80-Test Suite Locally:**
-   ```bash
-   python3 -m pytest
-   ```
-2. **Review the Interactive UI Locally:**
-   ```bash
-   make run
-   # Open http://127.0.0.1:8000
-   ```
-3. **Optional Live Nebius Test Call:**
-   Provide explicit approval to execute one live synthetic request against Nebius Token Factory.
-4. **Record the 2:45 Demo Video:**
-   Read the script in `docs/hackathon/DEMO_VIDEO_SCRIPT.md` while capturing the running UI. Upload as unlisted/public on YouTube.
-5. **Push Feature Branch & Open PR:**
-   ```bash
-   git push origin feat/nebius-nvidia-verified-repair
-   ```
-6. **Submit to Devpost:**
-   Copy text from `docs/hackathon/DEVPOST_SUBMISSION.md` into the Devpost submission form at [https://nebiusglobalaihackathon.devpost.com/](https://nebiusglobalaihackathon.devpost.com/).
+1. Upload the final under-three-minute demonstration to YouTube.
+2. Paste the public GitHub repository, GitHub Release, and YouTube URLs into Devpost.
+3. Submit the completed entry on Devpost.

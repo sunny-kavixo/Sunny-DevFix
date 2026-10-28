@@ -19,10 +19,6 @@ MAX_PAYLOAD_CHARS = 30_000
 
 SUPPORTED_NVIDIA_MODELS: tuple[str, ...] = (
     "nvidia/Nemotron-3_5-Lightning",
-    "nvidia/Llama-3.1-Nemotron-70B-Instruct",
-    "nebius/nvidia/nemotron-3-super-120b-a12b",
-    "nebius/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
-    "nebius/nvidia/Nemotron-3-Ultra-550b-a55b",
 )
 
 
@@ -52,13 +48,10 @@ class NebiusResponseError(NebiusError):
 
 
 def redact_key(key: str | None) -> str:
-    """Safely mask an API key for logs or diagnostics."""
+    """Report key presence without exposing a reusable key fingerprint."""
     if not key:
         return "[NOT_SET]"
-    clean = key.strip()
-    if len(clean) <= 8:
-        return "[REDACTED]"
-    return f"{clean[:4]}...{clean[-4:]}"
+    return "[REDACTED]"
 
 
 class NebiusClient:

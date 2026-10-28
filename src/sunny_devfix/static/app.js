@@ -1,10 +1,13 @@
 const EXAMPLES = {
   name_error: {
+    filename: "billing.py",
+    relativePath: "examples/billing_bug.py",
     source: `def calculate_invoice(subtotal, tax_rate):
     tax = subtotal * tax_rate
     return subtotal + tx
 
-print(calculate_invoice(100.0, 0.08))`,
+print(calculate_invoice(100.0, 0.08))
+`,
     traceback: `Traceback (most recent call last):
   File "billing.py", line 5, in <module>
     print(calculate_invoice(100.0, 0.08))
@@ -13,6 +16,7 @@ print(calculate_invoice(100.0, 0.08))`,
 NameError: name 'tx' is not defined`,
   },
   syntax_error: {
+    filename: "format.py",
     source: `def format_currency(amount)
     return f"\${amount:,.2f}"
 
@@ -24,6 +28,7 @@ print(format_currency(1250.5))`,
 SyntaxError: expected ':'`,
   },
   zero_div: {
+    filename: "stats.py",
     source: `def compute_ratio(total_hits, total_attempts):
     return total_hits / total_attempts
 
@@ -36,6 +41,7 @@ print(compute_ratio(10, 0))`,
 ZeroDivisionError: division by zero`,
   },
   index_error: {
+    filename: "tokens.py",
     source: `def get_last_token(items):
     return items[len(items)]
 
@@ -77,6 +83,8 @@ const agentApplyBtn = document.querySelector("#agent-apply-btn");
 const agentRollbackBtn = document.querySelector("#agent-rollback-btn");
 const modeNvidiaBtn = document.querySelector("#mode-nvidia-btn");
 const modeLocalBtn = document.querySelector("#mode-local-btn");
+const projectRootInput = document.querySelector("#project-root-input");
+const relativePathInput = document.querySelector("#relative-path-input");
 
 let useNebiusMode = true;
 let guardianTimer = null;
@@ -257,8 +265,8 @@ function explainResult(result) {
   const valid = result.source_analysis?.valid_syntax ?? true;
   syntaxStatus.classList.toggle("is-invalid", !valid);
   syntaxStatus.textContent = valid
-    ? "✓ Source syntax parsed successfully"
-    : `△ ${result.source_analysis?.syntax_error?.message || "Source syntax needs attention"}`;
+    ? "Passed: source syntax parsed successfully"
+    : `Review required: ${result.source_analysis?.syntax_error?.message || "source syntax needs attention"}`;
 
   const traceList = document.querySelector("#trace-list");
   const frames = result.frames || [];
@@ -303,8 +311,8 @@ function renderSuggestion(suggestion) {
   document.querySelector("#suggestion-limit").textContent =
     suggestion.limitation ||
     (comparison.after_valid_syntax
-      ? "✓ Proposed source passes non-executing AST syntax validation."
-      : "△ The proposed source needs syntax attention.");
+      ? "Passed: proposed source meets non-executing AST syntax validation."
+      : "Review required: the proposed source needs syntax attention.");
 
   const fixedButton = document.querySelector("#copy-fixed");
   const diffButton = document.querySelector("#copy-diff");
@@ -618,6 +626,9 @@ async function runAgentRepair() {
       body: JSON.stringify({
         source: sourceInput.value,
         traceback: tracebackInput.value,
+        filename: relativePathInput.value.trim() || "<submitted>",
+        project_root: projectRootInput.value.trim() || null,
+        relative_path: relativePathInput.value.trim() || null,
         use_nebius: useNebiusMode,
       }),
     });
@@ -652,8 +663,8 @@ async function runAgentRepair() {
           after_valid_syntax: r.syntax_valid,
         },
         limitation: r.syntax_valid
-          ? "✓ Proposed repair passed syntax AST verification."
-          : "△ Warning: proposed repair may need manual review.",
+          ? "Passed: proposed repair meets AST syntax validation."
+          : "Review required: proposed repair needs manual inspection.",
       });
 
       if (payload.patch_preview) {
@@ -714,7 +725,7 @@ async function applyAgentPatch() {
       currentRollbackToken = payload.patch_result.rollback_id;
       agentRollbackBtn.classList.remove("hidden");
       agentApplyBtn.classList.add("hidden");
-      setSuccess(`✓ Patch applied successfully to ${payload.patch_result.relative_path}. One-click rollback token active.`);
+      setSuccess(`Patch applied to ${payload.patch_result.relative_path}. One-time rollback token active.`);
     }
 
     if (payload.evidence) {
@@ -751,7 +762,7 @@ async function rollbackAgentPatch() {
 
     setAgentState("ROLLED_BACK", `Restored pre-patch state for ${payload.relative_path}`);
     agentRollbackBtn.classList.add("hidden");
-    setSuccess(`✓ Successfully rolled back ${payload.relative_path} to exact pre-patch content.`);
+    setSuccess(`Rollback completed for ${payload.relative_path}; exact pre-patch content was restored.`);
   } catch (err) {
     setError(err instanceof Error ? err.message : "Rollback failed.");
   }
@@ -764,6 +775,7 @@ document.querySelector("#load-demo").addEventListener("click", () => {
   const ex = EXAMPLES[key] || EXAMPLES.name_error;
   sourceInput.value = ex.source;
   tracebackInput.value = ex.traceback;
+  relativePathInput.value = ex.relativePath || "";
   updateCounts();
   scheduleGuardian();
   sourceInput.focus();

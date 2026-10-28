@@ -38,7 +38,7 @@ def main() -> int:
         "--model",
         type=str,
         default=None,
-        help="NVIDIA model ID to evaluate (e.g. nvidia/Nemotron-3_5-Lightning or nvidia/Llama-3.1-Nemotron-70B-Instruct).",
+        help="NVIDIA model ID to evaluate (verified default: nvidia/Nemotron-3_5-Lightning).",
     )
     parser.add_argument(
         "--execute",

@@ -27,7 +27,7 @@ flowchart TD
 
     subgraph IntelligenceLayer ["Inference & Causal Reasoning"]
         NebiusClient["Nebius Token Factory Client\n(Bounded context, retries, secret redaction)"]
-        NvidiaModel["NVIDIA Llama-3.1-Nemotron-70B-Instruct\n(Structured JSON diagnosis & surgical patch)"]
+        NvidiaModel["NVIDIA Nemotron 3.5 Lightning\n(Structured JSON diagnosis & surgical patch)"]
         LocalEngine["Local Deterministic Engine\n(AST & SequenceMatcher fallback)"]
     end
 
@@ -68,10 +68,10 @@ The repair agent moves through explicit, verifiable states:
 
 ### B. Nebius Token Factory Client (`src/sunny_devfix/providers/nebius.py`)
 - **Protocol**: OpenAI-compatible API at `https://api.tokenfactory.nebius.com/v1/chat/completions`.
-- **Model**: `nvidia/Llama-3.1-Nemotron-70B-Instruct` (with runtime support for `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`).
+- **Verified model**: `nvidia/Nemotron-3_5-Lightning`.
 - **Safety**:
   - Zero browser exposure: all keys reside strictly in the server environment (`NEBIUS_API_KEY`).
-  - Automatic key masking (`supe...8877`) in diagnostic endpoints and logs.
+  - Key presence is reported only as `[REDACTED]` in diagnostic endpoints and logs.
   - Character bounding (payloads capped at 30,000 characters).
   - Exponential backoff with jitter on HTTP 429 and 5xx responses.
   - Seamless offline fallback to the local deterministic AST analyzer if credentials are missing or unavailable.

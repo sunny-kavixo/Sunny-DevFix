@@ -18,12 +18,20 @@
 
 Unlike naive LLM wrappers that emit speculative code snippets without validation or containment, Sunny-DevFix pairs **NVIDIA Nemotron's high-capacity causal reasoning on Nebius Token Factory** with deterministic AST guardrails, single-use cryptographic approval tokens, and zero-trust disposable Docker containers.
 
+### Product Evidence
+
+| Repair preview | Applied patch with rollback |
+| :---: | :---: |
+| ![Verified repair preview](release/screenshots/final_ui/03_repair_proposed_diff.png) | ![Applied patch with rollback active](release/screenshots/final_ui/04_patch_applied_rollback_active.png) |
+
+The complete desktop, tablet, mobile, apply, and rollback evidence set is available in [`release/screenshots/final_ui/`](release/screenshots/final_ui/).
+
 ---
 
 ## Key Features
 
 1. **NVIDIA Nemotron Causal Reasoning on Nebius Token Factory**:
-   - Routes bounded traceback stacks and source code to `nvidia/Nemotron-3_5-Lightning` (with `nvidia/Llama-3.1-Nemotron-70B-Instruct` supported).
+   - Routes bounded traceback stacks and source code to the verified runtime model, `nvidia/Nemotron-3_5-Lightning`.
    - Enforces strict Pydantic JSON schemas (`root_cause_title`, `explanation`, `recommended_next_step`, and `repaired_source`).
 2. **6-Stage Agentic Workflow Lifecycle**:
    - `ANALYZED` → `PATCH_PROPOSED` → `AWAITING_APPROVAL` → `APPLIED` → `TESTING` → `VERIFIED` (or `ROLLED_BACK`).
@@ -105,7 +113,7 @@ Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser.
 ## Safety & Security Boundary
 
 - **Passive Data Principle**: All submitted Python source and tracebacks are treated as untrusted passive data. Never executed on the host, never imported into the server runtime.
-- **Credential Protection**: Server keys (`NEBIUS_API_KEY`) remain strictly on the backend and are masked (`supe...8877`) in diagnostic endpoints.
+- **Credential Protection**: Server keys (`NEBIUS_API_KEY`) remain strictly on the backend and are reported only as `[REDACTED]` in diagnostic endpoints.
 - **Path Containment**: Disk patches are restricted strictly to explicitly authorized `DEVFIX_PROJECT_ROOTS`. Symlink escapes and directory traversal are rejected.
 - **Adversarial Hardening**: Passed 9 dedicated adversarial security tests covering prompt injection, replay attacks, and container isolation.
 

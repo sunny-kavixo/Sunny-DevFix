@@ -18,7 +18,7 @@ tar --exclude='.git' \
     --exclude='.DS_Store' \
     -czf "${DIST_DIR}/${ARCHIVE_NAME}" \
     -C "${ROOT_DIR}" \
-    src tests tools docs extensions Dockerfile Makefile pyproject.toml requirements.lock requirements-dev.lock README.md LICENSE .env.example
+    src tests tools docs examples extensions Dockerfile Makefile pyproject.toml requirements.lock requirements-dev.lock README.md LICENSE .env.example
 
 cd "${DIST_DIR}"
 shasum -a 256 "${ARCHIVE_NAME}" > "${CHECKSUM_FILE}"

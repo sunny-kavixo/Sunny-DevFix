@@ -183,4 +183,4 @@ def test_api_keys_never_exposed_in_model_info(monkeypatch):
     assert "super-secret-production-key-998877" not in body
     data = resp.json()
     assert data["key_present"] is True
-    assert data["key_masked"] == "supe...8877"
+    assert data["key_masked"] == "[REDACTED]"

@@ -57,7 +57,7 @@ Sunny-DevFix implements an explicit state machine:
 
 ### NVIDIA Model Usage
 - Primary Model: `nvidia/Nemotron-3_5-Lightning`.
-- Alternative Models: `nvidia/Llama-3.1-Nemotron-70B-Instruct`, `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`.
+- Verified Runtime Model: `nvidia/Nemotron-3_5-Lightning`.
 - Why NVIDIA Nemotron: NVIDIA Nemotron excels at complex reasoning, code comprehension, and instruction-following. It reliably adheres to structured JSON schemas and understands subtle Python scoping quirks (e.g. variable typos vs. global/local scope shadowing).
 
 ---
@@ -86,7 +86,7 @@ Sunny-DevFix separates preexisting foundations from hackathon additions:
 
 ```bash
 $ python3 -m pytest
-============================== 80 passed in 0.80s ==============================
+============================== 81 passed in 0.80s ==============================
 
 $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 {"iterations": 2000, "median_ms": 0.1856, "p95_ms": 0.1894, "peak_traced_kib": 94.9}
@@ -105,7 +105,7 @@ $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 - **Opportunities for Improvement**: Native JSON-schema output enforcement (like OpenAI's `response_format: {"type": "json_schema"}`) would eliminate the need for manual markdown fence stripping and client-side Pydantic retries.
 
 ### Feedback on NVIDIA Nemotron:
-- **Strengths**: `nvidia/Llama-3.1-Nemotron-70B-Instruct` displayed outstanding causal reasoning on Python stack traces, correctly identifying the root cause even when the traceback pointed to a caller frame rather than the definition frame.
+- **Strengths**: `nvidia/Nemotron-3_5-Lightning` returned a concise, schema-valid diagnosis and surgical Python repair for the recorded synthetic traceback case.
 - **Opportunities for Improvement**: Context windows are generous, but guidance on token-efficient prompt templates for automated coding agents would assist builders in minimizing latency.
 
 ---
@@ -118,5 +118,5 @@ $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 - **License**: MIT Permissive Open Source
 - **Local Verification Status**: **100% PASS** (81/81 unit, functional, and adversarial security tests passing cleanly in 0.79s).
 - **Live Nebius & NVIDIA Inference**: **100% PASS** (Live authenticated inference verified on Nebius Token Factory with `nvidia/Nemotron-3_5-Lightning`, returning valid Python syntax in 7.506s with live evidence saved in `docs/hackathon/LIVE_INFERENCE_RECORD.json`).
-- **Judge Access**: Standalone test build archive `dist/sunny-devfix-v0.2.0.tar.gz` and Docker container ready; GitHub Release asset / Cloud Run URL pending owner authorization.
-- **Demo Video**: Script and Full HD video finalized; public YouTube link pending owner upload.
+- **Judge Access**: Public standalone test build and checksum: [Sunny-DevFix v0.2.0](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0). Docker and offline local modes are also documented.
+- **Demo Video**: Public YouTube link pending owner upload.

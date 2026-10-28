@@ -2,8 +2,8 @@
 
 **Date of Execution:** 2026-10-28  
 **Environment:** macOS Darwin (Apple Silicon M4), CPython 3.14.5  
-**Total Tests:** 80  
-**Passed:** 80  
+**Total Tests:** 81
+**Passed:** 81
 **Failed:** 0  
 **Skipped:** 0  
 **Execution Duration:** 0.80s  
@@ -30,7 +30,8 @@
 | **Pass B: Agent Lifecycle** | `tests/test_agent.py` | 2 | **PASS** | State transitions: `ANALYZED` -> `PROPOSED` -> `AWAITING` -> `APPLIED` -> `ROLLED_BACK`. |
 | **Pass B: Integration** | `tests/test_agent_api.py` | 4 | **PASS** | Endpoints: `/api/model-info`, `/api/agent/repair`, `/api/agent/apply`, `/api/agent/rollback`. |
 | **Pass C: Adversarial / Sec**| `tests/test_adversarial_security.py` | 9 | **PASS** | Prompt injection defense, path traversal, symlink escape, replay attacks, credential masking. |
-| **Total** | **16 test suites** | **80** | **100% PASS** | **All passes verified.** |
+| **Pass B: Cloud Lifecycle** | `tests/test_cloud_repair_lifecycle.py` | 1 | **PASS** | Mocked cloud-generated repair through preview, approval, apply, and rollback. |
+| **Total** | **17 test suites** | **81** | **100% PASS** | **All passes verified.** |
 
 ---
 
@@ -54,23 +55,22 @@ $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 - **Path Containment:** Verified that relative path traversal (`../../etc/passwd`) and absolute outside paths raise `PatchError: The patch path escapes the authorized project root.`
 - **Symlink Protection:** Verified that symlinks pointing outside the project root are resolved to their target destination and rejected prior to writing.
 - **Token Invalidation:** Verified that approval tokens cannot be re-applied after consumption and cannot be used after the 300-second TTL expires.
-- **Credential Protection:** Verified that `/api/model-info` masks the `NEBIUS_API_KEY` (e.g. `supe...8877`) and never exposes the full credential in headers, logs, or error responses.
+- **Credential Protection:** Verified that `/api/model-info` reports the `NEBIUS_API_KEY` only as `[REDACTED]` and never exposes the credential or a reusable fingerprint in headers, logs, or error responses.
 
 ---
 
 ## 4. Real Browser & Responsive UI Verification Evidence
 
-Visual layout, interactive controls, and responsive styling were verified in Google Chrome via live headless captures against `http://127.0.0.1:8000`:
+Visual layout, interactive controls, and responsive styling were verified in Google Chrome via live browser automation against the running application. The suite exercised the real preview, approval, atomic apply, and rollback lifecycle and confirmed the target file's SHA-256 digest was identical before apply and after rollback.
 
-1. **Desktop Workspace (`docs/assets/screenshots/desktop_workspace.png`)**:
-   - Window size: 1280x960 px.
+1. **Desktop Workspace (`release/screenshots/final_ui/01_fresh_launch_desktop.png`)**:
+   - Window size: 1920x1000 px.
    - Clean dark developer aesthetic, topbar with `Nebius × NVIDIA Hackathon 2026` pill, active status dot, and 6-stage lifecycle stepper.
-2. **Mobile Viewport (`docs/assets/screenshots/mobile_workspace.png`)**:
+2. **Mobile Viewport (`release/screenshots/final_ui/09_mobile_responsive_390px.png`)**:
    - Window size: 390x844 px (iPhone 14 / modern smartphone viewport).
    - Single-column responsive layout, stacked editors, touch-accessible controls, and zero horizontal overflow.
-3. **Diagnosed State & Diff Viewer (`docs/assets/screenshots/diagnosed_repair_diff.png`)**:
-   - Window size: 1280x1400 px.
-   - URL: `http://127.0.0.1:8000/?example=name_error&autorun=true`.
+3. **Diagnosed State & Diff Viewer (`release/screenshots/final_ui/03_repair_proposed_diff.png`)**:
+   - Window size: 1920x1000 px.
    - Verified that the state advances to `AWAITING_APPROVAL`, side-by-side Before/After code panels render with high contrast, and the unified diff displays green additions (`+ return subtotal + tax`) and red deletions (`- return subtotal + tx`).
 
 ---
@@ -78,6 +78,6 @@ Visual layout, interactive controls, and responsive styling were verified in Goo
 ## 5. Live Inference Tooling & Diagnostic Evidence
 
 - **Verification Tool:** [`tools/verify_nebius_inference.py`](../../tools/verify_nebius_inference.py)
-- **Supported Catalog:** `nvidia/Llama-3.1-Nemotron-70B-Instruct`, `nebius/nvidia/nemotron-3-super-120b-a12b`, `nebius/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`.
-- **Pre-flight Key Check:** Verified that absent `NEBIUS_API_KEY` returns status code 2 with clear instructions and pricing estimate (~$0.000102 per synthetic run).
+- **Verified Runtime Model:** `nvidia/Nemotron-3_5-Lightning` through Nebius Token Factory.
+- **Pre-flight Key Check:** Verified that absent `NEBIUS_API_KEY` returns status code 2 with clear setup instructions and does not attempt a network request.
 

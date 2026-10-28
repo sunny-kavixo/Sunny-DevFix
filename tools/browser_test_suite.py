@@ -17,7 +17,9 @@ SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
 
 CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 CHROME_PORT = 9222
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = os.environ.get("BROWSER_TEST_BASE_URL", "http://127.0.0.1:8000")
+PROJECT_ROOT = os.environ.get("BROWSER_TEST_PROJECT_ROOT", str(Path.cwd()))
+RELATIVE_PATH = os.environ.get("BROWSER_TEST_RELATIVE_PATH", "examples/billing_bug.py")
 
 
 class ChromeSession:
@@ -112,6 +114,10 @@ async def run_e2e_tests():
             document.querySelector('#example-select').value = 'name_error';
             document.querySelector('#load-demo').click();
         """)
+        await session.eval_js(
+            f"document.querySelector('#project-root-input').value = {json.dumps(PROJECT_ROOT)};"
+            f"document.querySelector('#relative-path-input').value = {json.dumps(RELATIVE_PATH)};"
+        )
         await asyncio.sleep(0.8)
         await session.capture_screenshot("02_preset_loaded_guardian.png")
 
@@ -126,6 +132,11 @@ async def run_e2e_tests():
         # Verify state in DOM
         state = await session.eval_js("document.querySelector('#agent-state-label').textContent")
         print(f"Current Agent State: {state}")
+        assert state.endswith("AWAITING_APPROVAL"), state
+        apply_visible = await session.eval_js(
+            "!document.querySelector('#agent-apply-btn').classList.contains('hidden')"
+        )
+        assert apply_visible, "Apply control must be visible after a bound preview"
         diff_text = await session.eval_js("document.querySelector('#diff-output').textContent")
         print(f"Diff output snippet: {diff_text[:120]}...")
 
@@ -139,6 +150,7 @@ async def run_e2e_tests():
 
         applied_state = await session.eval_js("document.querySelector('#agent-state-label').textContent")
         print(f"Post-Apply Agent State: {applied_state}")
+        assert applied_state.endswith("APPLIED"), applied_state
 
         # Step 5: Test Instant Rollback
         print("5. Testing Instant Rollback...")
@@ -148,6 +160,7 @@ async def run_e2e_tests():
 
         rolled_back_state = await session.eval_js("document.querySelector('#agent-state-label').textContent")
         print(f"Post-Rollback Agent State: {rolled_back_state}")
+        assert rolled_back_state.endswith("ROLLED_BACK"), rolled_back_state
 
         # Step 6: Test Mode Switcher (Switch to Local AST Engine)
         print("6. Testing Provider Mode Switcher...")

@@ -34,11 +34,11 @@ The following capabilities were engineered specifically for the **Nebius × NVID
 ### A. Nebius Token Factory Integration (`src/sunny_devfix/providers/nebius.py`)
 - Engineered a zero-overhead HTTP client connecting directly to `https://api.tokenfactory.nebius.com/v1/chat/completions`.
 - Integrated strict timeout controls (default 20.0s), character payload bounds (30,000 characters), and exponential retry backoff on HTTP 429 and 5xx errors.
-- Built automatic secret masking (`supe...8877`) for diagnostic status endpoints and logs to prevent credential leakage.
+- Built automatic secret redaction (`[REDACTED]`) for diagnostic status endpoints and logs to prevent credential leakage.
 - Added comprehensive unit tests (`tests/test_nebius_client.py`).
 
 ### B. NVIDIA Nemotron Reasoning Provider (`src/sunny_devfix/providers/nvidia_repair.py`)
-- Selected and integrated `nvidia/Llama-3.1-Nemotron-70B-Instruct` (with runtime compatibility for `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`).
+- Selected and integrated the verified runtime model `nvidia/Nemotron-3_5-Lightning`.
 - Designed specialized system prompts and strict Pydantic JSON schemas (`NvidiaRepairOutput`) enforcing structured root-cause explanations, actionable advice, and surgical patch proposals.
 - Implemented AST-level compilation verification of all model-proposed code before acceptance.
 - Built automated, graceful fallback to the trusted local deterministic AST analyzer whenever Nebius credentials are absent or network is offline.
@@ -65,4 +65,4 @@ The following capabilities were engineered specifically for the **Nebius × NVID
 
 ### F. Adversarial & Security Test Suite (`tests/test_adversarial_security.py`)
 - 9 dedicated security tests verifying prompt injection resistance, path traversal rejection, symlink escape protection, replay attack prevention, and secret masking.
-- Increased total test suite from 50 to 80 tests (100% pass rate).
+- Increased the total test suite from 50 to 81 tests (100% pass rate in the final local run).

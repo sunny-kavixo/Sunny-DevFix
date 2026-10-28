@@ -19,7 +19,7 @@ def test_redact_key():
     assert redact_key(None) == "[NOT_SET]"
     assert redact_key("") == "[NOT_SET]"
     assert redact_key("short") == "[REDACTED]"
-    assert redact_key("abcdefghijklmnop") == "abcd...mnop"
+    assert redact_key("abcdefghijklmnop") == "[REDACTED]"
 
 
 def test_client_configuration_defaults():
@@ -41,7 +41,7 @@ def test_client_configured_with_key():
 
     diag = client.get_diagnostics()
     assert diag["configured"] is True
-    assert diag["key_masked"] == "neb-...cdef"
+    assert diag["key_masked"] == "[REDACTED]"
 
 
 def test_chat_completion_unconfigured_raises():

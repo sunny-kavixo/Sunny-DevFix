@@ -374,6 +374,49 @@ textarea {
   margin-top: 4px;
 }
 
+.target-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 5px;
+  background: var(--bg-input);
+}
+.target-fields legend {
+  padding: 0 5px;
+  color: var(--text-primary);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.target-fields legend span {
+  margin-left: 6px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.target-fields label {
+  display: grid;
+  gap: 5px;
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+.target-fields input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 9px;
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  outline: none;
+  color: var(--text-primary);
+  background: var(--bg-deep);
+  font: 10.5px var(--font-mono);
+}
+.target-fields input:focus-visible {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-blue) 25%, transparent);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1041,11 +1084,6 @@ textarea {
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
 }
-.safety-check {
-  font-size: 12px;
-  color: var(--accent-success);
-  font-weight: 700;
-}
 .safety-text strong {
   display: block;
   font-size: 10.5px;
@@ -1232,6 +1270,9 @@ textarea {
     flex: 1;
   }
   .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  .target-fields {
     grid-template-columns: 1fr;
   }
   .evidence-grid {

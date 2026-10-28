@@ -2,8 +2,7 @@
 
 **Target Provider:** Nebius Token Factory (Serverless OpenAI-Compatible API)  
 **Endpoint Base URL:** `https://api.tokenfactory.nebius.com/v1`  
-**Model Identifier:** `nvidia/Llama-3.1-Nemotron-70B-Instruct`  
-**Alternative Model:** `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`  
+**Verified Model Identifier:** `nvidia/Nemotron-3_5-Lightning`
 **Authentication:** `Bearer ${NEBIUS_API_KEY}` (Server environment variable)  
 
 ---
@@ -19,7 +18,7 @@ Content-Type: application/json
 User-Agent: Sunny-DevFix-Agent/0.2.0 (Nebius-NVIDIA-Hackathon)
 
 {
-  "model": "nvidia/Llama-3.1-Nemotron-70B-Instruct",
+  "model": "nvidia/Nemotron-3_5-Lightning",
   "messages": [
     {
       "role": "system",

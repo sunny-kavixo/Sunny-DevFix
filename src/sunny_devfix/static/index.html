@@ -75,8 +75,8 @@
           <span class="status-dot dot-neutral"></span>
           <span>Docker Sandbox</span>
         </div>
-        <div class="status-chip chip-benchmark" title="Measured execution latency across 80 tests">
-          <span>0.18ms · 80 Tests</span>
+        <div class="status-chip chip-benchmark" title="Measured execution latency with 81 regression tests passing">
+          <span>0.18 ms median · 81 tests</span>
         </div>
       </div>
     </header>
@@ -151,6 +151,18 @@
                 <span>Maps deepest traceback frame to isolate defect location.</span>
               </div>
             </div>
+
+            <fieldset class="target-fields">
+              <legend>Authorized file target <span>Optional for analysis; required for disk apply</span></legend>
+              <label>
+                <span>Project root</span>
+                <input id="project-root-input" type="text" autocomplete="off" placeholder="/absolute/path/to/project" />
+              </label>
+              <label>
+                <span>Relative file path</span>
+                <input id="relative-path-input" type="text" autocomplete="off" placeholder="src/module.py" />
+              </label>
+            </fieldset>
 
             <!-- Primary Actions Row -->
             <div class="editor-actions">
@@ -365,7 +377,6 @@
 
             <!-- Safety Guarantee Card -->
             <div class="safety-card" id="safety-card">
-              <span class="safety-check">✓</span>
               <div class="safety-text">
                 <strong>Provenance & Safety Guarantee</strong>
                 <p id="safety-message">Zero submitted code was executed during analysis. Patches require explicit human approval before disk write.</p>
