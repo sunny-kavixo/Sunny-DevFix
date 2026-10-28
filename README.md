@@ -12,27 +12,27 @@ These images are captured from the published hackathon feature branch (not mocku
 
 ### Workspace and root-cause analysis
 
-[![Sunny-DevFix developer workspace](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/01_fresh_launch_desktop.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/01_fresh_launch_desktop.png)
+[![Sunny-DevFix developer workspace](docs/images/01_fresh_launch_desktop.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/01_fresh_launch_desktop.png)
 
 ### Repair proposal and before/after diff
 
-[![Real repair preview and diff](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/03_repair_proposed_diff.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/03_repair_proposed_diff.png)
+[![Real repair preview and diff](docs/images/03_repair_proposed_diff.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/03_repair_proposed_diff.png)
 
 ### Explicit patch approval and rollback
 
 | Approved patch | Restored original file |
 | :---: | :---: |
-| ![Approved patch](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/04_patch_applied_rollback_active.png) | ![Completed rollback](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/05_rollback_completed.png) |
+| ![Approved patch](docs/images/04_patch_applied_rollback_active.png) | ![Completed rollback](docs/images/05_rollback_completed.png) |
 
 ### Responsive mobile view
 
-![Mobile interface](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/09_mobile_responsive_390px.png)
+![Mobile interface](docs/images/09_mobile_responsive_390px.png)
 
 [See all nine original browser captures](https://github.com/sunny-kavixo/Sunny-DevFix/tree/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui)
 
 ## System design
 
-![System architecture: browser, FastAPI agent, Nebius NVIDIA model, offline AST fallback, patch approvals and optional Docker verification](https://raw.githubusercontent.com/sunny-kavixo/Sunny-DevFix/feat/nebius-nvidia-verified-repair/docs/assets/system-architecture.svg)
+![System architecture: browser, FastAPI agent, Nebius NVIDIA model, offline AST fallback, patch approvals and optional Docker verification](docs/assets/system-architecture.svg)
 
 [Open diagram at full size](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/assets/system-architecture.svg) · [Detailed technical architecture](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/hackathon/ARCHITECTURE.md)
 
