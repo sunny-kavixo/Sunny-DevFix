@@ -781,3 +781,22 @@ document.querySelector("#copy-diff").addEventListener("click", (event) => copyVa
 updateCounts();
 checkModelInfo();
 setAgentState("IDLE", "System initialized and ready");
+
+// URL Query Parameter Support for Evaluators
+const urlParams = new URLSearchParams(window.location.search);
+const initialExample = urlParams.get("example") || (urlParams.get("demo") ? "name_error" : null);
+if (initialExample && EXAMPLES[initialExample]) {
+  const ex = EXAMPLES[initialExample];
+  sourceInput.value = ex.source;
+  tracebackInput.value = ex.traceback;
+  const select = document.querySelector("#example-select");
+  if (select) select.value = initialExample;
+  updateCounts();
+  scheduleGuardian();
+  if (urlParams.get("autorun") === "true") {
+    setTimeout(() => {
+      runAgentRepair();
+    }, 150);
+  }
+}
+

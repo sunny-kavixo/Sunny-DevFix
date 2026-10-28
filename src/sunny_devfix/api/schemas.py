@@ -241,6 +241,8 @@ class ModelInfoResponse(BaseModel):
     key_masked: str
     timeout_seconds: float
     max_retries: int
+    supported_models: list[str] = Field(default_factory=list)
+
 
 
 class AgentTimelineItem(BaseModel):

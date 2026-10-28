@@ -55,3 +55,29 @@ $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 - **Symlink Protection:** Verified that symlinks pointing outside the project root are resolved to their target destination and rejected prior to writing.
 - **Token Invalidation:** Verified that approval tokens cannot be re-applied after consumption and cannot be used after the 300-second TTL expires.
 - **Credential Protection:** Verified that `/api/model-info` masks the `NEBIUS_API_KEY` (e.g. `supe...8877`) and never exposes the full credential in headers, logs, or error responses.
+
+---
+
+## 4. Real Browser & Responsive UI Verification Evidence
+
+Visual layout, interactive controls, and responsive styling were verified in Google Chrome via live headless captures against `http://127.0.0.1:8000`:
+
+1. **Desktop Workspace (`docs/assets/screenshots/desktop_workspace.png`)**:
+   - Window size: 1280x960 px.
+   - Clean dark developer aesthetic, topbar with `Nebius × NVIDIA Hackathon 2026` pill, active status dot, and 6-stage lifecycle stepper.
+2. **Mobile Viewport (`docs/assets/screenshots/mobile_workspace.png`)**:
+   - Window size: 390x844 px (iPhone 14 / modern smartphone viewport).
+   - Single-column responsive layout, stacked editors, touch-accessible controls, and zero horizontal overflow.
+3. **Diagnosed State & Diff Viewer (`docs/assets/screenshots/diagnosed_repair_diff.png`)**:
+   - Window size: 1280x1400 px.
+   - URL: `http://127.0.0.1:8000/?example=name_error&autorun=true`.
+   - Verified that the state advances to `AWAITING_APPROVAL`, side-by-side Before/After code panels render with high contrast, and the unified diff displays green additions (`+ return subtotal + tax`) and red deletions (`- return subtotal + tx`).
+
+---
+
+## 5. Live Inference Tooling & Diagnostic Evidence
+
+- **Verification Tool:** [`tools/verify_nebius_inference.py`](../../tools/verify_nebius_inference.py)
+- **Supported Catalog:** `nvidia/Llama-3.1-Nemotron-70B-Instruct`, `nebius/nvidia/nemotron-3-super-120b-a12b`, `nebius/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, `nebius/nvidia/Nemotron-3-Ultra-550b-a55b`.
+- **Pre-flight Key Check:** Verified that absent `NEBIUS_API_KEY` returns status code 2 with clear instructions and pricing estimate (~$0.000102 per synthetic run).
+

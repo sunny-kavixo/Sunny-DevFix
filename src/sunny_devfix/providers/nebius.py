@@ -17,6 +17,15 @@ DEFAULT_TIMEOUT_SECONDS = 20.0
 DEFAULT_MAX_RETRIES = 2
 MAX_PAYLOAD_CHARS = 30_000
 
+SUPPORTED_NVIDIA_MODELS: tuple[str, ...] = (
+    "nvidia/Llama-3.1-Nemotron-70B-Instruct",
+    "nebius/nvidia/nemotron-3-super-120b-a12b",
+    "nebius/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "nebius/nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nebius/nvidia/Nemotron-3_5-Lightning",
+)
+
+
 
 class NebiusError(Exception):
     """Base exception for Nebius Token Factory operations."""
@@ -120,6 +129,7 @@ class NebiusClient:
             "key_masked": redact_key(self.api_key),
             "timeout_seconds": self.timeout_seconds,
             "max_retries": self.max_retries,
+            "supported_models": list(SUPPORTED_NVIDIA_MODELS),
         }
 
     def chat_completion(
