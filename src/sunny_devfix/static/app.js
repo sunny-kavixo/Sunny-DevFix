@@ -75,7 +75,10 @@ const timelineEntriesList = document.querySelector("#timeline-entries-list");
 const agentTimelineLog = document.querySelector("#agent-timeline-log");
 const agentApplyBtn = document.querySelector("#agent-apply-btn");
 const agentRollbackBtn = document.querySelector("#agent-rollback-btn");
+const modeNvidiaBtn = document.querySelector("#mode-nvidia-btn");
+const modeLocalBtn = document.querySelector("#mode-local-btn");
 
+let useNebiusMode = true;
 let guardianTimer = null;
 let guardianRequestId = 0;
 let currentGuardianDiagnostics = [];
@@ -83,6 +86,28 @@ let currentSuggestion = null;
 let currentApprovalToken = null;
 let currentRollbackToken = null;
 let lastRepairResult = null;
+
+function setInferenceMode(useNebius) {
+  useNebiusMode = useNebius;
+  if (modeNvidiaBtn && modeLocalBtn) {
+    modeNvidiaBtn.classList.toggle("active", useNebius);
+    modeNvidiaBtn.setAttribute("aria-checked", useNebius ? "true" : "false");
+    modeLocalBtn.classList.toggle("active", !useNebius);
+    modeLocalBtn.setAttribute("aria-checked", !useNebius ? "true" : "false");
+  }
+  const btnText = agentRepairButton ? agentRepairButton.querySelector(".button-text") : null;
+  if (btnText) {
+    btnText.textContent = useNebius ? "AI Repair (NVIDIA)" : "AI Repair (Local AST)";
+  } else if (agentRepairButton) {
+    agentRepairButton.textContent = useNebius ? "AI Repair (NVIDIA)" : "AI Repair (Local AST)";
+  }
+  setAgentState(
+    "IDLE",
+    useNebius
+      ? "Provider mode: NVIDIA Nemotron (Nebius Token Factory)"
+      : "Provider mode: Local Deterministic AST Engine (Offline)"
+  );
+}
 
 function updateCount(input, output) {
   output.textContent = `${input.value.length.toLocaleString()} / 20,000`;
@@ -578,8 +603,12 @@ async function runAgentRepair() {
   }
 
   agentRepairButton.disabled = true;
-  agentRepairButton.innerHTML = 'Reasoning with NVIDIA… <span class="button-spinner" aria-hidden="true"></span>';
-  analysisState.textContent = "Synthesizing repair via NVIDIA Nemotron…";
+  agentRepairButton.innerHTML = useNebiusMode
+    ? 'Reasoning with NVIDIA… <span class="button-spinner" aria-hidden="true"></span>'
+    : 'Synthesizing local repair… <span class="button-spinner" aria-hidden="true"></span>';
+  analysisState.textContent = useNebiusMode
+    ? "Synthesizing repair via NVIDIA Nemotron…"
+    : "Synthesizing repair via Local AST Engine…";
   setAgentState("ANALYZED", "Step 1: Mapping traceback frames to source code");
 
   try {
@@ -589,7 +618,7 @@ async function runAgentRepair() {
       body: JSON.stringify({
         source: sourceInput.value,
         traceback: tracebackInput.value,
-        use_nebius: true,
+        use_nebius: useNebiusMode,
       }),
     });
 
@@ -648,7 +677,7 @@ async function runAgentRepair() {
     setAgentState("FAILED", error instanceof Error ? error.message : "Repair failed");
   } finally {
     agentRepairButton.disabled = false;
-    agentRepairButton.innerHTML = 'AI Repair (NVIDIA) <span aria-hidden="true">✦</span>';
+    agentRepairButton.innerHTML = `<span class="button-icon">⚡</span><span class="button-text">${useNebiusMode ? "AI Repair (NVIDIA)" : "AI Repair (Local AST)"}</span>`;
   }
 }
 
@@ -776,6 +805,13 @@ agentApplyBtn.addEventListener("click", applyAgentPatch);
 agentRollbackBtn.addEventListener("click", rollbackAgentPatch);
 document.querySelector("#copy-fixed").addEventListener("click", (event) => copyValue(event.currentTarget));
 document.querySelector("#copy-diff").addEventListener("click", (event) => copyValue(event.currentTarget));
+
+if (modeNvidiaBtn) {
+  modeNvidiaBtn.addEventListener("click", () => setInferenceMode(true));
+}
+if (modeLocalBtn) {
+  modeLocalBtn.addEventListener("click", () => setInferenceMode(false));
+}
 
 // Startup
 updateCounts();

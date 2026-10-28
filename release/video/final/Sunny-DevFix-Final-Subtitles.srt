@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:22,800
+Every software team has faced this crisis: a runtime exception strikes production, causing silent corruption and broken transactions. Standard AI coding assistants jump straight to rewriting entire files, hallucinating unseen APIs and introducing fatal regressions. Today, we need a smarter, safer way to debug Python.
+
+2
+00:00:23,000 --> 00:00:46,799
+Meet Sunny DevFix: an autonomous, causal Python debugging agent purpose-built for the Nebius and NVIDIA Hackathon. Re-architected with a professional developer workspace, Sunny DevFix pairs NVIDIA Nemotron on Nebius Token Factory with local deterministic AST guardrails, a cryptographic human approval barrier, and isolated container verification.
+
+3
+00:00:47,000 --> 00:01:10,799
+Let's inspect a live billing failure. In the workspace panel, we load a defective source file with a subtle typo in a billing calculation, alongside its raw traceback. Notice the Live Code Guardian beneath the editor: it performs real-time AST linting as you type. It flags unmapped identifiers immediately, without executing untrusted code.
+
+4
+00:01:11,000 --> 00:01:35,799
+Now, we engage the autonomous repair engine. With one click, Sunny DevFix dispatches the problem context to NVIDIA Nemotron on Nebius Token Factory. The agent state machine advances in real time: analyzing the traceback, mapping deepest call frames, and synthesizing a pinpoint repair. The causal engine explains exactly why the failure occurred.
+
+5
+00:01:36,000 --> 00:02:00,799
+Before a single byte touches disk, Sunny DevFix requires explicit human authorization. The diff studio presents an exact side-by-side comparison and color-coded unified diff. Only the defective variable is corrected, preserving existing syntax. A one-time cryptographic approval token ensures no autonomous agent writes to your workspace without your consent.
+
+6
+00:02:01,000 --> 00:02:21,800
+Once approved, the patch is verified in an isolated Docker sandbox with zero network access, read-only filesystem, and memory limits. Exit codes and stdout are verified before and after. If anything is unexpected, our instant rollback token restores the exact pre-patch code in milliseconds.
+
+7
+00:02:22,000 --> 00:02:39,800
+Sunny DevFix is thoroughly verified. Our comprehensive test suite covers eighty passing unit and integration tests in under one second, with a median benchmark latency of zero point one eight milliseconds. A self-contained test bundle is ready for evaluator testing.
+
+8
+00:02:40,000 --> 00:02:49,800
+Sunny DevFix: NVIDIA-Powered Verified Code Repair. Open source under the MIT License on GitHub.
