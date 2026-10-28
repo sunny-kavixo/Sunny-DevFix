@@ -677,7 +677,7 @@ async function runAgentRepair() {
     setAgentState("FAILED", error instanceof Error ? error.message : "Repair failed");
   } finally {
     agentRepairButton.disabled = false;
-    agentRepairButton.innerHTML = `<span class="button-icon">⚡</span><span class="button-text">${useNebiusMode ? "AI Repair (NVIDIA)" : "AI Repair (Local AST)"}</span>`;
+    agentRepairButton.innerHTML = `<span class="button-text">${useNebiusMode ? "AI Repair (NVIDIA)" : "AI Repair (Local AST)"}</span>`;
   }
 }
 

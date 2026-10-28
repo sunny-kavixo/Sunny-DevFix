@@ -14,20 +14,24 @@
   </head>
   <body>
     <a class="skip-link" href="#source-input">Skip to code editor</a>
-    <div class="ambient ambient-one" aria-hidden="true"></div>
-    <div class="ambient ambient-two" aria-hidden="true"></div>
 
     <!-- Top Navigation Bar -->
     <header class="topbar">
       <div class="topbar-left">
         <a class="brand" href="/" aria-label="Sunny DevFix home">
-          <span class="brand-mark" aria-hidden="true">✦</span>
+          <span class="brand-symbol" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </span>
           <div class="brand-text">
             <strong>Sunny DevFix</strong>
-            <small>NVIDIA Verified Repair</small>
+            <span class="brand-subtitle">NVIDIA Verified Repair</span>
           </div>
         </a>
-        <span class="hackathon-badge" id="hackathon-badge">Nebius × NVIDIA Hackathon 2026</span>
+        <span class="badge-separator"></span>
+        <span class="hackathon-tag" id="hackathon-badge">Nebius × NVIDIA Hackathon 2026</span>
         <span class="version-tag">v0.2 Verified Agent</span>
       </div>
 
@@ -42,8 +46,8 @@
             aria-checked="true"
             title="Reasoning and code repair powered by NVIDIA Nemotron via Nebius Token Factory"
           >
-            <span class="mode-icon nvidia-icon" aria-hidden="true">⚡</span>
-            <span>NVIDIA Nemotron</span>
+            <span class="mode-indicator active"></span>
+            <span class="mode-name">NVIDIA Nemotron</span>
             <span class="mode-sub">Cloud</span>
           </button>
           <button
@@ -54,75 +58,65 @@
             aria-checked="false"
             title="Deterministic local AST parser & repair engine (zero cloud dependencies)"
           >
-            <span class="mode-icon ast-icon" aria-hidden="true">⚙</span>
-            <span>Local AST Engine</span>
-            <span class="mode-sub">Offline</span>
+            <span class="mode-indicator"></span>
+            <span class="mode-name">Deterministic AST</span>
+            <span class="mode-sub">Local</span>
           </button>
         </div>
       </div>
 
       <div class="topbar-right">
-        <!-- Live Provider & Security Badges -->
+        <!-- Status chips -->
         <div class="status-chip" id="model-status-pill" title="Current provider connectivity">
           <span class="status-dot active-nebius" id="model-status-dot"></span>
           <span id="model-status-text">Detecting provider…</span>
         </div>
-        <div class="security-chip" title="Container sandbox isolation security barrier">
-          <span class="chip-icon">🐳</span>
-          <span>Docker Isolated</span>
+        <div class="status-chip chip-docker" title="Isolated container execution environment">
+          <span class="status-dot dot-neutral"></span>
+          <span>Docker Sandbox</span>
         </div>
-        <div class="health-chip" title="Real-time verified benchmark latency">
-          <span class="chip-pulse"></span>
-          <span>0.18ms Latency · 80 Tests</span>
+        <div class="status-chip chip-benchmark" title="Measured execution latency across 80 tests">
+          <span>0.18ms · 80 Tests</span>
         </div>
       </div>
     </header>
 
-    <!-- Main IDE Workspace Container -->
-    <main class="ide-workspace">
+    <!-- Main Workspace Container -->
+    <main class="workspace-container">
       <!-- Alerts Banner -->
       <div class="workspace-alerts">
         <div class="alert-box hidden" id="error-message" role="alert"></div>
         <div class="alert-box alert-success hidden" id="agent-success-message" role="status"></div>
       </div>
 
-      <!-- 3-Column IDE Layout Grid -->
-      <div class="ide-grid">
-        <!-- Column 1: Left Workspace Panel (Code Intake, Presets & Editor) -->
-        <section class="panel panel-left" aria-labelledby="workspace-title">
-          <div class="panel-header">
-            <div class="panel-header-title">
-              <span class="panel-num">01</span>
-              <div>
-                <h2 id="workspace-title">Code Intake & Presets</h2>
-                <span class="panel-subtitle">Target: <code class="active-file-tag">billing.py</code></span>
-              </div>
+      <!-- 2-Column Professional Engineering Layout -->
+      <div class="engineering-layout">
+        <!-- Column 1: Intake & Editor Workspace -->
+        <section class="workspace-column column-intake" aria-labelledby="workspace-title">
+          <div class="column-header">
+            <div class="header-label">
+              <h2 id="workspace-title">Input Workspace</h2>
+              <span class="file-tag">Target: <code class="active-file-tag">billing.py</code></span>
             </div>
-          </div>
-
-          <div class="preset-toolbar">
-            <div class="preset-select-wrapper">
-              <label for="example-select" class="preset-label">Bug Preset:</label>
+            <div class="preset-toolbar">
+              <label for="example-select" class="sr-only">Choose Bug Preset</label>
               <select id="example-select" class="select-preset">
-                <option value="name_error">Example 1: NameError (Variable Typo)</option>
-                <option value="syntax_error">Example 2: SyntaxError (Missing Colon)</option>
-                <option value="zero_div">Example 3: ZeroDivisionError (Guard Missing)</option>
-                <option value="index_error">Example 4: IndexError (Off-by-One)</option>
+                <option value="name_error">Preset 1: NameError (Variable Typo)</option>
+                <option value="syntax_error">Preset 2: SyntaxError (Missing Colon)</option>
+                <option value="zero_div">Preset 3: ZeroDivisionError (Guard Missing)</option>
+                <option value="index_error">Preset 4: IndexError (Off-by-One)</option>
               </select>
+              <button class="btn btn-secondary btn-sm" id="load-demo" type="button" title="Load selected preset into editor">
+                Load Preset
+              </button>
             </div>
-            <button class="button button-preset" id="load-demo" type="button" title="Load selected bug preset">
-              Load Preset
-            </button>
           </div>
 
           <form id="analysis-form" class="editor-form" novalidate>
             <!-- Python Source Editor -->
-            <div class="editor-pane">
-              <div class="editor-pane-header">
-                <span class="editor-pane-label">
-                  <span class="editor-badge">{ }</span>
-                  <strong>Python Source File</strong>
-                </span>
+            <div class="editor-card">
+              <div class="editor-card-header">
+                <span class="editor-title">Python Source File</span>
                 <span class="editor-meta" id="source-count">0 / 20,000</span>
               </div>
               <textarea
@@ -133,18 +127,15 @@
                 placeholder="def calculate_invoice(subtotal, tax_rate):&#10;    tax = subtotal * tax_rate&#10;    return subtotal + tx"
                 aria-describedby="source-help"
               ></textarea>
-              <div class="editor-pane-footer" id="source-help">
-                <span>Safe static analysis · AST linted in real time</span>
+              <div class="editor-card-footer" id="source-help">
+                <span>Static non-executing AST analysis. Untrusted code is never imported.</span>
               </div>
             </div>
 
             <!-- Python Traceback Input -->
-            <div class="editor-pane editor-pane-trace">
-              <div class="editor-pane-header">
-                <span class="editor-pane-label">
-                  <span class="editor-badge badge-warn">!</span>
-                  <strong>Python Stack Traceback</strong>
-                </span>
+            <div class="editor-card">
+              <div class="editor-card-header">
+                <span class="editor-title">Python Stack Traceback</span>
                 <span class="editor-meta" id="traceback-count">0 / 20,000</span>
               </div>
               <textarea
@@ -156,21 +147,20 @@
                 aria-describedby="traceback-help"
                 required
               ></textarea>
-              <div class="editor-pane-footer" id="traceback-help">
-                <span>Captures deepest call frame for causal mapping</span>
+              <div class="editor-card-footer" id="traceback-help">
+                <span>Maps deepest traceback frame to isolate defect location.</span>
               </div>
             </div>
 
-            <!-- Left Panel Action Controls -->
+            <!-- Primary Actions Row -->
             <div class="editor-actions">
-              <button class="button button-repair" id="agent-repair-button" type="button">
-                <span class="button-icon">⚡</span>
+              <button class="btn btn-primary" id="agent-repair-button" type="button">
                 <span class="button-text">AI Repair (NVIDIA)</span>
               </button>
-              <button class="button button-secondary" id="analyze-button" type="submit">
+              <button class="btn btn-secondary" id="analyze-button" type="submit">
                 <span>Local Analyze</span>
               </button>
-              <button class="button button-ghost" id="clear-form" type="button" title="Clear inputs and reset state">
+              <button class="btn btn-ghost" id="clear-form" type="button" title="Clear inputs and reset workspace">
                 Clear
               </button>
             </div>
@@ -178,137 +168,157 @@
 
           <!-- Live Code Guardian AST Diagnostics Strip -->
           <div class="guardian-panel guardian-strip" id="guardian-strip" aria-live="polite">
-            <div class="guardian-strip-head">
-              <div class="guardian-strip-title">
-                <span class="guardian-icon">🛡</span>
-                <strong>Live Code Guardian</strong>
-              </div>
+            <div class="guardian-header">
+              <span class="guardian-title">Live Code Guardian</span>
               <span class="guardian-state" id="guardian-state">Waiting for source</span>
             </div>
             <div class="guardian-empty" id="guardian-empty">
-              Type or paste Python to see instant AST syntax diagnostics and zero-execution safety checks.
+              Type or paste Python code to view real-time local AST syntax signals.
             </div>
             <div class="guardian-content hidden" id="guardian-content">
               <div class="guardian-summary" id="guardian-summary"></div>
-              <div class="guardian-diagnostics-scroll" id="guardian-diagnostics"></div>
+              <div class="guardian-diagnostics-list" id="guardian-diagnostics"></div>
               <div class="guardian-source hidden" id="guardian-source"></div>
             </div>
           </div>
         </section>
 
-        <!-- Column 2: Center Engineering Panel (Root Cause & Verified Diff Studio) -->
-        <section class="panel panel-center" aria-labelledby="results-title">
-          <div class="panel-header">
-            <div class="panel-header-title">
-              <span class="panel-num">02</span>
-              <div>
-                <h2 id="results-title">Engineering Inspection & Diff Studio</h2>
-                <span class="panel-subtitle" id="analysis-state">Waiting for analysis or repair request</span>
+        <!-- Column 2: Inspection, Diff Studio & Safety Controls -->
+        <section class="workspace-column column-inspection" aria-labelledby="results-title">
+          <div class="column-header">
+            <div class="header-label">
+              <h2 id="results-title">Diagnosis & Verified Patch Studio</h2>
+              <span class="panel-subtitle" id="analysis-state">Waiting for analysis or repair request</span>
+            </div>
+            <div class="header-right">
+              <span class="model-badge" id="model-provider-badge">AST Engine</span>
+            </div>
+          </div>
+
+          <!-- Agent 6-State Stepper Progress Bar -->
+          <div class="agent-stepper-card" id="agent-lifecycle-section">
+            <div class="stepper-header">
+              <span class="stepper-title">Agent Workflow Lifecycle</span>
+              <div class="agent-state-pill" id="agent-current-state-badge">
+                <span class="state-dot" id="agent-pulse"></span>
+                <span id="agent-state-label">STATE: IDLE</span>
               </div>
             </div>
-            <div class="panel-header-badge">
-              <span class="severity-badge" id="model-provider-badge">AST Analyzer</span>
+            <div class="stepper-track" id="lifecycle-stepper">
+              <div class="step-item active" id="step-analyzed">
+                <span class="step-index">1</span>
+                <span class="step-label">Analyzed</span>
+              </div>
+              <div class="step-item" id="step-proposed">
+                <span class="step-index">2</span>
+                <span class="step-label">Proposed</span>
+              </div>
+              <div class="step-item" id="step-approval">
+                <span class="step-index">3</span>
+                <span class="step-label">Approval</span>
+              </div>
+              <div class="step-item" id="step-applied">
+                <span class="step-index">4</span>
+                <span class="step-label">Applied</span>
+              </div>
+              <div class="step-item" id="step-testing">
+                <span class="step-index">5</span>
+                <span class="step-label">Testing</span>
+              </div>
+              <div class="step-item" id="step-verified">
+                <span class="step-index">6</span>
+                <span class="step-label">Verified</span>
+              </div>
             </div>
           </div>
 
           <!-- Empty State Placeholder -->
           <div class="empty-state" id="empty-state">
-            <div class="empty-orbit" aria-hidden="true"><span>✦</span></div>
-            <h3>Ready for AI Diagnosis & Verified Repair</h3>
-            <p>Click <strong>"AI Repair (NVIDIA)"</strong> to synthesize a patch with NVIDIA Nemotron on Nebius Token Factory, or <strong>"Local Analyze"</strong> for deterministic AST parsing.</p>
-            <div class="quick-examples-hint">
-              <span>Try:</span>
-              <button type="button" class="hint-tag" onclick="document.querySelector('#example-select').value='name_error';document.querySelector('#load-demo').click();">Typo NameError</button>
-              <button type="button" class="hint-tag" onclick="document.querySelector('#example-select').value='syntax_error';document.querySelector('#load-demo').click();">Syntax Colon</button>
-              <button type="button" class="hint-tag" onclick="document.querySelector('#example-select').value='zero_div';document.querySelector('#load-demo').click();">ZeroDivision</button>
+            <div class="empty-symbol" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 6v6l4 2"></path>
+              </svg>
             </div>
+            <h3>Ready for Diagnosis & Patch Generation</h3>
+            <p>Select a bug preset on the left and click <strong>AI Repair (NVIDIA)</strong> to synthesize a verified patch, or <strong>Local Analyze</strong> for deterministic offline diagnosis.</p>
           </div>
 
           <!-- Active Results Container -->
           <div class="results-container hidden" id="results-grid">
-            <!-- Root Cause Diagnostic Card -->
+            <!-- Causal Root-Cause Diagnostic Card -->
             <div class="diagnostic-card">
               <div class="diagnostic-topline">
-                <div class="exception-badge-group">
-                  <span class="diagnostic-label">Causal Diagnosis</span>
-                  <span class="exception-name" id="exception-type">—</span>
+                <div class="exception-meta">
+                  <span class="exception-type" id="exception-type">—</span>
+                  <span class="location-chip" id="exception-location">No frame mapped</span>
                 </div>
-                <div class="location-chip" id="exception-location">No frame mapped</div>
               </div>
-              <p class="exception-message" id="exception-message">—</p>
+              <div class="exception-message" id="exception-message">—</div>
 
-              <div class="explanation-box">
+              <div class="causal-analysis">
                 <h3 id="explanation-title">Locating root cause…</h3>
-                <p id="explanation-copy">Run an analysis to review the causal explanation.</p>
-                <div class="next-step-row">
-                  <span class="next-step-icon">↳</span>
+                <p id="explanation-copy">Run an analysis to inspect causal reasoning.</p>
+                <div class="next-step-hint">
+                  <span class="hint-label">Recommended Step:</span>
                   <span id="next-step">Recommended action will appear here.</span>
                 </div>
               </div>
 
-              <!-- Focused Source Context & Syntax Validation -->
-              <div class="code-context-wrapper">
-                <div class="code-context-head">
-                  <span>Focused Frame Context</span>
+              <!-- Focused Source Frame Context -->
+              <div class="context-box">
+                <div class="context-header">
+                  <span>Frame Context</span>
                   <span class="syntax-status" id="syntax-status">Source parsed</span>
                 </div>
                 <div class="code-context" id="code-context" aria-label="Focused source context"></div>
               </div>
             </div>
 
-            <!-- Traceback Frame Stack Hierarchy -->
-            <div class="frame-stack-card">
-              <div class="frame-stack-head">
+            <!-- Traceback Frame List (Collapsible / Compact) -->
+            <div class="frame-list-card">
+              <div class="frame-list-header">
                 <span>Call Stack Frames</span>
-                <span class="frame-count-badge" id="frame-count">0 frames</span>
+                <span class="frame-counter" id="frame-count">0 frames</span>
               </div>
               <ol class="trace-list" id="trace-list"></ol>
             </div>
 
-            <!-- Synthesized Patch & Diff Studio Card -->
-            <div class="patch-studio-card suggestion-card" id="suggestion-card">
-              <div class="patch-studio-header">
+            <!-- Synthesized Patch & Diff Studio -->
+            <div class="suggestion-card patch-card" id="suggestion-card">
+              <div class="patch-card-header">
                 <div>
-                  <div class="card-label">Synthesized Repair Proposal</div>
+                  <span class="patch-badge">Synthesized Repair Proposal</span>
                   <h3 id="suggestion-title">No patch proposed</h3>
                   <p class="suggestion-description" id="suggestion-description">Synthesizing patch proposal…</p>
                 </div>
                 <span class="suggestion-confidence" id="suggestion-confidence">Not proposed</span>
               </div>
 
-              <!-- Side-by-Side Comparison Panels -->
+              <!-- Side-by-Side Comparison -->
               <div class="comparison-grid">
-                <div class="comparison-panel comparison-before">
-                  <div class="comparison-label">
-                    <span class="dot-red"></span>
-                    <span>Before (Defective Source)</span>
-                  </div>
+                <div class="comparison-pane pane-before">
+                  <div class="pane-header">Before (Defective Source)</div>
                   <pre id="before-code" class="comparison-code"></pre>
                 </div>
-                <div class="comparison-panel comparison-after">
-                  <div class="comparison-label">
-                    <span class="dot-green"></span>
-                    <span>After (Repaired Source)</span>
-                  </div>
+                <div class="comparison-pane pane-after">
+                  <div class="pane-header">After (Repaired Source)</div>
                   <pre id="after-code" class="comparison-code"></pre>
                 </div>
               </div>
 
-              <!-- Unified Color-Coded Diff Viewer -->
-              <div class="diff-section">
+              <!-- Color-Coded Unified Diff -->
+              <div class="diff-wrapper">
                 <div class="diff-toolbar">
-                  <div class="diff-title">
-                    <span class="diff-icon">±</span>
-                    <strong>Unified Patch Diff</strong>
-                  </div>
-                  <div class="copy-actions">
-                    <button class="button button-action button-small" id="apply-fixed" type="button" disabled title="Load fixed code into the editor for further editing">
+                  <span class="diff-heading">Unified Patch Diff</span>
+                  <div class="diff-actions">
+                    <button class="btn btn-sm btn-secondary" id="apply-fixed" type="button" disabled title="Load fixed code into the editor">
                       Replace Editor
                     </button>
-                    <button class="button button-quiet button-small" id="copy-fixed" type="button" disabled title="Copy fixed code to clipboard">
+                    <button class="btn btn-sm btn-ghost" id="copy-fixed" type="button" disabled title="Copy fixed code">
                       Copy Fixed
                     </button>
-                    <button class="button button-quiet button-small" id="copy-diff" type="button" disabled title="Copy unified diff to clipboard">
+                    <button class="btn btn-sm btn-ghost" id="copy-diff" type="button" disabled title="Copy unified diff">
                       Copy Diff
                     </button>
                     <span class="copy-status" id="copy-status" aria-live="polite"></span>
@@ -318,134 +328,64 @@
                 <p class="suggestion-limit" id="suggestion-limit"></p>
               </div>
             </div>
-          </div>
-        </section>
 
-        <!-- Column 3: Right Agent Panel (Lifecycle, Authorization Gate & Audit) -->
-        <section class="panel panel-right" aria-labelledby="agent-panel-title">
-          <div class="panel-header">
-            <div class="panel-header-title">
-              <span class="panel-num">03</span>
-              <div>
-                <h2 id="agent-panel-title">Agent Lifecycle & Gate</h2>
-                <span class="panel-subtitle">Autonomous State Machine</span>
+            <!-- Human Authorization Gate & Control Barrier -->
+            <div class="auth-gate-card" id="authorization-box">
+              <div class="auth-card-content">
+                <div class="auth-label">
+                  <strong>Human Authorization Gate</strong>
+                  <p>All filesystem modifications require explicit human consent. Dispatches are sealed by one-time authorization tokens with rollback guarantees.</p>
+                </div>
+                <div class="auth-btn-row">
+                  <button class="btn btn-success hidden" id="agent-apply-btn" type="button">
+                    Approve & Apply (Disk)
+                  </button>
+                  <button class="btn btn-warning hidden" id="agent-rollback-btn" type="button">
+                    Instant Rollback
+                  </button>
+                  <button class="btn btn-secondary" id="verify-evidence" type="button" disabled>
+                    Verify in Docker
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="agent-current-state" id="agent-current-state-badge">
-              <span class="pulse-indicator" id="agent-pulse"></span>
-              <span id="agent-state-label">STATE: IDLE</span>
-            </div>
-          </div>
 
-          <!-- 6-State Visual Stepper -->
-          <div class="stepper-vertical" id="lifecycle-stepper">
-            <div class="stepper-step active" id="step-analyzed">
-              <div class="step-marker"><span class="step-num">01</span></div>
-              <div class="step-content">
-                <strong class="step-title">Analyzed</strong>
-                <small class="step-desc">AST & Traceback frame mapping</small>
+            <!-- Agent Event Audit Log -->
+            <div class="timeline-box">
+              <div class="timeline-head">
+                <span>Agent Event Audit Stream</span>
+                <span class="timeline-status">Active</span>
+              </div>
+              <div class="agent-timeline-log" id="agent-timeline-log">
+                <ul class="timeline-entries" id="timeline-entries-list">
+                  <li><strong>[SYSTEM]</strong> Agent engine initialized and listening.</li>
+                </ul>
               </div>
             </div>
-            <div class="stepper-step" id="step-proposed">
-              <div class="step-marker"><span class="step-num">02</span></div>
-              <div class="step-content">
-                <strong class="step-title">Patch Proposed</strong>
-                <small class="step-desc">NVIDIA Nemotron reasoning</small>
-              </div>
-            </div>
-            <div class="stepper-step" id="step-approval">
-              <div class="step-marker"><span class="step-num">03</span></div>
-              <div class="step-content">
-                <strong class="step-title">Awaiting Approval</strong>
-                <small class="step-desc">Cryptographic token issued</small>
-              </div>
-            </div>
-            <div class="stepper-step" id="step-applied">
-              <div class="step-marker"><span class="step-num">04</span></div>
-              <div class="step-content">
-                <strong class="step-title">Applied</strong>
-                <small class="step-desc">Atomic workspace write</small>
-              </div>
-            </div>
-            <div class="stepper-step" id="step-testing">
-              <div class="step-marker"><span class="step-num">05</span></div>
-              <div class="step-content">
-                <strong class="step-title">Testing</strong>
-                <small class="step-desc">Isolated Docker verification</small>
-              </div>
-            </div>
-            <div class="stepper-step" id="step-verified">
-              <div class="step-marker"><span class="step-num">06</span></div>
-              <div class="step-content">
-                <strong class="step-title">Verified</strong>
-                <small class="step-desc">Zero regression confirmed</small>
-              </div>
-            </div>
-          </div>
 
-          <!-- Human Authorization Gate & Control Center -->
-          <div class="authorization-box" id="authorization-box">
-            <div class="auth-header">
-              <span class="auth-icon">🔒</span>
-              <div>
-                <strong>Human Approval Barrier</strong>
-                <small>Non-autonomous disk writes</small>
+            <!-- Safety Guarantee Card -->
+            <div class="safety-card" id="safety-card">
+              <span class="safety-check">✓</span>
+              <div class="safety-text">
+                <strong>Provenance & Safety Guarantee</strong>
+                <p id="safety-message">Zero submitted code was executed during analysis. Patches require explicit human approval before disk write.</p>
               </div>
-            </div>
-            <p class="auth-desc">
-              All code modifications require explicit user consent. Dispatches are sealed by one-time authorization tokens with rollback guarantees.
-            </p>
-            <div class="auth-actions">
-              <button class="button button-success hidden" id="agent-apply-btn" type="button">
-                <span>Approve & Apply (Disk)</span>
-              </button>
-              <button class="button button-warning hidden" id="agent-rollback-btn" type="button">
-                <span>Instant Rollback</span>
-              </button>
-              <button class="button button-outline" id="verify-evidence" type="button" disabled>
-                <span>Verify in Docker</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Real-Time Agent Decision Timeline Log -->
-          <div class="agent-timeline-card">
-            <div class="timeline-header">
-              <span>Agent Event Stream</span>
-              <span class="timeline-badge">Real-Time</span>
-            </div>
-            <div class="agent-timeline-log" id="agent-timeline-log">
-              <ul class="timeline-entries" id="timeline-entries-list">
-                <li><strong>[SYSTEM]</strong> Agent engine initialized and listening.</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Provenance & Safety Guarantee -->
-          <div class="safety-card" id="safety-card">
-            <div class="safety-icon" aria-hidden="true">✓</div>
-            <div class="safety-text">
-              <strong>Provenance Guarantee</strong>
-              <p id="safety-message">Zero submitted code was executed during analysis. Patches require human approval before disk write.</p>
             </div>
           </div>
         </section>
       </div>
 
-      <!-- Bottom Evidence Lab Panel (Docker Container Verification) -->
+      <!-- Bottom Container Verification Evidence Panel -->
       <section class="evidence-panel result-card hidden" id="evidence-card" aria-labelledby="evidence-title">
         <div class="evidence-header">
-          <div class="evidence-title-group">
-            <span class="panel-num">04</span>
-            <div>
-              <h2 id="evidence-title">Isolated Container Verification Lab</h2>
-              <p class="evidence-subtitle" id="evidence-message">
-                Zero-network sandbox with read-only rootfs, non-root user, and 256MB memory cap.
-              </p>
-            </div>
+          <div>
+            <h2 id="evidence-title">Isolated Container Verification Lab</h2>
+            <p class="evidence-subtitle" id="evidence-message">
+              Non-root execution with --network none, read-only rootfs, and 256MB memory cap.
+            </p>
           </div>
           <div class="evidence-score-badge">
-            <span class="score-label">Overall Status</span>
+            <span class="score-label">Result:</span>
             <span class="suggestion-confidence" id="evidence-score">Not run</span>
           </div>
         </div>
@@ -468,28 +408,26 @@
         </div>
 
         <div class="evidence-console">
-          <div class="console-head">
-            <span>Container Stdout / Stderr Capture</span>
-          </div>
+          <div class="console-head">Container Stdout / Stderr Capture</div>
           <pre class="evidence-output" id="evidence-output">No captured output.</pre>
         </div>
         <p class="evidence-claim" id="evidence-claim"></p>
       </section>
     </main>
 
-    <!-- Professional Status Footer -->
+    <!-- Professional Footer -->
     <footer class="app-footer">
       <div class="footer-left">
-        <span class="footer-brand">Sunny-DevFix</span>
+        <span class="footer-brand">Sunny DevFix</span>
         <span class="footer-sep">·</span>
         <span>NVIDIA-Powered Verified Code Repair</span>
         <span class="footer-sep">·</span>
         <span>Nebius Token Factory & NVIDIA Nemotron</span>
       </div>
       <div class="footer-right">
-        <span>Open Source MIT License</span>
+        <span>MIT License</span>
         <span class="footer-sep">·</span>
-        <a href="https://github.com/sunny-kavixo/Sunny-DevFix" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <a href="https://github.com/sunny-kavixo/Sunny-DevFix" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </footer>
   </body>

@@ -155,11 +155,23 @@ async def run_e2e_tests():
         await asyncio.sleep(0.5)
         await session.capture_screenshot("06_mode_switched_local_ast.png")
 
-        # Step 7: Test Mobile Viewport Responsiveness (390x844 iPhone 14)
-        print("7. Testing Mobile Viewport Responsiveness (390x844)...")
+        # Step 7: Laptop Viewport (1440x900)
+        print("7. Testing Laptop Viewport (1440x900)...")
+        await session.set_viewport(1440, 900, is_mobile=False)
+        await asyncio.sleep(0.5)
+        await session.capture_screenshot("07_laptop_1440x900.png")
+
+        # Step 8: Tablet Viewport (768x1024)
+        print("8. Testing Tablet Viewport (768x1024)...")
+        await session.set_viewport(768, 1024, is_mobile=False)
+        await asyncio.sleep(0.5)
+        await session.capture_screenshot("08_tablet_768px.png")
+
+        # Step 9: Mobile Viewport Responsiveness (390x844 iPhone 14)
+        print("9. Testing Mobile Viewport Responsiveness (390x844)...")
         await session.set_viewport(390, 844, is_mobile=True)
         await asyncio.sleep(0.8)
-        await session.capture_screenshot("07_mobile_responsive_390px.png")
+        await session.capture_screenshot("09_mobile_responsive_390px.png")
 
         # Reset viewport
         await session.set_viewport(1920, 1080, is_mobile=False)
