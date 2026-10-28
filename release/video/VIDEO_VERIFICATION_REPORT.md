@@ -11,15 +11,15 @@
 
 | Metric | Target Specification | Actual Measured Value | Verdict |
 | :--- | :--- | :--- | :---: |
-| **Duration** | 2m 30s to 2m 55s (150s – 175s) | **169.73 seconds (2m 49.73s)** | **PASS** |
+| **Duration** | 2m 30s to 2m 55s (150s – 175s) | **174.05 seconds (2m 54.05s)** | **PASS** |
 | **Resolution** | 1920 × 1080 (Full HD, 16:9) | **1920 × 1080 progressive** | **PASS** |
 | **Frame Rate** | 30.00 fps | **30.00 fps (constant)** | **PASS** |
 | **Video Codec** | H.264 / AVC (`avc1`) High Profile | **H.264 (`libx264`, `yuv420p`, High@L4.0)** | **PASS** |
 | **Audio Codec** | AAC, Stereo, 44.1 kHz, ≥128 kbps | **AAC, Stereo, 44.1 kHz, 192 kbps** | **PASS** |
-| **Voice Engine** | Natural English Narration | **macOS Samantha (Professional en_US)** | **PASS** |
+| **Voice Engine** | Natural English Narration | **macOS Samantha (Professional en_US, 176 WPM)** | **PASS** |
 | **Subtitles** | Synchronized English Subtitles | **Dual: Embedded `mov_text` + standalone `.srt`** | **PASS** |
 | **Container** | MP4 with faststart Web optimization | **MP4 (`isom/iso2/avc1/mp41`, `+faststart`)** | **PASS** |
-| **File Size** | < 100 MB | **5.8 MB (5,825,627 bytes)** | **PASS** |
+| **File Size** | < 100 MB | **5.9 MB (5,991,098 bytes)** | **PASS** |
 
 ---
 
