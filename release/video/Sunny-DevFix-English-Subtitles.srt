@@ -1,0 +1,91 @@
+1
+00:00:00,000 --> 00:00:04,941
+Every developer knows the frustration of staring at a multi-frame Python traceback.
+
+2
+00:00:04,941 --> 00:00:16,789
+You spend hours tracing root causes across nested call stacks, manually formulating fixes, and hoping a chatbot's suggestion doesn't break syntax or introduce silent regressions into production code.
+
+3
+00:00:16,789 --> 00:00:27,265
+This is Sunny-DevFix: an autonomous, verifiable code repair assistant built for the Nebius and NVIDIA Global AI Hackathon under the Coding and Agentic Engineering track.
+
+4
+00:00:27,265 --> 00:00:42,761
+Sunny-DevFix transforms Python debugging into an accountable engineering workflow, pairing NVIDIA Nemotron reasoning on Nebius Token Factory with deterministic AST guardrails, cryptographic human approval gates, and disposable container verification.
+
+5
+00:00:42,761 --> 00:00:47,630
+Inside the workspace, we paste defective source code and the runtime traceback.
+
+6
+00:00:47,630 --> 00:00:56,567
+Notice our Live Code Guardian: as you type, it continuously parses AST structures locally without executing untrusted code or making cloud calls.
+
+7
+00:00:56,567 --> 00:01:05,627
+In this billing example, it immediately pinpoints line 3 and flags that tx was referenced instead of tax, giving developers instant local feedback.
+
+8
+00:01:05,627 --> 00:01:11,729
+When we trigger the agentic repair, Sunny-DevFix activates its 6-stage lifecycle orchestrator.
+
+9
+00:01:11,729 --> 00:01:20,039
+It maps the deepest call frame, bounds context, and prepares the structured request for NVIDIA Nemotron on Nebius Token Factory.
+
+10
+00:01:20,039 --> 00:01:31,010
+While live cloud inference requires operator key authorization, the assistant operates seamlessly using local AST guardrails, ensuring verifiable, zero-crash evaluation.
+
+11
+00:01:31,010 --> 00:01:36,366
+Before anything touches disk, Sunny-DevFix enforces a mandatory human approval barrier.
+
+12
+00:01:36,366 --> 00:01:45,476
+The assistant compiles the proposed code, verifies its AST syntax, and displays an interactive side-by-side code viewer with a colored unified diff.
+
+13
+00:01:45,476 --> 00:01:50,462
+A single-use cryptographic approval token bound to the exact file hash is issued.
+
+14
+00:01:50,462 --> 00:01:55,079
+Only when the operator explicitly approves is the patch atomically applied.
+
+15
+00:01:55,079 --> 00:02:03,334
+For optional verification evidence, twin reproductions run in disposable Docker containers with zero network access and read-only filesystems.
+
+16
+00:02:03,334 --> 00:02:07,578
+The scorecard confirms whether reproduction passed with zero regressions.
+
+17
+00:02:07,578 --> 00:02:16,298
+And if an unexpected edge case is observed, a single click on Instant Rollback uses a one-time token to immediately restore the exact pre-patch bytes.
+
+18
+00:02:16,298 --> 00:02:21,134
+Under the hood, Sunny-DevFix is engineered with zero compromise on quality.
+
+19
+00:02:21,134 --> 00:02:31,838
+It is backed by 80 automated tests, 9 adversarial security suites covering prompt injection and path traversal, and a median benchmark latency under 0.2 milliseconds.
+
+20
+00:02:31,838 --> 00:02:37,770
+If offline, it seamlessly falls back to its deterministic AST engine without missing a beat.
+
+21
+00:02:37,770 --> 00:02:43,737
+Sunny-DevFix brings transparency, safety, and verifiable evidence to agentic AI engineering.
+
+22
+00:02:43,737 --> 00:02:52,559
+The complete MIT-licensed source code, judge-accessible standalone test build, and full technical documentation are available on GitHub.
+
+23
+00:02:52,559 --> 00:02:54,051
+Thank you for watching!

@@ -18,6 +18,12 @@ from sunny_devfix.analysis.insights import build_insights
 from sunny_devfix.analysis.source_analysis import analyze_source
 from sunny_devfix.analysis.traceback_parser import parse_traceback
 from sunny_devfix.api.schemas import (
+    AgentApplyRequest,
+    AgentApplyResponse,
+    AgentRepairRequest,
+    AgentRepairResponse,
+    AgentRepairResultResponse,
+    AgentTimelineItem,
     AnalyzeRequest,
     AnalyzeResponse,
     CodeComparisonResponse,
@@ -28,6 +34,7 @@ from sunny_devfix.api.schemas import (
     GuardianDiagnosticResponse,
     GuardianRequest,
     GuardianResponse,
+    ModelInfoResponse,
     SandboxRunResponse,
     PatchActionRequest,
     PatchActionResponse,
@@ -40,7 +47,13 @@ from sunny_devfix.api.schemas import (
     SyntaxDiagnosticResponse,
     TracebackFrameResponse,
 )
+from sunny_devfix.agent import (
+    execute_agent_apply,
+    execute_agent_rollback,
+    run_agent_analysis_and_proposal,
+)
 from sunny_devfix.patches import PatchError, apply_patch, prepare_patch, rollback_patch
+from sunny_devfix.providers.nebius import NebiusClient
 from sunny_devfix.sandbox import (
     EvidenceResult,
     SandboxRun,
@@ -167,6 +180,121 @@ def patch_rollback(payload: PatchActionRequest) -> PatchActionResponse:
     except PatchError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     return PatchActionResponse(**result.__dict__)
+
+
+@router.get("/model-info", response_model=ModelInfoResponse)
+def model_info() -> ModelInfoResponse:
+    """Return runtime configuration and diagnostic metadata for Nebius & NVIDIA models."""
+    client = NebiusClient()
+    diag = client.get_diagnostics()
+    return ModelInfoResponse(**diag)
+
+
+@router.post("/agent/repair", response_model=AgentRepairResponse)
+def agent_repair(payload: AgentRepairRequest) -> AgentRepairResponse:
+    """Execute end-to-end agentic analysis and repair proposal."""
+    client = NebiusClient() if payload.use_nebius else None
+    result = run_agent_analysis_and_proposal(
+        payload.source,
+        payload.traceback,
+        filename=payload.filename,
+        project_root=payload.project_root,
+        relative_path=payload.relative_path,
+        client=client,
+    )
+
+    repair_resp = None
+    if result.get("repair"):
+        r = result["repair"]
+        repair_resp = AgentRepairResultResponse(
+            available=r.available,
+            provider=r.provider,
+            model=r.model,
+            is_ai_generated=r.is_ai_generated,
+            root_cause_title=r.root_cause_title,
+            root_cause_explanation=r.root_cause_explanation,
+            next_step=r.next_step,
+            confidence=r.confidence,
+            fix_description=r.fix_description,
+            before_source=r.before_source,
+            after_source=r.after_source,
+            unified_diff=r.unified_diff,
+            syntax_valid=r.syntax_valid,
+            error_message=r.error_message,
+        )
+
+    preview_resp = None
+    if result.get("patch_preview"):
+        preview_resp = PatchPreviewResponse(**result["patch_preview"].__dict__)
+
+    timeline_items = [
+        AgentTimelineItem(
+            state=item["state"],
+            description=item["description"],
+            metadata={
+                k: v for k, v in item.items() if k not in {"state", "description"}
+            },
+        )
+        for item in result.get("timeline", [])
+    ]
+
+    return AgentRepairResponse(
+        state=result["state"],
+        repair=repair_resp,
+        patch_preview=preview_resp,
+        timeline=timeline_items,
+        error=result.get("error"),
+    )
+
+
+@router.post("/agent/apply", response_model=AgentApplyResponse)
+def agent_apply(payload: AgentApplyRequest) -> AgentApplyResponse:
+    """Apply an approved repair patch with optional Docker container verification."""
+    res = execute_agent_apply(
+        payload.token,
+        confirm=payload.confirm,
+        run_sandbox_evidence=payload.run_sandbox_evidence,
+        stdin=payload.stdin,
+        source_before=payload.source_before,
+        source_after=payload.source_after,
+    )
+
+    patch_result_resp = None
+    if res.get("patch_result"):
+        patch_result_resp = PatchActionResponse(**res["patch_result"].__dict__)
+
+    evidence_resp = None
+    if res.get("evidence"):
+        evidence_resp = _evidence_response(res["evidence"])
+
+    timeline_items = [
+        AgentTimelineItem(
+            state=item["state"],
+            description=item["description"],
+            metadata={
+                k: v for k, v in item.items() if k not in {"state", "description"}
+            },
+        )
+        for item in res.get("timeline", [])
+    ]
+
+    return AgentApplyResponse(
+        state=res["state"],
+        patch_result=patch_result_resp,
+        evidence=evidence_resp,
+        timeline=timeline_items,
+        error=res.get("error"),
+    )
+
+
+@router.post("/agent/rollback", response_model=PatchActionResponse)
+def agent_rollback(payload: PatchActionRequest) -> PatchActionResponse:
+    """Roll back an applied patch to its exact pre-patch contents."""
+    res = execute_agent_rollback(payload.token, confirm=payload.confirm)
+    if res.get("error"):
+        raise HTTPException(status_code=422, detail=res["error"])
+    return PatchActionResponse(**res["patch_result"].__dict__)
+
 
 
 def _frame_response(frame: TracebackFrame) -> TracebackFrameResponse:

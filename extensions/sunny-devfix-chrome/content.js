@@ -16,7 +16,7 @@ function mountPanel() {
   const panel = document.createElement("aside");
   panel.id = "sunny-devfix-chrome-panel";
   panel.innerHTML = `
-    <div class="sunny-devfix-chrome-title"><span>✦</span> Sunny DevFix <small>prototype</small></div>
+    <div class="sunny-devfix-chrome-title">Sunny DevFix <small>prototype</small></div>
     <div class="sunny-devfix-chrome-state" data-state>Finds a local text editor…</div>
     <div class="sunny-devfix-chrome-list" data-list></div>`;
   document.body.appendChild(panel);

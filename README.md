@@ -1,49 +1,179 @@
-# Sunny-DevFix — NVIDIA-Powered Verified Code Repair
+# Sunny-DevFix: NVIDIA-Powered Verified Code Repair
 
-**Nebius × NVIDIA Global AI Hackathon 2026 · Coding and Agentic Engineering**
+<div align="center">
 
-A Python debugging and repair application with traceback analysis, NVIDIA Nemotron reasoning via Nebius Token Factory, reviewed patch previews, explicit human approval, rollback, and optional isolated verification.
+![Sunny DevFix workflow](docs/assets/workflow.svg)
 
-> **Judge build:** The hackathon implementation is on [`feat/nebius-nvidia-verified-repair`](https://github.com/sunny-kavixo/Sunny-DevFix/tree/feat/nebius-nvidia-verified-repair), not this historical `main` branch. Use the [v0.2.0 public release](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0) and its [downloadable test archive](https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.0/sunny-devfix-v0.2.0.tar.gz) for evaluation.
+**Autonomous Python Traceback Debugging · NVIDIA Nemotron on Nebius Token Factory · Cryptographic Approval Gate · Disposable Docker Verification**
 
-## Product demo — real application screenshots
+[Quick Start](#quick-start) · [Agent Lifecycle](#agentic-workflow-lifecycle) · [Safety Model](#safety--security-boundary) · [Hackathon Documentation](#hackathon-documentation-suite) · [Tests](#testing--verification)
 
-These images are captured from the published hackathon feature branch (not mockups). Click a screenshot to view it at full resolution.
+</div>
 
-### Workspace and root-cause analysis
+---
 
-[![Sunny-DevFix developer workspace](docs/images/01_fresh_launch_desktop.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/01_fresh_launch_desktop.png)
+## Overview
 
-### Repair proposal and before/after diff
+**Sunny-DevFix** is an agentic Python traceback debugging and automated repair assistant built for the **Nebius × NVIDIA Global AI Hackathon 2026** under the **Coding and Agentic Engineering** track.
 
-[![Real repair preview and diff](docs/images/03_repair_proposed_diff.png)](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui/03_repair_proposed_diff.png)
+Unlike naive LLM wrappers that emit speculative code snippets without validation or containment, Sunny-DevFix pairs **NVIDIA Nemotron's high-capacity causal reasoning on Nebius Token Factory** with deterministic AST guardrails, single-use cryptographic approval tokens, and zero-trust disposable Docker containers.
 
-### Explicit patch approval and rollback
+### Product Evidence
 
-| Approved patch | Restored original file |
+| Repair preview | Applied patch with rollback |
 | :---: | :---: |
-| ![Approved patch](docs/images/04_patch_applied_rollback_active.png) | ![Completed rollback](docs/images/05_rollback_completed.png) |
+| ![Verified repair preview](docs/images/03_repair_proposed_diff.png) | ![Applied patch with rollback active](docs/images/04_patch_applied_rollback_active.png) |
 
-### Responsive mobile view
+The complete desktop, tablet, mobile, apply, and rollback evidence set is available in [`docs/images/`](docs/images/).
 
-![Mobile interface](docs/images/09_mobile_responsive_390px.png)
+### Demo gallery
 
-[See all nine original browser captures](https://github.com/sunny-kavixo/Sunny-DevFix/tree/feat/nebius-nvidia-verified-repair/release/screenshots/final_ui)
+| Workspace | Diagnosis and repair |
+| :---: | :---: |
+| ![Current desktop application](docs/images/01_fresh_launch_desktop.png) | ![Repair preview](docs/images/03_repair_proposed_diff.png) |
+| **Patch applied** | **Rollback completed** |
+| ![Approved patch applied](docs/images/04_patch_applied_rollback_active.png) | ![Rollback completed](docs/images/05_rollback_completed.png) |
+| **Laptop layout** | **Mobile layout** |
+| ![Laptop view](docs/images/07_laptop_1440x900.png) | ![Mobile view](docs/images/09_mobile_responsive_390px.png) |
 
-## System design
+### System design
 
-![System architecture: browser, FastAPI agent, Nebius NVIDIA model, offline AST fallback, patch approvals and optional Docker verification](docs/assets/system-architecture.svg)
+![Sunny-DevFix system architecture: browser, agent, Nebius inference, local fallback, approval, and optional Docker verification](docs/assets/system-architecture.svg)
 
-[Open diagram at full size](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/assets/system-architecture.svg) · [Detailed technical architecture](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/hackathon/ARCHITECTURE.md)
+[Open system diagram](docs/assets/system-architecture.svg) · [Full architecture notes](docs/hackathon/ARCHITECTURE.md)
 
-## Release and verification
 
-- **NVIDIA model:** `nvidia/Nemotron-3_5-Lightning` via Nebius Token Factory; live synthetic repair previously verified.
-- **Safety:** approval required before file writes, patch containment, replay protections, and exact rollback.
-- **Testing:** 81 automated tests reported passing; [published GitHub CI succeeded](https://github.com/sunny-kavixo/Sunny-DevFix/actions/runs/40675252918).
-- **Release:** [Sunny-DevFix v0.2.0](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0) · [SHA-256 checksums](https://github.com/sunny-kavixo/Sunny-DevFix/releases/download/v0.2.0/SHA256SUMS).
-- **Quick start and judge instructions:** [Feature-branch README](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/README.md) · [Judge testing guide](https://github.com/sunny-kavixo/Sunny-DevFix/blob/feat/nebius-nvidia-verified-repair/docs/hackathon/JUDGE_TESTING_GUIDE.md).
+---
 
-The repository's default `main` branch retains an earlier local-first implementation. The screenshots, diagram, and v0.2.0 judge build above refer to the published hackathon feature branch. A demonstration video and final Devpost submission are managed separately by the project owner.
+## Key Features
 
-**License:** MIT.
+1. **NVIDIA Nemotron Causal Reasoning on Nebius Token Factory**:
+   - Routes bounded traceback stacks and source code to the verified runtime model, `nvidia/Nemotron-3_5-Lightning`.
+   - Enforces strict Pydantic JSON schemas (`root_cause_title`, `explanation`, `recommended_next_step`, and `repaired_source`).
+2. **6-Stage Agentic Workflow Lifecycle**:
+   - `ANALYZED` → `PATCH_PROPOSED` → `AWAITING_APPROVAL` → `APPLIED` → `TESTING` → `VERIFIED` (or `ROLLED_BACK`).
+3. **Human-in-the-Loop Cryptographic Approval Gate**:
+   - Zero silent file modifications: writes require an operator-reviewed preview and a 5-minute single-use cryptographic approval token.
+   - Atomic disk writes preserve file permissions and prevent partial write corruptions.
+4. **Single-Click Fail-Safe Rollback**:
+   - Every applied patch issues a one-time rollback token. If regressions occur, clicking **Instant Rollback** immediately restores exact pre-patch bytes.
+5. **Disposable Docker Evidence Sandbox**:
+   - Before-and-after reproductions run in parallel disposable containers with `--network none`, `--read-only`, dropped capabilities, memory caps, and a non-root UID.
+   - Generates an objective scorecard verifying syntax, reproduction pass/fail, and regression detection.
+6. **Live Code Guardian**:
+   - Instant in-editor AST linter providing debounced, line-level diagnostics as you type, completely offline.
+7. **Zero-Cloud Offline Fallback**:
+   - If `NEBIUS_API_KEY` is not present, the assistant automatically falls back to its deterministic AST engine with zero crashes or errors.
+
+---
+
+## Agentic Workflow Lifecycle
+
+```
+[Defective Code + Traceback]
+            │
+            ▼
+     [ 1. ANALYZED ]  ─── Local AST parse & deepest frame mapping
+            │
+            ▼
+  [ 2. PATCH PROPOSED ] ─── NVIDIA Nemotron on Nebius Token Factory
+            │
+            ▼
+ [ 3. AWAITING APPROVAL ] ── Side-by-side diff & 5-minute token issued
+            │
+            ├── User Denies / Aborts ──► FAILED (No disk write)
+            │
+            ▼ User Approves
+      [ 4. APPLIED ]  ──── Atomic write to disk & rollback token issued
+            │
+            ▼ Optional Docker Evidence
+      [ 5. TESTING ]  ──── Isolated containers (--network none, --read-only)
+            │
+            ├─ Reproduction Passes ──► [ 6. VERIFIED ]
+            │
+            └─ Regression / Revert ──► [ 6. ROLLED_BACK ] (Pre-patch restored)
+```
+
+---
+
+## Quick Start
+
+### 1. Requirements
+- Python 3.14 (or 3.12+)
+- GNU Make
+- Docker (optional, for container evidence verification)
+
+### 2. Local Setup
+```bash
+git clone https://github.com/sunny-kavixo/Sunny-DevFix.git
+cd Sunny-DevFix
+git checkout feat/nebius-nvidia-verified-repair
+
+# Install pinned dependencies
+python3 -m pip install -r requirements.lock -r requirements-dev.lock
+```
+
+### 3. Launch Service
+```bash
+# Run locally (runs 100% offline with deterministic fallback out of the box)
+make run
+
+# Or enable live Nebius Token Factory inference:
+export NEBIUS_API_KEY="your-nebius-token-factory-key"
+export DEVFIX_NEBIUS_ENABLED="true"
+make run
+```
+Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser.
+
+---
+
+## Safety & Security Boundary
+
+- **Passive Data Principle**: All submitted Python source and tracebacks are treated as untrusted passive data. Never executed on the host, never imported into the server runtime.
+- **Credential Protection**: Server keys (`NEBIUS_API_KEY`) remain strictly on the backend and are reported only as `[REDACTED]` in diagnostic endpoints.
+- **Path Containment**: Disk patches are restricted strictly to explicitly authorized `DEVFIX_PROJECT_ROOTS`. Symlink escapes and directory traversal are rejected.
+- **Adversarial Hardening**: Passed 9 dedicated adversarial security tests covering prompt injection, replay attacks, and container isolation.
+
+---
+
+## Testing & Verification
+
+Sunny-DevFix features an exhaustive 81-test test suite across 17 test files:
+
+```bash
+# Run the complete test suite
+python3 -m pytest
+
+# Result: 81 passed in ~0.8s
+```
+
+Run the deterministic benchmark:
+```bash
+PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
+# Median latency: ~0.18ms | Peak memory: ~95 KiB
+```
+
+---
+
+## Hackathon Documentation Suite
+
+Detailed compliance, architecture, and verification materials are maintained in `docs/hackathon/`:
+
+- [BASELINE_AUDIT.md](docs/hackathon/BASELINE_AUDIT.md): Initial read-only repository audit and Git baseline.
+- [COMPLIANCE_MATRIX.md](docs/hackathon/COMPLIANCE_MATRIX.md): Detailed requirement-by-requirement compliance matrix.
+- [ARCHITECTURE.md](docs/hackathon/ARCHITECTURE.md): Technical architecture diagram, state machine, and data flow.
+- [SECURITY_MODEL.md](docs/hackathon/SECURITY_MODEL.md): Threat model, prompt injection defense, and cryptographic token lifecycle.
+- [TEST_REPORT.md](docs/hackathon/TEST_REPORT.md): Complete report covering Pass A (Baseline), Pass B (Functional), and Pass C (Adversarial).
+- [NEW_WORK_CHANGELOG.md](docs/hackathon/NEW_WORK_CHANGELOG.md): Clear separation of pre-existing work from post-August-26 hackathon improvements.
+- [MODEL_INTEGRATION_EVIDENCE.md](docs/hackathon/MODEL_INTEGRATION_EVIDENCE.md): Nebius Token Factory & NVIDIA model integration evidence.
+- [JUDGE_TESTING_GUIDE.md](docs/hackathon/JUDGE_TESTING_GUIDE.md): Step-by-step evaluator instructions and example bug walkthroughs.
+- [DEPLOYMENT_GUIDE.md](docs/hackathon/DEPLOYMENT_GUIDE.md): Cloud Run and Docker deployment instructions with quota protection.
+- [DEVPOST_SUBMISSION.md](docs/hackathon/DEVPOST_SUBMISSION.md): Complete Devpost submission text and technology feedback.
+- [DEMO_VIDEO_SCRIPT.md](docs/hackathon/DEMO_VIDEO_SCRIPT.md): 2-minute 55-second YouTube video storyboard and narration script.
+- [FINAL_RELEASE_CHECKLIST.md](docs/hackathon/FINAL_RELEASE_CHECKLIST.md): Quality gates G1–G15 and owner release action items.
+
+---
+
+## License
+
+Sunny-DevFix is open-source software licensed under the **[MIT License](LICENSE)**.

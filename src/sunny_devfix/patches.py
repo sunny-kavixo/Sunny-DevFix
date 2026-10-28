@@ -6,12 +6,14 @@ import hashlib
 import os
 import secrets
 import tempfile
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
 
 MAX_PATCH_BYTES = 20_000
 APPROVAL_TTL_SECONDS = 300
+_patch_lock = threading.Lock()
 
 
 class PatchError(ValueError):
@@ -70,16 +72,17 @@ def prepare_patch(project_root: str, relative_path: str, before: str, after: str
     if current != before:
         raise PatchError("The file changed or does not match the supplied original source.")
 
-    _prune_expired()
-    approval_id = secrets.token_urlsafe(24)
-    _approvals[approval_id] = _Approval(
-        root=root,
-        target=target,
-        relative_path=normalized,
-        before=before,
-        after=after,
-        expires_at=time.monotonic() + APPROVAL_TTL_SECONDS,
-    )
+    with _patch_lock:
+        _prune_expired()
+        approval_id = secrets.token_urlsafe(24)
+        _approvals[approval_id] = _Approval(
+            root=root,
+            target=target,
+            relative_path=normalized,
+            before=before,
+            after=after,
+            expires_at=time.monotonic() + APPROVAL_TTL_SECONDS,
+        )
     return PatchPreview(
         approval_id=approval_id,
         relative_path=normalized,
@@ -94,8 +97,9 @@ def apply_patch(approval_id: str, *, confirm: bool) -> PatchResult:
 
     if not confirm:
         raise PatchError("Explicit confirmation is required before applying a patch.")
-    _prune_expired()
-    approval = _approvals.pop(approval_id, None)
+    with _patch_lock:
+        _prune_expired()
+        approval = _approvals.pop(approval_id, None)
     if approval is None:
         raise PatchError("The patch approval is invalid, expired, or already used.")
     _revalidate_target(approval.root, approval.target)
@@ -104,14 +108,15 @@ def apply_patch(approval_id: str, *, confirm: bool) -> PatchResult:
 
     _atomic_write(approval.target, approval.after)
     rollback_id = secrets.token_urlsafe(24)
-    _rollbacks[rollback_id] = _Rollback(
-        root=approval.root,
-        target=approval.target,
-        relative_path=approval.relative_path,
-        expected_current=approval.after,
-        restore=approval.before,
-        expires_at=time.monotonic() + APPROVAL_TTL_SECONDS,
-    )
+    with _patch_lock:
+        _rollbacks[rollback_id] = _Rollback(
+            root=approval.root,
+            target=approval.target,
+            relative_path=approval.relative_path,
+            expected_current=approval.after,
+            restore=approval.before,
+            expires_at=time.monotonic() + APPROVAL_TTL_SECONDS,
+        )
     return PatchResult("applied", approval.relative_path, rollback_id)
 
 
@@ -120,8 +125,9 @@ def rollback_patch(rollback_id: str, *, confirm: bool) -> PatchResult:
 
     if not confirm:
         raise PatchError("Explicit confirmation is required before rolling back a patch.")
-    _prune_expired()
-    rollback = _rollbacks.pop(rollback_id, None)
+    with _patch_lock:
+        _prune_expired()
+        rollback = _rollbacks.pop(rollback_id, None)
     if rollback is None:
         raise PatchError("The rollback is invalid, expired, or already used.")
     _revalidate_target(rollback.root, rollback.target)

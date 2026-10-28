@@ -1,10 +1,11 @@
 [project]
 name = "sunny-devfix"
-version = "0.1.0"
+version = "0.2.0"
 description = "A local-first Python traceback debugging assistant."
 requires-python = ">=3.14,<3.15"
 dependencies = [
     "fastapi==0.139.0",
+    "httpx==0.28.1",
     "uvicorn==0.51.0",
 ]
 
@@ -18,3 +19,8 @@ test = [
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-ra -p no:cacheprovider"
+filterwarnings = [
+    "ignore::starlette.exceptions.StarletteDeprecationWarning",
+    "ignore::DeprecationWarning",
+]
+
