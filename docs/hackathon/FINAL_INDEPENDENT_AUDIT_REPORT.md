@@ -18,9 +18,9 @@
 | :--- | :--- | :--- | :--- |
 | **Visual Architecture & UI/UX** | Linear / Vercel grade, 2-column layout, zero emojis, zero glowing pulse animations | Fully implemented & verified via Chrome CDP across 5 viewports | **PASS** |
 | **Visible Controls Inventory** | 100% interactive controls mapped to real backend handlers | 22/22 visible controls verified through browser automation | **PASS** |
-| **Automated Test Suite** | Full regression without skips or mocked assertions | 81/81 tests passing in 0.79 seconds | **PASS** |
+| **Automated Test Suite** | Full regression without skips or mocked assertions | 86/86 tests passing in 0.81 seconds | **PASS** |
 | **Adversarial Security** | Path traversal, symlinks, replay, prompt injection, root escape | 9/9 dedicated adversarial tests passing | **PASS** |
 | **Safety & Human-in-the-Loop** | Preview token required before write; cryptographic rollback | Verified in browser & backend integration tests | **PASS** |
 | **Performance Benchmarks** | Sub-millisecond local analysis; low memory footprint | Median: 0.1776 ms (P95: 0.1915 ms); RAM: 48.86 MB | **PASS** |
-| **Standalone Clean Build** | Self-contained judge archive runnable in fresh environment | `dist/sunny-devfix-v0.2.0.tar.gz` (2.0 MB) extracts & passes 81/81 | **PASS** |
+| **Standalone Clean Build** | Self-contained judge archive runnable in fresh environment | `dist/sunny-devfix-v0.2.0.tar.gz` (3.0 MB) extracts & passes 86/86 | **PASS** |
 | **Live Nebius/NVIDIA Inference** | Authenticated call to NVIDIA Nemotron via Nebius Token Factory | `nvidia/Nemotron-3_5-Lightning` verified in 7.506s (`LIVE_INFERENCE_RECORD.json`) | **PASS** |

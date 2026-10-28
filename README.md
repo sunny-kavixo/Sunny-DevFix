@@ -138,13 +138,13 @@ Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser.
 
 ## Testing & Verification
 
-Sunny-DevFix features an exhaustive 81-test test suite across 17 test files:
+Sunny-DevFix features an exhaustive 86-test test suite across 17 test files:
 
 ```bash
 # Run the complete test suite
 python3 -m pytest
 
-# Result: 81 passed in ~0.8s
+# Result: 86 passed in ~0.8s
 ```
 
 Run the deterministic benchmark:
@@ -159,7 +159,10 @@ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 
 Detailed compliance, architecture, and verification materials are maintained in `docs/hackathon/`:
 
-- [BASELINE_AUDIT.md](docs/hackathon/BASELINE_AUDIT.md): Initial read-only repository audit and Git baseline.
+- [FILE_BY_FILE_AUDIT.md](docs/hackathon/FILE_BY_FILE_AUDIT.md): Comprehensive inventory of all 120 tracked files.
+- [FINAL_ENGINEERING_VERIFICATION.md](docs/hackathon/FINAL_ENGINEERING_VERIFICATION.md): Complete verification results for backend, security, and UI.
+- [RELEASE_CONSISTENCY_REPORT.md](docs/hackathon/RELEASE_CONSISTENCY_REPORT.md): Audit proving branch synchronization and checksum consistency.
+- [FINAL_DEVPOST_HANDOFF.md](docs/hackathon/FINAL_DEVPOST_HANDOFF.md): Ready-to-paste Devpost submission text and owner instructions.
 - [COMPLIANCE_MATRIX.md](docs/hackathon/COMPLIANCE_MATRIX.md): Detailed requirement-by-requirement compliance matrix.
 - [ARCHITECTURE.md](docs/hackathon/ARCHITECTURE.md): Technical architecture diagram, state machine, and data flow.
 - [SECURITY_MODEL.md](docs/hackathon/SECURITY_MODEL.md): Threat model, prompt injection defense, and cryptographic token lifecycle.

@@ -116,7 +116,7 @@ $ PYTHONPATH=src python3 tools/benchmark.py --iterations 2000
 - **GitHub Repository**: [https://github.com/sunny-kavixo/Sunny-DevFix](https://github.com/sunny-kavixo/Sunny-DevFix)
 - **Branch**: `feat/nebius-nvidia-verified-repair`
 - **License**: MIT Permissive Open Source
-- **Local Verification Status**: **100% PASS** (81/81 unit, functional, and adversarial security tests passing cleanly in 0.79s).
+- **Local Verification Status**: **100% PASS** (86/86 unit, functional, and adversarial security tests passing cleanly in 0.81s).
 - **Live Nebius & NVIDIA Inference**: **100% PASS** (Live authenticated inference verified on Nebius Token Factory with `nvidia/Nemotron-3_5-Lightning`, returning valid Python syntax in 7.506s with live evidence saved in `docs/hackathon/LIVE_INFERENCE_RECORD.json`).
 - **Judge Access**: Public standalone test build and checksum: [Sunny-DevFix v0.2.0](https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.0). Docker and offline local modes are also documented.
 - **Demo Video**: Public YouTube link pending owner upload.
