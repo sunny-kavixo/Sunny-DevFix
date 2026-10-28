@@ -2,13 +2,17 @@
 
 <div align="center">
 
-![Sunny DevFix workflow](docs/assets/workflow.svg)
+![Sunny DevFix logo](docs/assets/logo.svg)
 
 **Local-first Python traceback analysis · Conservative fixes · Optional sandbox evidence**
 
 [Quick start](#local-setup) · [Safety boundary](#safety-boundary) · [Tests](#test) · [Architecture](#architecture)
 
 </div>
+
+![Sunny DevFix dashboard running locally](docs/assets/dashboard.png)
+
+> Captured from the real local FastAPI application; not a mockup.
 
 Sunny DevFix is a local-first browser-based Python debugging assistant for
 understanding tracebacks, learning why an error happened, and reviewing a
@@ -27,6 +31,21 @@ available as an opt-in local capability.
 
 The browser and editor integrations communicate with the local FastAPI engine. The static-analysis path never executes submitted Python. The separate Docker evidence path runs only after explicit opt-in and when its sandbox prerequisites are met.
 
+## Debugging and patch workflow
+
+![Sunny DevFix review workflow](docs/assets/workflow.svg)
+
+![Sunny DevFix diagnosis result](docs/assets/debugging-demo.png)
+
+After analysis proposes a conservative change, the UI can prepare a secure file
+preview against an explicitly authorized project root. Preview does not write.
+Apply requires separate confirmation, and a successful write is labeled **applied**,
+not **verified**. Rollback is available only while the exact applied content remains.
+
+![Sunny DevFix secure patch review](docs/assets/patch-review.png)
+
+![Sunny DevFix patch security boundary](docs/assets/security-boundary.svg)
+
 ## What this project does — and does not claim
 
 - **Implemented:** local traceback analysis, line-aware live guardian, reviewed code suggestions, before/after diffs, opt-in Docker evidence, VS Code and Chrome integration prototypes.
@@ -43,6 +62,11 @@ If those conditions are unavailable, the application reports that sandbox
 execution was not performed.
 
 There are no external AI or network services required at runtime.
+
+File writes are disabled unless `DEVFIX_PROJECT_ROOTS` contains the exact project
+root. The patch lifecycle uses `POST /api/patches/preview`, `/api/patches/apply`,
+and `/api/patches/rollback`. Traversal, symlink escapes, stale content, expired or
+replayed tokens, oversized targets, and rollback over newer edits are rejected.
 
 ## Requirements
 
@@ -138,6 +162,26 @@ make test
 
 The test suite is designed to run without internet access after dependencies
 have been installed into the project virtual environment.
+
+CI runs the suite on every pull request. See the
+[GitHub Actions workflow](https://github.com/sunny-kavixo/Sunny-DevFix/actions/workflows/ci.yml).
+
+## Verified local performance
+
+Three 2,000-iteration static-analysis runs on Apple Silicon with CPython 3.14.5
+recorded median latency of 0.1878–0.1920 ms, p95 of 0.2045–0.2659 ms, and
+94.9 KiB peak traced Python allocation. These development measurements exclude
+HTTP, browser, Docker, and filesystem latency; see `docs/performance.md`.
+
+## Limitations and roadmap
+
+- Approval and rollback tokens are process-local and expire after five minutes.
+- Patch writes support existing regular UTF-8 files up to 20,000 bytes.
+- Docker evidence is unavailable unless explicitly configured locally.
+- Suggestions cover conservative deterministic cases, not arbitrary repository repair.
+- Planned work includes local history/export and broader browser interaction coverage.
+
+Focused contributions are welcome under the repository's [MIT License](LICENSE).
 
 ## Docker
 
