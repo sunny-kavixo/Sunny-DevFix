@@ -83,7 +83,8 @@ NVIDIA Nemotron displays exceptional causal reasoning over complex Python call s
 ## 3. Only Remaining Owner Actions
 
 1. **Video Demonstration (Owner Responsibility):**
-   - Record and edit the product demonstration video (2–3 minutes).
+   - Use the verified silent master at `submission/Sunny-DevFix-Final-Demo-SILENT.mp4` (2:50, 1920×1080, H.264, 30 FPS, no audio stream).
+   - Optionally record personal narration from `submission/Sunny-DevFix-Demo-Voiceover-Timeline.md` and add it in a video editor.
    - Upload to YouTube as **Public** or **Unlisted**.
    - Copy the YouTube video URL.
 2. **Submit on Devpost:**

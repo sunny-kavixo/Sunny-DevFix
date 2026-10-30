@@ -9,6 +9,7 @@ import base64
 import json
 import os
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 import httpx
@@ -17,6 +18,10 @@ import websockets
 CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 CHROME_PORT = 9222
 BASE_URL = "http://127.0.0.1:8000"
+DEMO_PROJECT_ROOT = os.environ.get("DEVFIX_DEMO_PROJECT_ROOT", "")
+DEMO_RELATIVE_PATH = os.environ.get(
+    "DEVFIX_DEMO_RELATIVE_PATH", "examples/billing_bug.py"
+)
 
 RECORDINGS_DIR = Path("release/video/final/clips")
 RECORDINGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -103,17 +108,19 @@ class BrowserRecorder:
 
 
 def launch_chrome():
+    profile_dir = tempfile.mkdtemp(prefix="sunny-devfix-chrome-")
     cmd = [
         CHROME_PATH,
         "--headless=new",
         f"--remote-debugging-port={CHROME_PORT}",
+        f"--user-data-dir={profile_dir}",
         "--window-size=1920,1080",
         "--hide-scrollbars",
         "--no-first-run",
         "--no-default-browser-check"
     ]
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    time.sleep(1.5)
+    time.sleep(3.0)
     return proc
 
 
@@ -132,11 +139,19 @@ async def record_all_scenes():
         await recorder.send("Page.navigate", {"url": BASE_URL})
         await asyncio.sleep(1.0)
         await recorder.eval_js("window.confirm = () => true;")
+        if DEMO_PROJECT_ROOT:
+            await recorder.eval_js(
+                "document.querySelector('#project-root-input').value = "
+                + json.dumps(DEMO_PROJECT_ROOT)
+                + ";document.querySelector('#relative-path-input').value = "
+                + json.dumps(DEMO_RELATIVE_PATH)
+                + ";"
+            )
 
         # Scene 1: Problem Overview (23s)
         # Shows defective source and traceback in billing.py
         await recorder.record_scene("scene1_problem", 23.0, fps=12, actions=[
-            {"time": 0.5, "js": "document.querySelector('#example-select').value='name_error';document.querySelector('#load-demo').click();"},
+            {"time": 0.5, "js": "document.querySelector('#example-select').value='name_error';document.querySelector('#load-demo').click();document.querySelector('#project-root-input').value=" + json.dumps(DEMO_PROJECT_ROOT) + ";document.querySelector('#relative-path-input').value=" + json.dumps(DEMO_RELATIVE_PATH) + ";"},
             {"time": 4.0, "js": "document.querySelector('#source-input').focus();"},
             {"time": 10.0, "js": "document.querySelector('#traceback-input').focus();"},
         ])
@@ -186,7 +201,7 @@ async def record_all_scenes():
         ])
 
         # Scene 7: Technical Evidence & Test Suite (18s)
-        # Demonstrating the 80/80 test suite in terminal & benchmark evidence
+        # Demonstrating the 86/86 test suite and benchmark evidence
         await recorder.record_scene("scene7_technical_evidence", 18.0, fps=12, actions=[
             {"time": 1.0, "js": "document.querySelector('.app-footer').scrollIntoView({behavior: 'smooth'});"},
             {"time": 8.0, "js": "document.querySelector('.topbar').scrollIntoView({behavior: 'smooth'});"},

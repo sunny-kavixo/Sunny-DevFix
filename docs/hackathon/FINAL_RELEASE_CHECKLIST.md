@@ -20,7 +20,7 @@
 | **G7** | **Professional Application UI/UX** | **PASS** | Mandatory | Modern dark theme, interactive lifecycle stepper, live model badge, side-by-side diffs, colored unified diffs. |
 | **G8** | **Public Repo & Open-Source License** | **PASS** | Mandatory | Permissive MIT License in root `LICENSE`. Pinned lockfiles for clean reproducibility. |
 | **G9** | **Judge-Accessible Demo / Test Build** | **PASS** | Mandatory | Public GitHub Release asset, zero-cost offline local mode, Docker container, and BYOK cloud instructions. Release: `https://github.com/sunny-kavixo/Sunny-DevFix/releases/tag/v0.2.1`. |
-| **G10**| **Under-3-Minute YouTube Demo Video** | **OWNER ACTION PENDING** | Mandatory | The owner will upload the final under-three-minute product demonstration to YouTube and add its public URL to Devpost. No video or audio files are created or modified by this release workflow. |
+| **G10**| **Under-3-Minute YouTube Demo Video** | **PASS / UPLOAD PENDING** | Mandatory | A genuine 2:50 browser demonstration is ready at `submission/Sunny-DevFix-Final-Demo-SILENT.mp4` (1920×1080, H.264, 30 FPS, zero audio streams). The owner only needs to add personal voice-over if desired, upload it, and add the public URL to Devpost. |
 | **G11**| **Complete Factual Devpost Text** | **PASS** | Mandatory | Complete write-up ready in `DEVPOST_SUBMISSION.md`. Clear explanation of problem, solution, and architecture. |
 | **G12**| **Evidence of Significant New Work** | **PASS** | Mandatory | `NEW_WORK_CHANGELOG.md` documents post-August 26 commits, separating baseline foundation from hackathon additions. |
 | **G13**| **Genuine Technology Feedback** | **PASS** | Mandatory | Actionable feedback on Nebius Token Factory and NVIDIA Nemotron included in Devpost text. |
@@ -31,6 +31,6 @@
 
 ## 2. Remaining Owner Actions
 
-1. Upload the final under-three-minute demonstration to YouTube.
+1. Optionally add personal voice-over using `submission/Sunny-DevFix-Demo-Voiceover-Timeline.md`, then upload the final under-three-minute demonstration to YouTube.
 2. Paste the public GitHub repository, GitHub Release, and YouTube URLs into Devpost.
 3. Submit the completed entry on Devpost.
