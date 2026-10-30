@@ -16,3 +16,6 @@ build/
 reports/
 tmp/
 scratch/
+submission/*.mp4
+release/video/final/clips/
+release/video/final/clips_concat.txt
